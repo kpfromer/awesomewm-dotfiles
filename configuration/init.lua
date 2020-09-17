@@ -3,6 +3,9 @@ local gears = require("gears")
 local wibox = require("wibox")
 local config = require('configuration.config')
 
+-- Global Keybindings
+_G.root.keys(require("configuration.keybindings.global"))
+
 -- Set awesomewm window layouts
 awful.layout.layouts = config.layouts
 
@@ -94,3 +97,6 @@ _G.tag.connect_signal('property::layout', function(t)
       t.gap = 2
   end
 end)
+
+-- Error handling
+require('configuration.error')
