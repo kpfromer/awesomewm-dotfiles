@@ -1,6 +1,11 @@
 local filesystem = require('gears.filesystem')
 local awful = require('awful')
+local gears = require('gears')
 local icons = require('theme.icons')
+
+local client_config = require('configuration.keybindings.client')
+local clientbuttons = client_config.clientbuttons
+local clientkeys = client_config.clientkeys
 
 -- TODO: get working
 -- Thanks to jo148 on github for making rofi dpi aware!
