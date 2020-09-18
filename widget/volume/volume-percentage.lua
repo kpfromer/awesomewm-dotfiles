@@ -10,10 +10,17 @@ percentage.valign = 'center'
 
 -- TODO: remove global
 function update_volume()
-    awful.spawn.easy_async("amixer -D pulse sget Master", function(stdout)
+    -- awful.spawn.easy_async("amixer -D pulse sget Master", function(stdout)
+    --     -- TODO: muted version
+    --     local mute = string.match(stdout, '%[(o%D%D?)%]')
+    --     local volume = string.match(stdout, '(%d?%d?%d)%%')
+    --     percentage.text = volume
+    --     collectgarbage('collect')
+    -- end)
+    awful.spawn.easy_async("pulsemixer --get-volume", function(stdout)
         -- TODO: muted version
-        local mute = string.match(stdout, '%[(o%D%D?)%]')
-        local volume = string.match(stdout, '(%d?%d?%d)%%')
+        -- local mute = string.match(stdout, '%[(o%D%D?)%]')
+        local volume = string.match(stdout, '%d?%d?')
         percentage.text = volume
         collectgarbage('collect')
     end)

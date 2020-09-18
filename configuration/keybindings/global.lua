@@ -233,8 +233,56 @@ local globalkeys =
           awful.spawn(config.apps.default.browser)
       end,
       {description = "launch browser", group = "apps"}
-  )
-  )
+  ),
+      -- Music
+
+    -- Audio
+    awful.key(
+        {modkey, "Shift"},
+        "-",
+        function(client)
+            awful.spawn('pulsemixer --change-volume -5')
+            -- Global from volume-percentage
+            _G.update_volume()
+        end,
+        {description = "decrease volume", group = "audio"}
+    ),
+    awful.key(
+        {modkey, "Shift"},
+        "=",
+        function(client)
+            awful.spawn('pulsemixer --change-volume +5')
+            -- Global from volume-percentage
+            _G.update_volume()
+        end,
+        {description = "increase volume", group = "audio"}
+    ),
+    -- Song control
+    awful.key(
+        {modkey, "Shift"},
+        ",",
+        function(client)
+            awful.spawn('playerctl previous')
+        end,
+        {description = "previous song", group = "audio"}
+    ),
+    awful.key(
+        {modkey, "Shift"},
+        ".",
+        function(client)
+            awful.spawn('playerctl next')
+        end,
+        {description = "next song", group = "audio"}
+    ),
+    awful.key(
+        {modkey, "Shift"},
+        "p",
+        function(client)
+            awful.spawn('playerctl play-pause')
+        end,
+        {description = "start/stop song", group = "audio"}
+    )
+)
 
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it work on any keyboard layout.
