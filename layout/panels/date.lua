@@ -10,13 +10,13 @@ local date_widget = wibox.container.margin(textclock, dpi(8), dpi(8), dpi(8),
                                            dpi(8))
 
 local DatePanel = function(s, offset)
-    local offsetx = -dpi(136)
+    local offsetx = -dpi(142)
     local offsety = dpi(12)
     local panel = wibox({
         ontop = false,
         screen = s,
         height = dpi(32),
-        width = dpi(86), -- width = dpi(80)
+        width = dpi(92),
         x = s.geometry.width + offsetx,
         y = s.geometry.y + offsety,
         stretch = false,

@@ -10,7 +10,7 @@ local clock_widget = wibox.container.margin(textclock, dpi(8), dpi(8), dpi(8),
                                             dpi(8))
 
 local ClockPanel = function(s, offset)
-    local offsetx = -dpi(196)
+    local offsetx = -dpi(202)
     local offsety = 0
     if offset == true then offsety = dpi(12) end
     local panel = wibox({

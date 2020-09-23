@@ -41,7 +41,7 @@ end)))
 local TasklistPanel = function(s, offset)
     local offsetx = 0
     if offset == true then
-        offsetx = dpi(512)
+        offsetx = dpi(506)
         offsety = dpi(12)
     end
     local panel = wibox({
