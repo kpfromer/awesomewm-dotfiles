@@ -124,6 +124,22 @@ local clientkeys =
             c:raise()
         end,
         {description = "(un)maximize horizontally", group = "client"}
+    ),
+    awful.key(
+        {modkey},
+        "p",
+        function(c)
+            if c.floating then
+                c.ontop = false
+                c.sticky = false
+                c.floating = false
+            else
+                c.ontop = true
+                c.sticky = true
+                c.floating = true
+            end
+        end,
+        {description = "pin window", group = "client"}
     )
 )
 
