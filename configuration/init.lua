@@ -18,7 +18,7 @@ awful.screen.connect_for_each_screen(function(s)
       awful.tag.add(i, {
           icon = tag.icon,
           icon_only = true,
-          layout = awful.layout.suit.tile,
+          layout = config.layouts[1],
           gap_single_client = true,
           gap = 2,
           screen = s,
@@ -27,6 +27,22 @@ awful.screen.connect_for_each_screen(function(s)
       })
   end
 end)
+
+-- Start up default applications
+-- Kill old versions of default applications
+function autostart()
+    for _, app in ipairs(config.apps.run_on_start_up) do
+        local script_name = app
+        local firstspace = app:find(" ")
+        if firstspace then
+            script_name = app:sub(0, firstspace - 1)
+        end
+        -- Only spawn if there are no other process of same name running
+        awful.spawn.with_shell(string.format("pgrep -u $USER -x %s > /dev/null || (%s)", script_name, app), false)
+     end
+end
+-- TODO:
+-- autostart()
 
 -- If a window wants titlebars (based on window rules) then give to them (see config.rules)
 -- Handle Titlebars (min/max/close bar on every window)
