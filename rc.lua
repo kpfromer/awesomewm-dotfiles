@@ -14,11 +14,7 @@ local beautiful = require("beautiful")
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
 
--- -- Global Variables
--- terminal = os.getenv("TERMINAL") or "kitty"
--- editor = os.getenv("EDITOR") or "nano"
--- browser = os.getenv("BROWSER") or "google-chrome-stable"
--- editor_cmd = terminal .. " -e " .. editor
+
 
 -- Configuration
 require("configuration")
@@ -28,6 +24,16 @@ beautiful.init(require("theme"))
 
 -- Layout
 require("layout")
+
+-- Init all modules
+-- require('module.notifications')
+-- require('module.auto-start')
+-- require('module.decorate-client')
+-- require('module.quake-terminal')
+-- Backdrop causes bugs on some gtk3 applications
+-- require('module.backdrop')
+-- require('module.exit-screen')
+-- require('module.dashboard')
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
