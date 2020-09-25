@@ -1,10 +1,6 @@
 local filesystem = require('gears.filesystem')
 local awful = require('awful')
-local gears = require('gears')
 local icons = require('theme.icons')
-
-local client_buttons = require('configuration.client.buttons')
-local client_keys = require('configuration.client.keys')
 
 -- TODO: get working
 -- Thanks to jo148 on github for making rofi dpi aware!
@@ -117,84 +113,6 @@ local config = {
             defaultApp = apps.default.rofi,
             screen = 1
         }
-    },
-    -- Window Rules
-    -- Doc: https://awesomewm.org/doc/api/libraries/awful.rules.html
-    -- Client rules doc: https://awesomewm.org/doc/api/classes/client.html#Extra_properties_available_in_awful_rules_and_awful_spawn
-    rules = {
-        {rule_any = {name = {"kitty"}}, properties = {skip_decoration = true}},
-        -- All clients will match this rule.
-        {
-            rule = {},
-            properties = {
-                focus = awful.client.focus.filter,
-                raise = true,
-                keys = client_keys,
-                buttons = client_buttons,
-                screen = awful.screen.preferred,
-                placement = awful.placement.no_offscreen,
-                floating = false,
-                maximized = false,
-                above = false,
-                below = false,
-                ontop = false,
-                sticky = false,
-                maximized_horizontal = false,
-                maximized_vertical = false
-            }
-        }, -- Titlebars
-        {
-            rule_any = {
-                type = {"dialog"},
-                class = {"Wicd-client.py", "calendar.google.com"}
-            },
-            properties = {
-                placement = awful.placement.centered,
-                ontop = true,
-                floating = true,
-                drawBackdrop = true,
-                shape = function()
-                    return function(cr, w, h)
-                        gears.shape.rounded_rect(cr, w, h, 8)
-                    end
-                end,
-                skip_decoration = true
-            }
-        }, 
-        -- Enable titlebars for all windows
-        {
-            -- https://awesomewm.org/doc/api/classes/client.html#request::titlebars
-            -- https://awesomewm.org/doc/api/classes/client.html#client.titlebars_enabled
-            rule_any = {type = {"normal", "dialog"}},
-            properties = {titlebars_enabled = true}
-        },
-        -- Show caja, password permission, file manager as hover
-        {
-            rule_any = { class = {"Caja", "gcr-prompter"} },
-            properties = {
-                focus = true,
-                floating = true,
-                above = true,
-                -- Center window on creation
-                callback = function (window)
-                    awful.placement.centered(window)
-                end
-            }
-        },
-        -- zoom chat as hover
-        {
-            rule_any = {class={"Zoom"}, name={"Chat"}},
-            properties = {
-                focus = true,
-                floating = true,
-                above = true,
-                -- Center window on creation
-                callback = function (window)
-                    awful.placement.centered(window)
-                end
-            }
-        },
-
     },
     -- Default Applications
     apps = apps

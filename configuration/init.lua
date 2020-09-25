@@ -3,14 +3,13 @@ local gears = require("gears")
 local wibox = require("wibox")
 local config = require('configuration.config')
 
+require('configuration.client.rules')
+
 -- Global Keybindings
 _G.root.keys(require("configuration.keys.global"))
 
 -- Set awesomewm window layouts
 awful.layout.layouts = config.layouts
-
--- Set window rules
-awful.rules.rules = config.rules
 
 -- Add tags for each window
 awful.screen.connect_for_each_screen(function(s)
