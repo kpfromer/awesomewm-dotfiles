@@ -2,6 +2,7 @@ local awful = require('awful')
 local config = require('configuration.config')
 
 require('configuration.client')
+require('configuration.root')
 
 -- Global Keybindings
 _G.root.keys(require("configuration.keys.global"))
