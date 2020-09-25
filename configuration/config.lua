@@ -3,7 +3,7 @@ local awful = require('awful')
 local gears = require('gears')
 local icons = require('theme.icons')
 
-local client_config = require('configuration.keybindings.client')
+local client_config = require('configuration.keys.client')
 local clientbuttons = client_config.clientbuttons
 local clientkeys = client_config.clientkeys
 
@@ -37,6 +37,19 @@ local apps = {
     },
     -- List of apps to start once on start-up
     run_on_start_up = {
+        -- Force Composition Pipeline for nvidia
+        "force-composition-pipeline",
+        -- Load xresources
+        "xrdb merge .Xresources",
+        -- Start audio
+        "start-pulseaudio-x11",
+        -- Dunst for notifcations (TODO: update to use awesomewm)
+        "dunst",
+        -- Backgrounds
+        "nitrogen --restore",
+        -- Picom (compositor)
+        "picom -b --experimental-backends --config ~/.config/picom.conf"
+        
         -- -- Add applications that need to be killed between reloads
         -- -- to avoid multipled instances, inside the awspawn script
         -- '~/.config/awesome/configuration/awspawn', -- Spawn "dirty" apps that can linger between sessions
@@ -51,8 +64,7 @@ local apps = {
         -- -- '/usr/lib/x86_64-linux-gnu/libexec/polkit-kde-authentication-agent-1 & eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)', -- credential manager
         -- '/usr/lib/xfce-polkit/xfce-polkit & eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)', -- credential manager
         -- 'blueman-tray' -- bluetooth tray
-        -- 'lxsession',
-        -- 'geary --hidden', -- Email client
+        -- 'lxsession'
     }
 }
 
@@ -159,9 +171,9 @@ local config = {
             rule_any = {type = {"normal", "dialog"}},
             properties = {titlebars_enabled = true}
         },
-        -- Show caja file manager as hover
+        -- Show caja, password permission, file manager as hover
         {
-            rule_any = { class = {"Caja"} },
+            rule_any = { class = {"Caja", "gcr-prompter"} },
             properties = {
                 focus = true,
                 floating = true,
@@ -171,7 +183,21 @@ local config = {
                     awful.placement.centered(window)
                 end
             }
-        }
+        },
+        -- zoom chat as hover
+        {
+            rule_any = {class={"Zoom"}, name={"Chat"}},
+            properties = {
+                focus = true,
+                floating = true,
+                above = true,
+                -- Center window on creation
+                callback = function (window)
+                    awful.placement.centered(window)
+                end
+            }
+        },
+
     },
     -- Default Applications
     apps = apps

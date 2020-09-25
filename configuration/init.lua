@@ -4,7 +4,7 @@ local wibox = require("wibox")
 local config = require('configuration.config')
 
 -- Global Keybindings
-_G.root.keys(require("configuration.keybindings.global"))
+_G.root.keys(require("configuration.keys.global"))
 
 -- Set awesomewm window layouts
 awful.layout.layouts = config.layouts
