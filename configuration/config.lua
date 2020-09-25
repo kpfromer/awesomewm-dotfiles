@@ -3,9 +3,8 @@ local awful = require('awful')
 local gears = require('gears')
 local icons = require('theme.icons')
 
-local client_config = require('configuration.keys.client')
-local clientbuttons = client_config.clientbuttons
-local clientkeys = client_config.clientkeys
+local client_buttons = require('configuration.client.buttons')
+local client_keys = require('configuration.client.keys')
 
 -- TODO: get working
 -- Thanks to jo148 on github for making rofi dpi aware!
@@ -130,10 +129,8 @@ local config = {
             properties = {
                 focus = awful.client.focus.filter,
                 raise = true,
-                keys = clientkeys,
-                buttons = clientbuttons,
-                -- keys = client_keys,
-                -- buttons = client_buttons,
+                keys = client_keys,
+                buttons = client_buttons,
                 screen = awful.screen.preferred,
                 placement = awful.placement.no_offscreen,
                 floating = false,
