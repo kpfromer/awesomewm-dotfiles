@@ -3,28 +3,13 @@ local config = require('configuration.config')
 
 require('configuration.client')
 require('configuration.root')
+require('configuration.tags')
 
 -- Global Keybindings
 _G.root.keys(require("configuration.keys.global"))
 
 -- Set awesomewm window layouts
 awful.layout.layouts = config.layouts
-
--- Add tags for each window
-awful.screen.connect_for_each_screen(function(s)
-  for i, tag in pairs(config.tags) do
-      awful.tag.add(i, {
-          icon = tag.icon,
-          icon_only = true,
-          layout = config.layouts[1],
-          gap_single_client = true,
-          gap = 2,
-          screen = s,
-          defaultApp = tag.defaultApp,
-          selected = i == 1
-      })
-  end
-end)
 
 -- Start up default applications
 -- Kill old versions of default applications
@@ -41,16 +26,6 @@ function autostart()
 end
 -- TODO:
 -- autostart()
-
--- TODO: comment
-_G.tag.connect_signal('property::layout', function(t)
-  local currentLayout = awful.tag.getproperty(t, 'layout')
-  if (currentLayout == awful.layout.suit.max) then
-      t.gap = 2
-  else
-      t.gap = 2
-  end
-end)
 
 -- Error handling
 require('configuration.error')

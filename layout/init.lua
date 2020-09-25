@@ -82,9 +82,6 @@ function updateBarsVisibility()
     end
 end
 
-_G.tag.connect_signal('property::selected',
-                      function(t) updateBarsVisibility() end)
-
 _G.client.connect_signal('property::fullscreen', function(c)
     c.screen.selected_tag.fullscreenMode = c.fullscreen
     updateBarsVisibility()
