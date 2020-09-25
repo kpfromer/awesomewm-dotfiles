@@ -1,11 +1,6 @@
 local filesystem = require('gears.filesystem')
 local awful = require('awful')
-local gears = require('gears')
 local icons = require('theme.icons')
-
-local client_config = require('configuration.keybindings.client')
-local clientbuttons = client_config.clientbuttons
-local clientkeys = client_config.clientkeys
 
 -- TODO: get working
 -- Thanks to jo148 on github for making rofi dpi aware!
@@ -37,6 +32,19 @@ local apps = {
     },
     -- List of apps to start once on start-up
     run_on_start_up = {
+        -- Force Composition Pipeline for nvidia
+        "force-composition-pipeline",
+        -- Load xresources
+        "xrdb merge .Xresources",
+        -- Start audio
+        "start-pulseaudio-x11",
+        -- Dunst for notifcations (TODO: update to use awesomewm)
+        "dunst",
+        -- Backgrounds
+        "nitrogen --restore",
+        -- Picom (compositor)
+        "picom -b --experimental-backends --config ~/.config/picom.conf"
+        
         -- -- Add applications that need to be killed between reloads
         -- -- to avoid multipled instances, inside the awspawn script
         -- '~/.config/awesome/configuration/awspawn', -- Spawn "dirty" apps that can linger between sessions
@@ -51,8 +59,7 @@ local apps = {
         -- -- '/usr/lib/x86_64-linux-gnu/libexec/polkit-kde-authentication-agent-1 & eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)', -- credential manager
         -- '/usr/lib/xfce-polkit/xfce-polkit & eval $(gnome-keyring-daemon -s --components=pkcs11,secrets,ssh,gpg)', -- credential manager
         -- 'blueman-tray' -- bluetooth tray
-        -- 'lxsession',
-        -- 'geary --hidden', -- Email client
+        -- 'lxsession'
     }
 }
 
@@ -71,107 +78,6 @@ local config = {
         -- -- awful.layout.suit.corner.ne,
         -- -- awful.layout.suit.corner.sw,
         -- -- awful.layout.suit.corner.se,
-    },
-    -- Tags used for the workspaces bar (located in the top left)
-    tags = {
-        {
-            icon = icons.firefox,
-            type = 'firefox',
-            defaultApp = apps.default.browser,
-            screen = 1
-        }, {
-            icon = icons.code,
-            type = 'code',
-            defaultApp = apps.default.editor,
-            screen = 1
-        }, {
-            icon = icons.folder,
-            type = 'files',
-            defaultApp = apps.default.files,
-            screen = 1
-        }, {
-            icon = icons.console,
-            type = 'console',
-            defaultApp = apps.default.terminal,
-            screen = 1
-        }, {
-            icon = icons.social,
-            type = 'social',
-            defaultApp = apps.default.social,
-            screen = 1
-        },
-        {
-            icon = icons.lab,
-            type = 'any',
-            defaultApp = apps.default.rofi,
-            screen = 1
-        }
-    },
-    -- Window Rules
-    -- Doc: https://awesomewm.org/doc/api/libraries/awful.rules.html
-    -- Client rules doc: https://awesomewm.org/doc/api/classes/client.html#Extra_properties_available_in_awful_rules_and_awful_spawn
-    rules = {
-        {rule_any = {name = {"kitty"}}, properties = {skip_decoration = true}},
-        -- All clients will match this rule.
-        {
-            rule = {},
-            properties = {
-                focus = awful.client.focus.filter,
-                raise = true,
-                keys = clientkeys,
-                buttons = clientbuttons,
-                -- keys = client_keys,
-                -- buttons = client_buttons,
-                screen = awful.screen.preferred,
-                placement = awful.placement.no_offscreen,
-                floating = false,
-                maximized = false,
-                above = false,
-                below = false,
-                ontop = false,
-                sticky = false,
-                maximized_horizontal = false,
-                maximized_vertical = false
-            }
-        }, -- Titlebars
-        {
-            rule_any = {
-                type = {"dialog"},
-                class = {"Wicd-client.py", "calendar.google.com"}
-            },
-            properties = {
-                placement = awful.placement.centered,
-                ontop = true,
-                floating = true,
-                drawBackdrop = true,
-                shape = function()
-                    return function(cr, w, h)
-                        gears.shape.rounded_rect(cr, w, h, 8)
-                    end
-                end,
-                skip_decoration = true
-            }
-        }, 
-        -- Enable titlebars for all windows
-        {
-            -- https://awesomewm.org/doc/api/classes/client.html#request::titlebars
-            -- https://awesomewm.org/doc/api/classes/client.html#client.titlebars_enabled
-            rule_any = {type = {"normal", "dialog"}},
-            properties = {titlebars_enabled = true}
-        },
-        -- Show caja file manager as hover
-        {
-            rule_any = { class = {"Caja"} },
-            properties = {
-                focus = true,
-                floating = true,
-                above = true,
-                -- Center window on creation
-                callback = function (window)
-                    awful.placement.centered(window)
-                end
-            }
-        }
     },
     -- Default Applications
     apps = apps

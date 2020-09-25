@@ -1,8 +1,10 @@
+-- ░█▀▀░█░░░▀█▀░█▀▀░█▀█░▀█▀░░░█░█░█▀▀░█░█░█▀▀
+-- ░█░░░█░░░░█░░█▀▀░█░█░░█░░░░█▀▄░█▀▀░░█░░▀▀█
+-- ░▀▀▀░▀▀▀░▀▀▀░▀▀▀░▀░▀░░▀░░░░▀░▀░▀▀▀░░▀░░▀▀▀
+
 local awful = require('awful')
 local gears = require('gears')
-local modkeys = require('configuration.modkeys')
-
-local modkey = modkeys.modkey
+local modkey = require('configuration.keys.mod').modkey
 
 local clientbuttons =
     gears.table.join(
