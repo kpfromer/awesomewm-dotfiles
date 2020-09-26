@@ -124,21 +124,30 @@ local tasklist_buttons =
     )
 )
 
+-- ░█░█░█▀█░█░░░█░░░█▀█░█▀█░█▀█░█▀▀░█▀▄
+-- ░█▄█░█▀█░█░░░█░░░█▀▀░█▀█░█▀▀░█▀▀░█▀▄
+-- ░▀░▀░▀░▀░▀▀▀░▀▀▀░▀░░░▀░▀░▀░░░▀▀▀░▀░▀
+
 local function set_wallpaper(s)
-    -- Wallpaper
+    -- If wallpaper is a function, call it with the screen
     if beautiful.wallpaper then
-        local wallpaper = beautiful.wallpaper
-        -- If wallpaper is a function, call it with the screen
-        if type(wallpaper) == "function" then
-            wallpaper = wallpaper(s)
+        if type(beautiful.wallpaper) == 'string' then
+
+            -- Check if beautiful.wallpaper is color/image
+            if beautiful.wallpaper:sub(1, #'#') == '#' then
+                -- If beautiful.wallpaper is color
+                gears.wallpaper.set(beautiful.wallpaper)
+
+            elseif beautiful.wallpaper:sub(1, #'/') == '/' then
+                -- If beautiful.wallpaper is path/image
+                gears.wallpaper.maximized(beautiful.wallpaper, s)
+            end
+        else
+            beautiful.wallpaper(s)
         end
-        gears.wallpaper.maximized(wallpaper, s, true)
     end
 end
 
+screen.connect_signal('request::wallpaper', set_wallpaper)
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
-
--- Autostart Applications
-
--- awful.spawn.with_shell("sh ~/.config/awesome/autostart")
