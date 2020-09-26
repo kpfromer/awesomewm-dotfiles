@@ -34,22 +34,14 @@ local apps = {
     run_on_start_up = {
         -- Force Composition Pipeline for nvidia
         "force-composition-pipeline",
+        -- Picom (compositor)
+        "picom -b --experimental-backends --config ~/.config/picom.conf",
         -- Load xresources
         "xrdb merge .Xresources",
         -- Start audio
         "start-pulseaudio-x11",
-        -- Dunst for notifcations (TODO: update to use awesomewm)
-        "dunst",
-        -- Backgrounds
-        "nitrogen --restore",
-        -- Picom (compositor)
-        "picom -b --experimental-backends --config ~/.config/picom.conf"
-        
-        -- -- Add applications that need to be killed between reloads
-        -- -- to avoid multipled instances, inside the awspawn script
-        -- '~/.config/awesome/configuration/awspawn', -- Spawn "dirty" apps that can linger between sessions
-        -- 'compton --config ' .. filesystem.get_configuration_dir() ..
-        --     '/configuration/compton.conf', 'nm-applet --indicator', -- wifi
+        -- Start blue light filter
+        "redshift -l 40.014984:-105.270546"
         -- -- 'blueberry-tray', -- Bluetooth tray icon
         -- 'xfce4-power-manager', -- Power manager
         -- 'ibus-daemon --xim --daemonize', -- Ibus daemon for keyboard
@@ -78,6 +70,11 @@ local config = {
         -- -- awful.layout.suit.corner.ne,
         -- -- awful.layout.suit.corner.sw,
         -- -- awful.layout.suit.corner.se,
+    },
+    module = {
+        auto_start = {
+            debug_mode = false
+        }
     },
     -- Default Applications
     apps = apps
