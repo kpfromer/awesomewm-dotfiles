@@ -36,6 +36,8 @@ require("configuration")
 
 -- Handles staring up programs like picom, 
 require('module.auto-start')
+-- Titlebars for clients (windows)
+require('module.titlebar')
 
 -- ░█░█░█▀█░█░░░█░░░█▀█░█▀█░█▀█░█▀▀░█▀▄
 -- ░█▄█░█▀█░█░░░█░░░█▀▀░█▀█░█▀▀░█▀▀░█▀▄
