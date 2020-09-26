@@ -5,60 +5,61 @@
 local icons = require('theme.icons')
 local awful = require('awful')
 local config = require('configuration.config')
+local beautiful = require('beautiful')
 local apps = config.apps
 
 -- Tags used for the workspaces bar (located in the top left)
 local tags = {
   {
-      icon = icons.firefox,
-      type = 'firefox',
+      icon = icons.web_browser,
+      type = 'internet',
       defaultApp = apps.default.browser,
-      screen = 1
+      gap = beautiful.useless_gap
   }, {
-      icon = icons.code,
+      icon = icons.development,
       type = 'code',
       defaultApp = apps.default.editor,
-      screen = 1
+      gap = beautiful.useless_gap
   }, {
-      icon = icons.folder,
+      icon = icons.file_manager,
       type = 'files',
       defaultApp = apps.default.files,
-      screen = 1
+      gap = beautiful.useless_gap
   }, {
-      icon = icons.console,
+      icon = icons.terminal,
       type = 'console',
       defaultApp = apps.default.terminal,
-      screen = 1
+      gap = beautiful.useless_gap
   }, {
       icon = icons.social,
       type = 'social',
       defaultApp = apps.default.social,
-      screen = 1
+      gap = beautiful.useless_gap
   },
   {
-      icon = icons.lab,
+      icon = icons.sandbox,
       type = 'any',
       defaultApp = apps.default.rofi,
-      screen = 1
+      gap = beautiful.useless_gap
   },
   -- TODO:
   {
-    icon = icons.lab,
+    icon = icons.sandbox,
     type = 'any',
     defaultApp = apps.default.rofi,
-    screen = 1
+    gap = beautiful.useless_gap
   },
   {
-    icon = icons.lab,
+    icon = icons.sandbox,
     type = 'any',
     defaultApp = apps.default.rofi,
-    screen = 1
+    gap = beautiful.useless_gap
   },
   {
-    icon = icons.lab,
+    icon = icons.sandbox,
     type = 'any',
     defaultApp = apps.default.rofi,
-    screen = 1
+    gap = beautiful.useless_gap
   }
 }
 

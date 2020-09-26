@@ -1,57 +1,35 @@
--- If LuaRocks is installed, make sure that packages installed through it are
--- found (e.g. lgi). If LuaRocks is not installed, do nothing.
-pcall(require, "luarocks.loader")
+-- ░█▀█░█░█░█▀▀░█▀▀░█▀█░█▄█░█▀▀░█░█░█▄█
+-- ░█▀█░█▄█░█▀▀░▀▀█░█░█░█░█░█▀▀░█▄█░█░█
+-- ░▀░▀░▀░▀░▀▀▀░▀▀▀░▀▀▀░▀░▀░▀▀▀░▀░▀░▀░▀
+-- Kyle Pfromer
+-- Banner generated using `toilet -f pagga text`
 
 -- Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
 require("awful.autofocus")
--- Widget and layout library
-local wibox = require("wibox")
 -- Theme handling library
 local beautiful = require("beautiful")
--- Enable hotkeys help widget for VIM and other apps
--- when client with a matching name is opened:
-require("awful.hotkeys_popup.keys")
 
+-- ░▀█▀░█░█░█▀▀░█▄█░█▀▀
+-- ░░█░░█▀█░█▀▀░█░█░█▀▀
+-- ░░▀░░▀░▀░▀▀▀░▀░▀░▀▀▀
 
-
--- Configuration
-require("configuration")
-
--- Theme
 beautiful.init(require("theme"))
 
--- Layout
+-- ░█░░░█▀█░█░█░█▀█░█░█░▀█▀
+-- ░█░░░█▀█░░█░░█░█░█░█░░█░
+-- ░▀▀▀░▀░▀░░▀░░▀▀▀░▀▀▀░░▀░
+
 require("layout")
 
--- Init all modules
--- require('module.notifications')
--- require('module.auto-start')
--- require('module.decorate-client')
--- require('module.quake-terminal')
--- Backdrop causes bugs on some gtk3 applications
--- require('module.backdrop')
--- require('module.exit-screen')
--- require('module.dashboard')
+-- ░█▀▀░█▀█░█▀█░█▀▀░▀█▀░█▀▀░█░█░█▀▄░█▀█░▀█▀░▀█▀░█▀█░█▀█
+-- ░█░░░█░█░█░█░█▀▀░░█░░█░█░█░█░█▀▄░█▀█░░█░░░█░░█░█░█░█
+-- ░▀▀▀░▀▀▀░▀░▀░▀░░░▀▀▀░▀▀▀░▀▀▀░▀░▀░▀░▀░░▀░░▀▀▀░▀▀▀░▀░▀
 
--- {{{ Variable definitions
--- Themes define colours, icons, font and wallpapers.
-beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
+require("configuration")
 
--- Default modkey.
--- Usually, Mod4 is the key with a logo between Control and Alt.
--- If you do not like this or do not have such a key,
--- I suggest you to remap Mod4 to another key using xmodmap or other tools.
--- However, you can use another modifier like Mod1, but it may interact with others.
-modkey = "Mod4"
-
--- Keyboard map indicator and switcher
-mykeyboardlayout = awful.widget.keyboardlayout()
-
--- {{{ Wibar
--- Create a textclock widget
-mytextclock = wibox.widget.textclock()
+local modkey = require('configuration.keys.mod').modkey
 
 -- Create a wibox for each screen and add it
 local taglist_buttons =
@@ -220,34 +198,9 @@ awful.screen.connect_for_each_screen(
             filter = awful.widget.tasklist.filter.currenttags,
             buttons = tasklist_buttons
         }
-
-        -- -- Create the wibox
-        -- s.mywibox = awful.wibar({position = "top", screen = s})
-
-        -- -- Add widgets to the wibox
-        -- s.mywibox:setup {
-        --     layout = wibox.layout.align.horizontal,
-        --     {
-        --         -- Left widgets
-        --         layout = wibox.layout.fixed.horizontal,
-        --         mylauncher,
-        --         s.mytaglist,
-        --         s.mypromptbox
-        --     },
-        --     s.mytasklist, -- Middle widget
-        --     {
-        --         -- Right widgets
-        --         layout = wibox.layout.fixed.horizontal,
-        --         mykeyboardlayout,
-        --         wibox.widget.systray(),
-        --         mytextclock,
-        --         s.mylayoutbox
-        --     }
-        -- }
     end
 )
--- }}}
 
 -- Autostart Applications
 
-awful.spawn.with_shell("sh ~/.config/awesome/autostart")
+-- awful.spawn.with_shell("sh ~/.config/awesome/autostart")
