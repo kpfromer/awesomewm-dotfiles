@@ -114,7 +114,7 @@ action_level:buttons(
 )
 
 local adjust_blur = function(power)
-
+	-- TODO: SCRIPT LOCATION
 	awful.spawn.with_shell(
 		[[bash -c "
 		sed -i 's/.*strength = .*/    strength = ]] .. power .. [[;/g' \
