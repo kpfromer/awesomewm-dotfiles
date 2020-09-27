@@ -1,146 +1,208 @@
--------------------------------------------------
--- Battery Widget for Awesome Window Manager
--- Shows the battery status using the ACPI tool
--- More details could be found here:
--- https://github.com/streetturtle/awesome-wm-widgets/tree/master/battery-widget
-
--- @author Pavel Makhov
--- @copyright 2017 Pavel Makhov
--------------------------------------------------
-
-local awful = require('awful')
-local naughty = require('naughty')
-local watch = require('awful.widget.watch')
 local wibox = require('wibox')
-local clickable_container = require('widget.material.clickable-container')
+local awful = require('awful')
 local gears = require('gears')
+local naughty = require('naughty')
+local watch = awful.widget.watch
+local clickable_container = require('widget.clickable-container')
 local dpi = require('beautiful').xresources.apply_dpi
+local config_dir = gears.filesystem.get_configuration_dir()
+local widget_icon_dir = config_dir .. 'widget/battery/icons/'
+local apps = require('configuration.config').apps
 
--- acpi sample outputs
--- Battery 0: Discharging, 75%, 01:51:38 remaining
--- Battery 0: Charging, 53%, 00:57:43 until charged
+local return_button = function()
 
-local HOME = os.getenv('HOME')
-local PATH_TO_ICONS = HOME .. '/.config/awesome/widget/battery/icons/'
+	local battery_imagebox = wibox.widget {
+		nil,
+		{
+			id = 'icon',
+			image = widget_icon_dir .. 'battery' .. '.svg',
+			widget = wibox.widget.imagebox,
+			resize = true
+		},
+		nil,
+		expand = 'none',
+		layout = wibox.layout.align.vertical
+	}
 
-local widget =
-  wibox.widget {
-  {
-    id = 'icon',
-    widget = wibox.widget.imagebox,
-    resize = true
-  },
-  layout = wibox.layout.fixed.horizontal,
-  opacity = 0.8
-}
+	local battery_percentage_text = wibox.widget {
+		id = 'percent_text',
+		text = '100%',
+		font = 'Inter Bold 11',
+		align = 'center',
+		valign = 'center',
+		visible = false,
+		widget = wibox.widget.textbox
+	}
 
-local widget_button = clickable_container(wibox.container.margin(widget, dpi(0), dpi(8), dpi(8), dpi(8)))
-widget_button:buttons(
-  gears.table.join(
-    awful.button(
-      {},
-      1,
-      nil,
-      function()
-        awful.spawn('xfce4-power-manager-settings')
-      end
-    )
-  )
-)
--- Alternative to naughty.notify - tooltip. You can compare both and choose the preferred one
-local battery_popup =
-  awful.tooltip(
-  {
-    objects = {widget_button},
-    mode = 'outside',
-    align = 'left',
-    preferred_positions = {'right', 'left', 'top', 'bottom'}
-  }
-)
 
--- To use colors from beautiful theme put
--- following lines in rc.lua before require("battery"):
---beautiful.tooltip_fg = beautiful.fg_normal
---beautiful.tooltip_bg = beautiful.bg_normal
+	local battery_widget = wibox.widget {
+		layout = wibox.layout.fixed.horizontal,
+		spacing = dpi(0),
+		battery_imagebox,
+		battery_percentage_text
+	}
 
-local function show_battery_warning()
-  naughty.notify {
-    icon = PATH_TO_ICONS .. 'battery-alert.svg',
-    icon_size = dpi(48),
-    text = 'Huston, we have a problem',
-    title = 'Battery is dying',
-    timeout = 5,
-    hover_timeout = 0.5,
-    position = 'bottom_left',
-    bg = '#d32f2f',
-    fg = '#EEE9EF',
-    width = 248
-  }
+
+	local battery_button = wibox.widget {
+		{
+			battery_widget,
+			margins = dpi(7),
+			widget = wibox.container.margin
+		},
+		widget = clickable_container
+	}
+
+	battery_button:buttons(
+		gears.table.join(
+			awful.button(
+				{},
+				1,
+				nil,
+				function()
+					awful.spawn(apps.default.power_manager , false)
+				end
+			)
+		)
+	)
+
+	local battery_tooltip =  awful.tooltip {
+		objects = {battery_button},
+		text = 'None',
+		mode = 'outside',
+		align = 'right',
+		margin_leftright = dpi(8),
+		margin_topbottom = dpi(8),
+		preferred_positions = {'right', 'left', 'top', 'bottom'}
+	}
+
+
+	local get_battery_info = function()
+		awful.spawn.easy_async_with_shell(
+			'upower -i $(upower -e | grep BAT)',
+			function(stdout)
+				if stdout == nil or stdout == '' then
+					battery_tooltip:set_text('No battery detected!')
+					return
+				end
+
+				-- Remove new line from the last line
+				battery_tooltip:set_text(stdout:sub(1, -2))
+			end
+		)
+	end
+	get_battery_info()
+
+	battery_widget:connect_signal(
+		'mouse::enter',
+		function() 
+			get_battery_info()
+		end
+	)
+
+	local last_battery_check = os.time()
+	local notify_critcal_battery = true
+
+    local show_battery_warning = function()
+        naughty.notification ({
+            icon = widget_icon_dir .. 'battery-alert.svg',
+            app_name = 'System notification',
+            title = 'Battery is dying!',
+            message = 'Hey, I think we have a problem here. Save your work before reaching the oblivion.',
+            urgency = 'critical'
+        })
+    end
+
+	local update_battery = function(status)
+
+		awful.spawn.easy_async_with_shell(
+			[[sh -c "
+			upower -i $(upower -e | grep BAT) | grep percentage | awk '{print \$2}' | tr -d '\n%'
+			"]],
+			function(stdout)
+				local battery_percentage = tonumber(stdout)
+
+				-- Stop if null
+				if not battery_percentage then
+					return
+				end
+
+				battery_widget.spacing = dpi(5)
+				battery_percentage_text.visible = true
+				battery_percentage_text:set_text(battery_percentage .. '%')
+
+				local icon_name = 'battery'
+
+				-- Fully charged
+				if (status == 'fully-charged' or status == 'charging') and battery_percentage == 100 then
+					icon_name = icon_name .. '-' .. 'fully-charged'
+					battery_imagebox.icon:set_image(gears.surface.load_uncached(widget_icon_dir .. icon_name .. '.svg'))
+					return
+				end
+
+				-- Critical level warning message
+				if (battery_percentage > 0 and battery_percentage < 10) and status == 'discharging' then
+					icon_name = icon_name .. '-' .. 'alert-red'
+
+					if os.difftime(os.time(), last_battery_check) > 300 or notify_critcal_battery then
+						last_battery_check = os.time()
+						notify_critcal_battery = false
+						show_battery_warning()
+					end
+					battery_imagebox.icon:set_image(gears.surface.load_uncached(widget_icon_dir .. icon_name .. '.svg'))
+					return
+				end
+
+				-- Discharging
+				if battery_percentage > 0 and battery_percentage < 20 then
+					icon_name = icon_name .. '-' .. status .. '-' .. '10'
+
+				elseif battery_percentage >= 20 and battery_percentage < 30 then
+					icon_name = icon_name .. '-' .. status .. '-' .. '20'
+
+				elseif battery_percentage >= 30 and battery_percentage < 50 then
+					icon_name = icon_name .. '-' .. status .. '-' .. '30'
+
+				elseif battery_percentage >= 50 and battery_percentage < 60 then
+					icon_name = icon_name .. '-' .. status .. '-' .. '50'
+
+				elseif battery_percentage >= 60 and battery_percentage < 80 then
+					icon_name = icon_name .. '-' .. status .. '-' .. '60'
+
+				elseif battery_percentage >= 80 and battery_percentage < 90 then
+					icon_name = icon_name .. '-' .. status .. '-' .. '80'
+
+				elseif battery_percentage >= 90 and battery_percentage < 100 then
+					icon_name = icon_name .. '-' .. status .. '-' .. '90'
+				end
+
+				battery_imagebox.icon:set_image(gears.surface.load_uncached(widget_icon_dir .. icon_name .. '.svg'))
+			end
+		)
+	end
+
+	-- Watch status if charging, discharging, fully-charged
+	watch(
+		[[sh -c "
+		upower -i $(upower -e | grep BAT) | grep state | awk '{print \$2}' | tr -d '\n'
+		"]],
+		5,
+		function(widget, stdout)
+			local status = stdout:gsub('%\n', '')
+			
+			-- If no output or no battery detected
+			if status == nil or status == '' then
+				battery_widget.spacing = dpi(0)
+				battery_percentage_text.visible = false
+				battery_tooltip:set_text('No battery detected!')
+				battery_imagebox.icon:set_image(gears.surface.load_uncached(widget_icon_dir .. 'battery-unknown' .. '.svg'))
+				return
+			end
+
+			update_battery(status)
+		end
+	)
+
+	return battery_button
 end
 
-local last_battery_check = os.time()
-
-watch(
-  'acpi -i',
-  1,
-  function(_, stdout)
-    local batteryIconName = 'battery'
-
-    local battery_info = {}
-    local capacities = {}
-    for s in stdout:gmatch('[^\r\n]+') do
-      local status, charge_str, time = string.match(s, '.+: (%a+), (%d?%d?%d)%%,?.*')
-      if status ~= nil then
-        table.insert(battery_info, {status = status, charge = tonumber(charge_str)})
-      else
-        local cap_str = string.match(s, '.+:.+last full capacity (%d+)')
-        table.insert(capacities, tonumber(cap_str))
-      end
-    end
-
-    local capacity = 0
-    for _, cap in ipairs(capacities) do
-      capacity = capacity + cap
-    end
-
-    local charge = 0
-    local status
-    for i, batt in ipairs(battery_info) do
-      if batt.charge >= charge then
-        status = batt.status -- use most charged battery status
-      -- this is arbitrary, and maybe another metric should be used
-      end
-
-      charge = charge + batt.charge * capacities[i]
-    end
-    charge = charge / capacity
-
-    if (charge >= 0 and charge < 15) then
-      if status ~= 'Charging' and os.difftime(os.time(), last_battery_check) > 300 then
-        -- if 5 minutes have elapsed since the last warning
-        last_battery_check = _G.time()
-
-        show_battery_warning()
-      end
-    end
-
-    if status == 'Charging' or status == 'Full' then
-      batteryIconName = batteryIconName .. '-charging'
-    end
-
-    local roundedCharge = math.floor(charge / 10) * 10
-    if (roundedCharge == 0) then
-      batteryIconName = batteryIconName .. '-outline'
-    elseif (roundedCharge ~= 100) then
-      batteryIconName = batteryIconName .. '-' .. roundedCharge
-    end
-
-    widget.icon:set_image(PATH_TO_ICONS .. batteryIconName .. '.svg')
-    -- Update popup text
-    battery_popup.text = string.gsub(stdout, '\n$', '')
-    collectgarbage('collect')
-  end,
-  widget
-)
-
-return widget_button
+return return_button

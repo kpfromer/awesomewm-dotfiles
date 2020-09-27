@@ -1,112 +1,105 @@
--------------------------------------------------
--- Battery Widget for Awesome Window Manager
--- Shows the battery status using the ACPI tool
--- More details could be found here:
--- https://github.com/streetturtle/awesome-wm-widgets/tree/master/battery-widget
-
--- @author Pavel Makhov
--- @copyright 2017 Pavel Makhov
--------------------------------------------------
-
 local awful = require('awful')
 local naughty = require('naughty')
-local watch = require('awful.widget.watch')
 local wibox = require('wibox')
-local clickable_container = require('widget.material.clickable-container')
 local gears = require('gears')
+
+local watch = awful.widget.watch
+
+local apps = require('configuration.config').apps
+
+local clickable_container = require('widget.clickable-container')
 local dpi = require('beautiful').xresources.apply_dpi
 
--- acpi sample outputs
--- Battery 0: Discharging, 75%, 01:51:38 remaining
--- Battery 0: Charging, 53%, 00:57:43 until charged
+local config_dir = gears.filesystem.get_configuration_dir()
+local widget_icon_dir = config_dir .. 'widget/package-updater/icons/'
 
-local HOME = os.getenv('HOME')
-local PATH_TO_ICONS = HOME .. '/.config/awesome/widget/package-updater/icons/'
-local updateAvailable = false
-local numOfUpdatesAvailable
+local update_available = false
+local number_of_updates_available = nil
+local update_package = nil
 
-local widget =
-  wibox.widget {
-  {
-    id = 'icon',
-    widget = wibox.widget.imagebox,
-    resize = true
-  },
-  layout = wibox.layout.align.horizontal
-}
+local return_button = function()
 
-local widget_button = clickable_container(wibox.container.margin(widget, dpi(14), dpi(14), dpi(4), dpi(4)))
-widget_button:buttons(
-  gears.table.join(
-    awful.button(
-      {},
-      1,
-      nil,
-      function()
-        if updateAvailable then
-          awful.spawn('pamac-manager --updates')
-        else
-          awful.spawn('pamac-manager')
-        end
-      end
-    )
-  )
-)
--- Alternative to naughty.notify - tooltip. You can compare both and choose the preferred one
-awful.tooltip(
-  {
-    objects = {widget_button},
-    mode = 'outside',
-    align = 'right',
-    timer_function = function()
-      if updateAvailable then
-        return numOfUpdatesAvailable .. ' updates are available'
-      else
-        return 'We are up-to-date!'
-      end
-    end,
-    preferred_positions = {'right', 'left', 'top', 'bottom'}
-  }
-)
+	local widget = wibox.widget {
+		{
+			id = 'icon',
+			widget = wibox.widget.imagebox,
+			image = widget_icon_dir .. 'package.svg',
+			resize = true
+		},
+		layout = wibox.layout.align.horizontal
+	}
 
--- To use colors from beautiful theme put
--- following lines in rc.lua before require("battery"):
---beautiful.tooltip_fg = beautiful.fg_normal
---beautiful.tooltip_bg = beautiful.bg_normal
+	local widget_button = wibox.widget {
+		{
+			widget,
+			margins = dpi(7),
+			widget = wibox.container.margin
+		},
+		widget = clickable_container
+	}
 
-local function show_battery_warning()
-  naughty.notify {
-    icon = PATH_TO_ICONS .. 'battery-alert.svg',
-    icon_size = dpi(48),
-    text = 'Huston, we have a problem',
-    title = 'Battery is dying',
-    timeout = 5,
-    hover_timeout = 0.5,
-    position = 'bottom_left',
-    bg = '#d32f2f',
-    fg = '#EEE9EF',
-    width = 248
-  }
+	widget_button:buttons(
+		gears.table.join(
+			awful.button(
+				{},
+				1,
+				nil,
+				function()
+					
+					if update_available then
+						awful.spawn(apps.default.package_manager .. ' --updates', false)
+					
+					else
+						awful.spawn(apps.default.package_manager, false)
+					
+					end
+				end
+			)
+		)
+	)
+
+	awful.tooltip(
+		{
+			objects = {widget_button},
+			mode = 'outside',
+			align = 'right',
+			margin_leftright = dpi(8),
+			margin_topbottom = dpi(8),
+			timer_function = function()
+
+				if update_available then
+					return update_package:gsub('\n$', '')
+				else
+					return 'We are up-to-date!'
+				end
+			
+			end,
+			preferred_positions = {'right', 'left', 'top', 'bottom'}
+		}
+	)
+
+	watch(
+		'pamac checkupdates',
+		60,
+		function(_, stdout)
+			number_of_updates_available = tonumber(stdout:match('.-\n'):match('%d*'))
+			update_package = stdout
+			local icon_name = nil
+			if number_of_updates_available ~= nil then
+				update_available = true
+				icon_name = 'package-up'
+			else
+				update_available = false
+				icon_name = 'package'
+				
+			end
+
+			widget.icon:set_image(widget_icon_dir .. icon_name .. '.svg')
+			collectgarbage('collect')
+		end
+	)
+
+	return widget_button
 end
 
-local last_battery_check = os.time()
-watch(
-  'pamac checkupdates',
-  60,
-  function(_, stdout)
-    numOfUpdatesAvailable = tonumber(stdout:match('.-\n'):match('%d*'))
-    local widgetIconName
-    if (numOfUpdatesAvailable ~= nil) then
-      updateAvailable = true
-      widgetIconName = 'package-up'
-    else
-      updateAvailable = false
-      widgetIconName = 'package'
-    end
-    widget.icon:set_image(PATH_TO_ICONS .. widgetIconName .. '.svg')
-    collectgarbage('collect')
-  end,
-  widget
-)
-
-return widget_button
+return return_button

@@ -7,10 +7,12 @@
 
 -- Standard awesome library
 local gears = require("gears")
-local awful = require("awful")
 require("awful.autofocus")
 -- Theme handling library
 local beautiful = require("beautiful")
+
+-- Print any errors
+require('configuration.error')
 
 -- ░▀█▀░█░█░█▀▀░█▄█░█▀▀
 -- ░░█░░█▀█░█▀▀░█░█░█▀▀
@@ -18,23 +20,25 @@ local beautiful = require("beautiful")
 
 beautiful.init(require("theme"))
 
--- ░█░░░█▀█░█░█░█▀█░█░█░▀█▀
--- ░█░░░█▀█░░█░░█░█░█░█░░█░
--- ░▀▀▀░▀░▀░░▀░░▀▀▀░▀▀▀░░▀░
-
-require("layout")
-
 -- ░█▀▀░█▀█░█▀█░█▀▀░▀█▀░█▀▀░█░█░█▀▄░█▀█░▀█▀░▀█▀░█▀█░█▀█
 -- ░█░░░█░█░█░█░█▀▀░░█░░█░█░█░█░█▀▄░█▀█░░█░░░█░░█░█░█░█
 -- ░▀▀▀░▀▀▀░▀░▀░▀░░░▀▀▀░▀▀▀░▀▀▀░▀░▀░▀░▀░░▀░░▀▀▀░▀▀▀░▀░▀
 
 require("configuration")
 
+-- ░█░░░█▀█░█░█░█▀█░█░█░▀█▀
+-- ░█░░░█▀█░░█░░█░█░█░█░░█░
+-- ░▀▀▀░▀░▀░░▀░░▀▀▀░▀▀▀░░▀░
+          
+require("layout")
+
 -- ░█▄█░█▀█░█▀▄░█░█░█░░░█▀▀░█▀▀
 -- ░█░█░█░█░█░█░█░█░█░░░█▀▀░▀▀█
 -- ░▀░▀░▀▀▀░▀▀░░▀▀▀░▀▀▀░▀▀▀░▀▀▀
 
--- Handles staring up programs like picom, 
+-- Configuration/layout for system notifications (using naughty)
+require('module.notifications') 
+-- Handles staring up programs like picom
 require('module.auto-start')
 -- Titlebars for clients (windows)
 require('module.titlebar')
@@ -43,6 +47,7 @@ require('module.titlebar')
 -- ░█▄█░█▀█░█░░░█░░░█▀▀░█▀█░█▀▀░█▀▀░█▀▄
 -- ░▀░▀░▀░▀░▀▀▀░▀▀▀░▀░░░▀░▀░▀░░░▀▀▀░▀░▀
 
+-- todo: extract
 local function set_wallpaper(s)
     -- If wallpaper is a function, call it with the screen
     if beautiful.wallpaper then

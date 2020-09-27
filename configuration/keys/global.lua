@@ -264,7 +264,7 @@ local globalkeys =
         {modkey, "Shift"},
         ",",
         function(client)
-            awful.spawn('playerctl previous')
+            awful.spawn('playerctl previous -p spotify')
         end,
         {description = "previous song", group = "audio"}
     ),
@@ -272,7 +272,7 @@ local globalkeys =
         {modkey, "Shift"},
         ".",
         function(client)
-            awful.spawn('playerctl next')
+            awful.spawn('playerctl next -p spotify')
         end,
         {description = "next song", group = "audio"}
     ),
@@ -280,7 +280,7 @@ local globalkeys =
         {modkey, "Shift"},
         "p",
         function(client)
-            awful.spawn('playerctl play-pause')
+            awful.spawn('playerctl play-pause -p spotify')
         end,
         {description = "start/stop song", group = "audio"}
     )

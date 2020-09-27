@@ -6,6 +6,8 @@ local naughty = require('naughty')
 local config = require('configuration.config')
 local debug_mode = config.module.auto_start.debug_mode or false
 
+-- Start up default applications
+-- Kill old versions of default applications
 local run_once = function(cmd)
     local findme = cmd
     local firstspace = cmd:find(' ')
