@@ -10,10 +10,10 @@ screen.connect_signal(
 		function(s)
 		s.top_panel = top_panel(s)
 		s.bottom_panel = bottom_panel(s)
-		-- s.control_center = control_center(s)
-		-- s.info_center = info_center(s)
-		-- s.control_center_show_again = false
-		-- s.info_center_show_again = false
+		s.control_center = control_center(s)
+		s.info_center = info_center(s)
+		s.control_center_show_again = false
+		s.info_center_show_again = false
 	end
 )
 

@@ -1,5 +1,4 @@
 local awful = require('awful')
-local naughty = require('naughty')
 local wibox = require('wibox')
 local gears = require('gears')
 
@@ -79,6 +78,7 @@ local return_button = function()
 	)
 
 	watch(
+		-- TODO:
 		'pamac checkupdates',
 		60,
 		function(_, stdout)

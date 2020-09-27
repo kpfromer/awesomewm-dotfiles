@@ -1,15 +1,6 @@
 local filesystem = require('gears.filesystem')
 local awful = require('awful')
-local icons = require('theme.icons')
 
--- TODO: get working
--- Thanks to jo148 on github for making rofi dpi aware!
-local with_dpi = require('beautiful').xresources.apply_dpi
-local get_dpi = require('beautiful').xresources.get_dpi
-local rofi_command = 'env /usr/bin/rofi -dpi ' .. get_dpi() .. ' -width ' ..
-                         with_dpi(400) .. ' -show drun -theme ' ..
-                         filesystem.get_configuration_dir() ..
-                         '/configuration/rofi.rasi -run-command "/bin/bash -c -i \'shopt -s expand_aliases; {cmd}\'"'
 local config_dir = filesystem.get_configuration_dir()   
 local bin_dir = config_dir .. 'utilities/'
 
@@ -19,7 +10,10 @@ local apps = {
 
 
 		-- GUI Text Editor
-		text_editor 			= 'subl3',
+        text_editor 			= 'code',
+        
+        -- Terminal based File Editor
+        terminal_editor = os.getenv('EDITOR') or 'vim',
 
 		-- Web browser
 		browser = os.getenv("BROWSER") or "google-chrome-stable",
@@ -28,7 +22,7 @@ local apps = {
 		file_manager 			= 'caja',
 
 		-- Network manager
-		network_manager 		= 'nmtui',
+		network_manager 		= 'nm-connection-editor',
 
 		-- Bluetooth manager
 		bluetooth_manager 		= 'blueman-manager',
@@ -146,8 +140,8 @@ local config = {
 		},
 
 		network = {
-			wired_interface = 'enp0s0',
-			wireless_interface = 'wlan0'
+			wired_interface = 'enp42s0',
+			wireless_interface = 'wlp40s0'
 		},
 
 		clock = {
