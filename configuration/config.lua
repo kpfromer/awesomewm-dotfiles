@@ -71,7 +71,7 @@ local apps = {
         -- Force Composition Pipeline for nvidia
         "force-composition-pipeline",
         -- Picom (compositor)
-        "picom -b --experimental-backends --config ~/.config/picom.conf",
+		'picom -b --experimental-backends --dbus --config ' .. config_dir .. '/configuration/picom.conf',
         -- Load xresources
         "xrdb merge .Xresources",
         -- Start audio
