@@ -2,6 +2,7 @@ local awful = require('awful')
 local wibox = require('wibox')
 local gears = require('gears')
 local beautiful = require('beautiful')
+local config = require('configuration.config')
 local dpi = beautiful.xresources.apply_dpi
 panel_visible = false
 
@@ -18,17 +19,22 @@ local info_center = function(s)
 	local panel_width = dpi(350)
 	local panel_margins = dpi(5)
 
+	local widgets = {
+		layout = wibox.layout.fixed.vertical,
+		forced_width = dpi(panel_width),
+		spacing = dpi(10),
+		require('widget.email'),
+	}
+	-- Conditionally enable weather widget if valid weather key in config
+	if not (config.widget.weather.key == nil or config.widget.weather.key == '') then
+		table.insert(widgets, require('widget.weather'))
+	end
+	table.insert(widgets, require('widget.notif-center')(s))
+
 	local panel = awful.popup {
 		widget = {
 			{
-				{
-					layout = wibox.layout.fixed.vertical,
-					forced_width = dpi(panel_width),
-					spacing = dpi(10),
-					require('widget.email'),
-					require('widget.weather'),
-					require('widget.notif-center')(s)
-				},
+				widgets,
 				margins = dpi(16),
 				widget = wibox.container.margin
 			},
