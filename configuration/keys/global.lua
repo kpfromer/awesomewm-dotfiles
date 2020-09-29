@@ -118,53 +118,61 @@ local globalkeys =
   ),
   awful.key({modkey, "Shift"}, "q", _G.awesome.quit, {description = "quit awesome", group = "awesome"}),
   awful.key(
-      {modkey},
-      "l",
-      function()
-          awful.tag.incmwfact(0.05)
-      end,
-      {description = "increase master width factor", group = "layout"}
-  ),
-  awful.key(
-      {modkey},
-      "h",
-      function()
-          awful.tag.incmwfact(-0.05)
-      end,
-      {description = "decrease master width factor", group = "layout"}
-  ),
-  awful.key(
-      {modkey, "Shift"},
-      "h",
-      function()
-          awful.tag.incnmaster(1, nil, true)
-      end,
-      {description = "increase the number of master clients", group = "layout"}
-  ),
-  awful.key(
-      {modkey, "Shift"},
-      "l",
-      function()
-          awful.tag.incnmaster(-1, nil, true)
-      end,
-      {description = "decrease the number of master clients", group = "layout"}
-  ),
-  awful.key(
-      {modkey, "Control"},
-      "h",
-      function()
-          awful.tag.incncol(1, nil, true)
-      end,
-      {description = "increase the number of columns", group = "layout"}
-  ),
-  awful.key(
-      {modkey, "Control"},
-      "l",
-      function()
-          awful.tag.incncol(-1, nil, true)
-      end,
-      {description = "decrease the number of columns", group = "layout"}
-  ),
+        {modkey},
+        'l',
+        function()
+            awful.spawn(config.apps.default.lock, false)
+        end,
+        {description = 'lock the screen', group = 'Utility'}
+    ),
+--   awful.key(
+--       {modkey},
+--       "l",
+--       function()
+--           awful.tag.incmwfact(0.05)
+--       end,
+--       {description = "increase master width factor", group = "layout"}
+--   ),
+--   awful.key(
+--       {modkey},
+--       "h",
+--       function()
+--           awful.tag.incmwfact(-0.05)
+--       end,
+--       {description = "decrease master width factor", group = "layout"}
+--   ),
+--   awful.key(
+--       {modkey, "Shift"},
+--       "h",
+--       function()
+--           awful.tag.incnmaster(1, nil, true)
+--       end,
+--       {description = "increase the number of master clients", group = "layout"}
+--   ),
+--   awful.key(
+--       {modkey, "Shift"},
+--       "l",
+--       function()
+--           awful.tag.incnmaster(-1, nil, true)
+--       end,
+--       {description = "decrease the number of master clients", group = "layout"}
+--   ),
+--   awful.key(
+--       {modkey, "Control"},
+--       "h",
+--       function()
+--           awful.tag.incncol(1, nil, true)
+--       end,
+--       {description = "increase the number of columns", group = "layout"}
+--   ),
+--   awful.key(
+--       {modkey, "Control"},
+--       "l",
+--       function()
+--           awful.tag.incncol(-1, nil, true)
+--       end,
+--       {description = "decrease the number of columns", group = "layout"}
+--   ),
   awful.key(
       {modkey},
       "space",
@@ -244,8 +252,6 @@ local globalkeys =
         "-",
         function(client)
             awful.spawn('pulsemixer --change-volume -5')
-            -- Global from volume-percentage
-            _G.update_volume()
         end,
         {description = "decrease volume", group = "audio"}
     ),
@@ -254,8 +260,6 @@ local globalkeys =
         "=",
         function(client)
             awful.spawn('pulsemixer --change-volume +5')
-            -- Global from volume-percentage
-            _G.update_volume()
         end,
         {description = "increase volume", group = "audio"}
     ),
