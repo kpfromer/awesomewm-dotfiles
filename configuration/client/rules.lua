@@ -37,7 +37,23 @@ local rules = {
           maximized_horizontal = false,
           maximized_vertical = false
       }
-  }, -- Titlebars
+  },
+  {
+      id         = 'dialog',
+      rule_any   = { 
+        type  = { 'dialog' },
+        class = { 'Wicd-client.py', 'calendar.google.com' }
+      },
+      properties = { 
+        titlebars_enabled = true,
+        floating = true,
+        above = true,
+        draw_backdrop = true,
+        skip_decoration = true,
+        placement = awful.placement.centered
+      }
+    },
+  -- Titlebars
 --   {
 --       rule_any = {
 --           type = {"dialog"},
