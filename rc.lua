@@ -24,7 +24,10 @@ beautiful.init(require("theme"))
 -- ░█░░░█░█░█░█░█▀▀░░█░░█░█░█░█░█▀▄░█▀█░░█░░░█░░█░█░█░█
 -- ░▀▀▀░▀▀▀░▀░▀░▀░░░▀▀▀░▀▀▀░▀▀▀░▀░▀░▀░▀░░▀░░▀▀▀░▀▀▀░▀░▀
 
-require("configuration")
+require('configuration.client')
+require('configuration.root')
+require('configuration.tags')
+_G.root.keys(require("configuration.keys.global"))
 
 -- ░█░░░█▀█░█░█░█▀█░█░█░▀█▀
 -- ░█░░░█▀█░░█░░█░█░█░█░░█░
