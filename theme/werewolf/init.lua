@@ -1,5 +1,4 @@
 local filesystem = require('gears.filesystem')
-local mat_colors = require('theme.mat-colors')
 local theme_dir = filesystem.get_configuration_dir() .. '/theme'
 
 local theme = {}
@@ -9,19 +8,6 @@ theme.font = 'Inter Regular 10'
 theme.font_bold = 'Inter Bold 10'
 
 -- Colors Pallets
-
--- Primary
-theme.primary = mat_colors.grey
-theme.primary.hue_200 = '#50fa7b'
-theme.primary.hue_300 = '#f8f8f2'
-theme.primary.hue_350 = '#ff5555'
-theme.primary.hue_400 = '#ffb86c'
-theme.primary.hue_500 = '#6272a4'
-theme.primary.hue_600 = '#ff79c6'
-theme.primary.hue_700 = '#bd93f9'
-theme.primary.hue_800 = '#44475a'
-theme.primary.hue_900 = '#282a36'
--- theme.primary = mat_colors.indigo
 
 -- Colorscheme
 theme.system_black_dark = '#3D4C5F'
@@ -36,7 +22,7 @@ theme.system_green_light = '#A1EFD3'
 theme.system_yellow_dark = '#F1FF52'
 theme.system_yellow_light = '#F1FA8C'
 
-theme.system_blue_dark = '#6498EF' 
+theme.system_blue_dark = '#6498EF'
 theme.system_blue_light = '#92B6F4'
 
 theme.system_magenta_dark = '#985EFF'
@@ -61,5 +47,9 @@ theme.transparent = '#00000000'
 -- Awesome icon
 theme.awesome_icon = theme.icons .. 'awesome.svg'
 
-local awesome_overrides = function(theme) end
-return {theme = theme, awesome_overrides = awesome_overrides}
+local awesome_overrides = function(theme)
+end
+return {
+  theme = theme,
+  awesome_overrides = awesome_overrides
+}

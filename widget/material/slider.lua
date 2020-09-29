@@ -8,7 +8,6 @@ local dpi = require('beautiful').xresources.apply_dpi
 local wibox = require('wibox')
 local gears = require('gears')
 local beautiful = require('beautiful')
-local mat_colors = require('theme.mat-colors')
 -- Local declarations
 
 local mat_slider = {mt = {}}
