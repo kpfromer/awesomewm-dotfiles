@@ -124,6 +124,7 @@ local main_control_row_sliders = wibox.widget {
 			widget = wibox.container.margin
 		}
 	),
+	-- TODO: CONDITIONALLY ENABLE (IF LAPTOP)
 	format_item(
 		{
 			require('widget.brightness-slider'),

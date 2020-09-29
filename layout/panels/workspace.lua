@@ -5,13 +5,14 @@ local TagList = require('widget.tag-list')
 local dpi = require('beautiful').xresources.apply_dpi
 
 local WorkspacePanel = function(s, offset)
-    local offsetx = 0
-    local offsety = 0
-    if offset == true then
-        offsetx = dpi(50)
-        offsety = dpi(12)
-    end
-    local panel = wibox({
+  local offsetx = 0
+  local offsety = 0
+  if offset == true then
+    offsetx = dpi(50)
+    offsety = dpi(12)
+  end
+  local panel = wibox(
+      {
         ontop = false,
         screen = s,
         height = dpi(32),
@@ -21,15 +22,21 @@ local WorkspacePanel = function(s, offset)
         stretch = false,
         bg = beautiful.primary.hue_900,
         fg = beautiful.fg_normal
-    })
+      }
+  )
 
-    local padding = dpi(5)
+  local padding = dpi(5)
 
-    panel:struts { top = dpi(32) + offsety + padding }
+  panel:struts{
+    top = dpi(32) + offsety + padding
+  }
 
-    panel:setup { layout = wibox.layout.align.horizontal, TagList(s) }
+  panel:setup{
+    layout = wibox.layout.align.horizontal,
+    TagList(s)
+  }
 
-    return panel
+  return panel
 end
 
 return WorkspacePanel

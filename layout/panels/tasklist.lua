@@ -12,7 +12,8 @@ local icons = require('theme.icons')
 
 -- Clock / Calendar 24h format
 local textclock = wibox.widget.textclock(
-                      '<span font="Roboto Mono bold 9">%d.%m.%Y\n     %H:%M</span>')
+    '<span font="Roboto Mono bold 9">%d.%m.%Y\n     %H:%M</span>'
+)
 
 -- Clock / Calendar 12AM/PM fornat
 -- local textclock = wibox.widget.textclock('<span font="Roboto Mono bold 9">%d.%m.%Y\n  %I:%M %p</span>\n<span font="Roboto Mono bold 9">%p</span>')
@@ -20,31 +21,40 @@ local textclock = wibox.widget.textclock(
 
 -- Add a calendar (credits to kylekewley for the original code)
 local month_calendar = awful.widget.calendar_popup.month(
-                           {
-        screen = s,
-        start_sunday = false,
-        week_numbers = true
-    })
+    {
+      screen = s,
+      start_sunday = false,
+      week_numbers = true
+    }
+)
 month_calendar:attach(textclock)
 
-local clock_widget = wibox.container.margin(textclock, dpi(13), dpi(13), dpi(8),
-                                            dpi(8))
+local clock_widget = wibox.container.margin(textclock, dpi(13), dpi(13), dpi(8), dpi(8))
 
 local add_button = mat_icon_button(mat_icon(icons.plus, dpi(24)))
-add_button:buttons(gears.table.join(awful.button({}, 1, nil, function()
-    awful.spawn(awful.screen.focused().selected_tag.defaultApp, {
-        tag = _G.mouse.screen.selected_tag,
-        placement = awful.placement.bottom_right
-    })
-end)))
+add_button:buttons(
+    gears.table.join(
+        awful.button(
+            {}, 1, nil, function()
+              awful.spawn(
+                  awful.screen.focused().selected_tag.defaultApp, {
+                    tag = _G.mouse.screen.selected_tag,
+                    placement = awful.placement.bottom_right
+                  }
+              )
+            end
+        )
+    )
+)
 
 local TasklistPanel = function(s, offset)
-    local offsetx = 0
-    if offset == true then
-        offsetx = dpi(506)
-        offsety = dpi(12)
-    end
-    local panel = wibox({
+  local offsetx = 0
+  if offset == true then
+    offsetx = dpi(506)
+    offsety = dpi(12)
+  end
+  local panel = wibox(
+      {
         ontop = false,
         screen = s,
         height = dpi(32),
@@ -54,21 +64,24 @@ local TasklistPanel = function(s, offset)
         stretch = false,
         bg = beautiful.primary.hue_900,
         fg = beautiful.fg_normal,
-        struts = {top = dpi(32)}
-    })
+        struts = {
+          top = dpi(32)
+        }
+      }
+  )
 
-    panel:setup{
-        layout = wibox.layout.align.horizontal,
-        nil,
-        {
-            TaskList(s),
-            layout = wibox.layout.fixed.horizontal
-            -- add_button
-        },
-        nil
-    }
+  panel:setup{
+    layout = wibox.layout.align.horizontal,
+    nil,
+    {
+      TaskList(s),
+      layout = wibox.layout.fixed.horizontal
+      -- add_button
+    },
+    nil
+  }
 
-    return panel
+  return panel
 end
 
 return TasklistPanel
