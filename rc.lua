@@ -2,23 +2,33 @@
 -- ░█▀█░█▄█░█▀▀░▀▀█░█░█░█░█░█▀▀░█▄█░█░█
 -- ░▀░▀░▀░▀░▀▀▀░▀▀▀░▀▀▀░▀░▀░▀▀▀░▀░▀░▀░▀
 -- Kyle Pfromer
--- Based off of 
+-- Based off of glorius dotfiles
 -- Banner generated using `toilet -f pagga text`
 
 -- Standard awesome library
 local gears = require("gears")
-require("awful.autofocus")
--- Theme handling library
+local awful = require('awful')
 local beautiful = require("beautiful")
+require("awful.autofocus")
 
--- Print any errors
-require('configuration.error')
+-- ░█▀▀░█░█░█▀▀░█░░░█░░
+-- ░▀▀█░█▀█░█▀▀░█░░░█░░
+-- ░▀▀▀░▀░▀░▀▀▀░▀▀▀░▀▀▀
+
+-- https://awesomewm.org/apidoc/libraries/awful.util.html#shell
+awful.util.shell = 'sh'
 
 -- ░▀█▀░█░█░█▀▀░█▄█░█▀▀
 -- ░░█░░█▀█░█▀▀░█░█░█▀▀
 -- ░░▀░░▀░▀░▀▀▀░▀░▀░▀▀▀
 
 beautiful.init(require("theme"))
+
+-- ░█░░░█▀█░█░█░█▀█░█░█░▀█▀
+-- ░█░░░█▀█░░█░░█░█░█░█░░█░
+-- ░▀▀▀░▀░▀░░▀░░▀▀▀░▀▀▀░░▀░
+          
+require("layout")
 
 -- ░█▀▀░█▀█░█▀█░█▀▀░▀█▀░█▀▀░█░█░█▀▄░█▀█░▀█▀░▀█▀░█▀█░█▀█
 -- ░█░░░█░█░█░█░█▀▀░░█░░█░█░█░█░█▀▄░█▀█░░█░░░█░░█░█░█░█
@@ -28,12 +38,6 @@ require('configuration.client')
 require('configuration.root')
 require('configuration.tags')
 _G.root.keys(require("configuration.keys.global"))
-
--- ░█░░░█▀█░█░█░█▀█░█░█░▀█▀
--- ░█░░░█▀█░░█░░█░█░█░█░░█░
--- ░▀▀▀░▀░▀░░▀░░▀▀▀░▀▀▀░░▀░
-          
-require("layout")
 
 -- ░█▄█░█▀█░█▀▄░█░█░█░░░█▀▀░█▀▀
 -- ░█░█░█░█░█░█░█░█░█░░░█▀▀░▀▀█
@@ -45,14 +49,14 @@ require('module.notifications')
 require('module.auto-start')
 -- Titlebars for clients (windows)
 require('module.titlebar')
+-- TODO: Fix weird load up bug (lockscreen fixes this?)
 require('module.dynamic-wallpaper')
 
 -- ░█░█░█▀█░█░░░█░░░█▀█░█▀█░█▀█░█▀▀░█▀▄
 -- ░█▄█░█▀█░█░░░█░░░█▀▀░█▀█░█▀▀░█▀▀░█▀▄
 -- ░▀░▀░▀░▀░▀▀▀░▀▀▀░▀░░░▀░▀░▀░░░▀▀▀░▀░▀
 
--- todo: extract
-local function set_wallpaper(s)
+screen.connect_signal('request::wallpaper', function(s)
     -- If wallpaper is a function, call it with the screen
     if beautiful.wallpaper then
         if type(beautiful.wallpaper) == 'string' then
@@ -70,8 +74,4 @@ local function set_wallpaper(s)
             beautiful.wallpaper(s)
         end
     end
-end
-
-screen.connect_signal('request::wallpaper', set_wallpaper)
--- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
-screen.connect_signal("property::geometry", set_wallpaper)
+end)

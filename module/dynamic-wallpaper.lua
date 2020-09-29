@@ -14,12 +14,10 @@
 
 -- Limitations: 
 -- Timeout paused when laptop/pc is suspended or in sleep mode, and there's probably some bugs too so whatever
-local awful = require('awful')
 local gears = require('gears')
 local beautiful = require('beautiful')
 local filesystem = gears.filesystem
 local config = require('configuration.config')
-
 
 --  ========================================
 -- 				Configuration
@@ -46,6 +44,7 @@ local wall_config = {
 	-- Don't stretch wallpaper on multihead setups if true
 	stretch = config.module.dynamic_wallpaper.stretch or false
 }
+
 
 --  ========================================
 -- 				   Processes

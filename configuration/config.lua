@@ -103,28 +103,49 @@ local apps = {
 }
 
 local config = {
-    -- Used for valid ways to layout awesomewm windows
-    layouts = {
-        awful.layout.suit.tile.left,
-        awful.layout.suit.floating,
-        awful.layout.suit.max
-        -- awful.layout.suit.floating, awful.layout.suit.tile,
-        -- -- awful.layout.suit.tile.left, awful.layout.suit.tile.bottom,
-        -- -- awful.layout.suit.tile.top, awful.layout.suit.fair,
-        -- -- awful.layout.suit.fair.horizontal, awful.layout.suit.spiral,
-        -- -- awful.layout.suit.spiral.dwindle, awful.layout.suit.max,
-        -- awful.layout.suit.max.fullscreen, -- awful.layout.suit.magnifier,
-        -- awful.layout.suit.corner.nw
-        -- -- awful.layout.suit.corner.ne,
-        -- -- awful.layout.suit.corner.sw,
-        -- -- awful.layout.suit.corner.se,
-    },
-    module = {
-        auto_start = {
-            debug_mode = false
-        }
-    },
-    widget = {
+	-- Used for valid ways to layout awesomewm windows
+	layouts = {
+			awful.layout.suit.tile.left,
+			awful.layout.suit.floating,
+			awful.layout.suit.max
+			-- awful.layout.suit.floating, awful.layout.suit.tile,
+			-- -- awful.layout.suit.tile.left, awful.layout.suit.tile.bottom,
+			-- -- awful.layout.suit.tile.top, awful.layout.suit.fair,
+			-- -- awful.layout.suit.fair.horizontal, awful.layout.suit.spiral,
+			-- -- awful.layout.suit.spiral.dwindle, awful.layout.suit.max,
+			-- awful.layout.suit.max.fullscreen, -- awful.layout.suit.magnifier,
+			-- awful.layout.suit.corner.nw
+			-- -- awful.layout.suit.corner.ne,
+			-- -- awful.layout.suit.corner.sw,
+			-- -- awful.layout.suit.corner.se,
+	},
+	module = {
+		auto_start = {
+				debug_mode = false
+		},
+		dynamic_wallpaper = {
+			wall_dir = 'theme/wallpapers/',
+			valid_picture_formats = {"jpg", "png", "jpeg"},
+			-- Leave this table empty for full auto scheduling
+			wallpaper_schedule = {
+				['00:00:00'] = 'midnight-wallpaper.png',
+				['06:22:00'] = 'morning-wallpaper.jpg',
+				['12:00:00'] = 'noon-wallpaper.jpg',
+				['17:58:00'] = 'night-wallpaper.jpg'
+			-- Example of just using auto-scheduling with keywords
+			--[[
+				'midnight',
+				'morning',
+				'noon',
+				'afternoon',
+				'evening',
+				'night'
+			--]]
+			},
+			stretch = false
+		},
+	},
+	widget = {
 		email  = {
 			address       = '',
 			app_password  = '',
@@ -156,27 +177,16 @@ local config = {
 			mic_level = '20',
 			fps = '30'
 		},
-
-		dynamic_wallpaper = {
-			wall_dir = 'werewolf/wallpapers/',
-			valid_picture_formats = {"jpg", "png", "jpeg"},
-			-- Leave this table empty for full auto scheduling
-			wallpaper_schedule = {
-				['00:00:00'] = 'midnight-wallpaper.png',
-				['06:22:00'] = 'morning-wallpaper.jpg',
-				['12:00:00'] = 'noon-wallpaper.jpg',
-				['17:58:00'] = 'night-wallpaper.jpg'
-			-- Example of just using auto-scheduling with keywords
-			--[[
-				'midnight',
-				'morning',
-				'noon',
-				'afternoon',
-				'evening',
-				'night'
-			--]]
-			},
-			stretch = false
+        
+		lockscreen = {
+			military_clock = true,
+			fallback_password = 'toor',
+			capture_intruder = true,
+			face_capture_dir = '$(xdg-user-dir PICTURES)/Intruders/',
+			blur_background = true,
+			wall_dir = 'theme/wallpapers/',
+			default_wall_name = 'morning-wallpaper.jpg',
+			tmp_wall_dir = '/tmp/awesomewm/' .. os.getenv('USER') .. '/'
 		}
 	},
     -- Default Applications
