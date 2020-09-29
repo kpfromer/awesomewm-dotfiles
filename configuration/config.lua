@@ -155,6 +155,28 @@ local config = {
 			save_directory = '$(xdg-user-dir VIDEOS)/Recordings/',
 			mic_level = '20',
 			fps = '30'
+		},
+
+		dynamic_wallpaper = {
+			wall_dir = 'werewolf/wallpapers/',
+			valid_picture_formats = {"jpg", "png", "jpeg"},
+			-- Leave this table empty for full auto scheduling
+			wallpaper_schedule = {
+				['00:00:00'] = 'midnight-wallpaper.png',
+				['06:22:00'] = 'morning-wallpaper.jpg',
+				['12:00:00'] = 'noon-wallpaper.jpg',
+				['17:58:00'] = 'night-wallpaper.jpg'
+			-- Example of just using auto-scheduling with keywords
+			--[[
+				'midnight',
+				'morning',
+				'noon',
+				'afternoon',
+				'evening',
+				'night'
+			--]]
+			},
+			stretch = false
 		}
 	},
     -- Default Applications

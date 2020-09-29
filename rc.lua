@@ -42,6 +42,7 @@ require('module.notifications')
 require('module.auto-start')
 -- Titlebars for clients (windows)
 require('module.titlebar')
+require('module.dynamic-wallpaper')
 
 -- ░█░█░█▀█░█░░░█░░░█▀█░█▀█░█▀█░█▀▀░█▀▄
 -- ░█▄█░█▀█░█░░░█░░░█▀▀░█▀█░█▀▀░█▀▀░█▀▄
