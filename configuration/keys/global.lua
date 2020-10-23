@@ -7,6 +7,34 @@ local hotkeys_popup = require('awful.hotkeys_popup')
 local config = require('configuration.config')
 local modkey = require('configuration.keys.mod').modkey
 
+-- Move mouse to focused window
+local function move_mouse_onto_focused_client()
+  if client.focus then
+    client_to_focus = client.focus
+    local geometry = client_to_focus:geometry()
+    local x = geometry.x + geometry.width / 2
+    local y = geometry.y + geometry.height / 2
+    mouse.coords(
+        {
+          x = x,
+          y = y
+        }, true
+    )
+  end
+end
+
+local function move_focus_or_view_tag(original_focus, direction)
+  if original_focus == client.focus or not client.focus then
+    if direction == 'left' then
+      awful.tag.viewprev()
+    else
+      awful.tag.viewnext()
+    end
+  else
+    move_mouse_onto_focused_client()
+  end
+end
+
 local globalkeys = gears.table.join(
     awful.key(
         {modkey}, 's', hotkeys_popup.show_help, {
@@ -14,14 +42,38 @@ local globalkeys = gears.table.join(
           group = 'awesome'
         }
     ), awful.key(
-        {modkey}, 'Left', awful.tag.viewprev, {
-          description = 'view previous',
-          group = 'tag'
+        {modkey}, 'Up', function()
+          awful.client.focus.bydirection('up')
+          move_mouse_onto_focused_client()
+        end, {
+          description = 'swap focus to top window',
+          group = 'client'
         }
     ), awful.key(
-        {modkey}, 'Right', awful.tag.viewnext, {
-          description = 'view next',
-          group = 'tag'
+        {modkey}, 'Down', function()
+          awful.client.focus.bydirection('down')
+          move_mouse_onto_focused_client()
+        end, {
+          description = 'swap focus to bottom window',
+          group = 'client'
+        }
+    ), awful.key(
+        {modkey}, 'Left', function()
+          local original_focus = client.focus
+          awful.client.focus.bydirection('left')
+          move_focus_or_view_tag(original_focus, 'left')
+        end, {
+          description = 'swap focus to left window',
+          group = 'client'
+        }
+    ), awful.key(
+        {modkey}, 'Right', function()
+          local original_focus = client.focus
+          awful.client.focus.bydirection('right')
+          move_focus_or_view_tag(original_focus, 'right')
+        end, {
+          description = 'swap focus to right window',
+          group = 'client'
         }
     ), awful.key(
         {modkey}, 'Escape', awful.tag.history.restore, {
@@ -102,6 +154,16 @@ local globalkeys = gears.table.join(
           awful.spawn(config.apps.default.terminal)
         end, {
           description = 'open a terminal',
+          group = 'launcher'
+        }
+    ), awful.key(
+        {
+          modkey,
+          'Shift'
+        }, 's', function()
+          awful.spawn(config.apps.default.screenshot)
+        end, {
+          description = 'capture a screenshot',
           group = 'launcher'
         }
     ), awful.key(
@@ -232,7 +294,7 @@ local globalkeys = gears.table.join(
         }
     ), awful.key(
         {modkey}, 'd', function()
-          awful.spawn('app-launcher')
+          awful.spawn(config.apps.default.rofi_appmenu, false)
         end, {
           description = 'app launcher',
           group = 'launcher'
