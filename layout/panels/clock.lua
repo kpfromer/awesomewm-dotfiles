@@ -3,17 +3,16 @@ local wibox = require('wibox')
 local dpi = require('beautiful').xresources.apply_dpi
 
 -- Clock / Calendar 24h format
-local textclock = wibox.widget.textclock(
-                      '<span font="Roboto Mono bold 9">%H:%M</span>')
+local textclock = wibox.widget.textclock('<span font="Roboto Mono bold 9">%H:%M</span>')
 
-local clock_widget = wibox.container.margin(textclock, dpi(8), dpi(8), dpi(8),
-                                            dpi(8))
+local clock_widget = wibox.container.margin(textclock, dpi(8), dpi(8), dpi(8), dpi(8))
 
 local ClockPanel = function(s, offset)
-    local offsetx = -dpi(202)
-    local offsety = 0
-    if offset == true then offsety = dpi(12) end
-    local panel = wibox({
+  local offsetx = -dpi(202)
+  local offsety = 0
+  if offset == true then offsety = dpi(12) end
+  local panel = wibox(
+      {
         ontop = false,
         screen = s,
         height = dpi(32),
@@ -23,12 +22,18 @@ local ClockPanel = function(s, offset)
         stretch = false,
         bg = beautiful.primary.hue_900,
         fg = beautiful.fg_normal,
-        struts = {top = dpi(32)}
-    })
+        struts = {
+          top = dpi(32)
+        }
+      }
+  )
 
-    panel:setup{layout = wibox.layout.fixed.horizontal, clock_widget}
+  panel:setup{
+    layout = wibox.layout.fixed.horizontal,
+    clock_widget
+  }
 
-    return panel
+  return panel
 end
 
 return ClockPanel

@@ -37,25 +37,41 @@ local rules = {
           maximized_horizontal = false,
           maximized_vertical = false
       }
-  }, -- Titlebars
+  },
   {
-      rule_any = {
-          type = {"dialog"},
-          class = {"Wicd-client.py", "calendar.google.com"}
+      id         = 'dialog',
+      rule_any   = { 
+        type  = { 'dialog' },
+        class = { 'Wicd-client.py', 'calendar.google.com' }
       },
-      properties = {
-          placement = awful.placement.centered,
-          ontop = true,
-          floating = true,
-          drawBackdrop = true,
-          shape = function()
-              return function(cr, w, h)
-                  gears.shape.rounded_rect(cr, w, h, 8)
-              end
-          end,
-          skip_decoration = true
+      properties = { 
+        titlebars_enabled = true,
+        floating = true,
+        above = true,
+        draw_backdrop = true,
+        skip_decoration = true,
+        placement = awful.placement.centered
       }
-  }, 
+    },
+  -- Titlebars
+--   {
+--       rule_any = {
+--           type = {"dialog"},
+--           class = {"Wicd-client.py", "calendar.google.com"}
+--       },
+--       properties = {
+--           placement = awful.placement.centered,
+--           ontop = true,
+--           floating = true,
+--           drawBackdrop = true,
+--           shape = function()
+--               return function(cr, w, h)
+--                   gears.shape.rounded_rect(cr, w, h, 8)
+--               end
+--           end,
+--           skip_decoration = true
+--       }
+--   }, 
   -- Enable titlebars for all windows
   {
       -- https://awesomewm.org/doc/api/classes/client.html#request::titlebars

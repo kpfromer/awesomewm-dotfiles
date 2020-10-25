@@ -1,39 +1,42 @@
-local dir = os.getenv('HOME') .. '/.config/awesome/theme/icons'
+-- Icons directory
+local dir = os.getenv('HOME') .. '/.config/awesome/theme/icons/'
+
 
 return {
-    -- tags
-    chrome = dir .. '/google-chrome.svg',
-    firefox = dir .. '/firefox.svg',
-    console = dir .. '/console.svg',
-    code = dir .. '/code-braces.svg',
-    social = dir .. '/forum.svg',
-    folder = dir .. '/folder.svg',
-    music = dir .. '/music.svg',
-    game = dir .. '/google-controller.svg',
-    lab = dir .. '/flask.svg',
-    -- others
-    menu = dir .. '/dashboard.svg',
-    close = dir .. '/close.svg',
-    close_dark = dir .. '/close_dark.svg',
-    logout = dir .. '/logout.svg',
-    sleep = dir .. '/power-sleep.svg',
-    power = dir .. '/power.svg',
-    lock = dir .. '/lock.svg',
-    restart = dir .. '/restart.svg',
-    search = dir .. '/magnify-dark.svg',
-    volume = dir .. '/volume-high.svg',
-    volume_dark = dir .. '/volume-high-dark.svg',
-    brightness = dir .. '/brightness-7.svg',
-    chart = dir .. '/chart-areaspline.svg',
-    memory = dir .. '/memory.svg',
-    harddisk = dir .. '/harddisk.svg',
-    thermometer = dir .. '/thermometer.svg',
-    uptime = dir .. '/computer.svg',
-    plus = dir .. '/plus.svg',
-    github = dir .. '/github.svg',
-    deviantart = dir .. '/deviantart.svg',
-    codeforces = dir .. '/codeforces.svg',
-    youtube = dir .. '/youtube.svg',
-    reddit = dir .. '/reddit.svg',
-    linkedin = dir .. '/linkedin.svg'
+
+	-- Action Bar
+	web_browser 		= dir .. 'tag-list/' .. 'web-browser.svg',
+	text_editor			= dir .. 'tag-list/' .. 'text-editor.svg',
+	social				= dir .. 'tag-list/' .. 'social.svg',
+	file_manager 		= dir .. 'tag-list/' .. 'file-manager.svg',
+	multimedia 			= dir .. 'tag-list/' .. 'multimedia.svg',
+	games 				= dir .. 'tag-list/' .. 'games.svg',
+	development 		= dir .. 'tag-list/' .. 'development.svg',
+	sandbox 			= dir .. 'tag-list/' .. 'sandbox.svg',
+	terminal 			= dir .. 'tag-list/' .. 'terminal.svg',
+	graphics 			= dir .. 'tag-list/' .. 'graphics.svg',
+	menu 				= dir .. 'tag-list/' .. 'menu.svg',
+	close_small 		= dir .. 'tag-list/' .. 'close-small.svg',
+
+	-- Others/System UI
+	close 				= dir .. 'close.svg',
+	logout				= dir .. 'logout.svg',
+	sleep 				= dir .. 'power-sleep.svg',
+	power 				= dir .. 'power.svg',
+	lock 				= dir .. 'lock.svg',
+	restart 			= dir .. 'restart.svg',
+	search 				= dir .. 'magnify.svg',
+	volume 				= dir .. 'volume-high.svg',
+	brightness 			= dir .. 'brightness-7.svg',
+	effects 			= dir .. 'effects.svg',
+	chart 				= dir .. 'chart-areaspline.svg',
+	memory 				= dir .. 'memory.svg',
+	harddisk 			= dir .. 'harddisk.svg',
+	thermometer 		= dir .. 'thermometer.svg',
+	plus 				= dir .. 'plus.svg',
+	batt_charging 		= dir .. 'battery-charge.svg',
+	batt_discharging	= dir .. 'battery-discharge.svg',
+	toggled_on 			= dir .. 'toggled-on.svg',
+	toggled_off			= dir .. 'toggled-off.svg'
+
 }

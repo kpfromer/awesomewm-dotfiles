@@ -1,0 +1,22 @@
+# Misc
+kitty
+rofi
+
+# Theme
+# Icons
+tela-icon-theme-git
+
+# Widgets
+
+# Package manager
+pacmac-aur
+
+# network widget
+nm-connection-editor
+iproute2
+iw
+
+# Various things
+xdg-user-dirs
+# pam integration for lockscreen
+# https://github.com/manilarome/the-glorious-dotfiles/wiki
