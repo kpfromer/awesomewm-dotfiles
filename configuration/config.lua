@@ -35,6 +35,9 @@ local apps = {
     -- Lockscreen
     lock = 'awesome-client "awesome.emit_signal(\'module::lockscreen_show\')"',
 
+    -- Screenshot
+    screenshot = 'spectacle --region',
+
     -- Quake-like Terminal
     quake = 'kitty --name QuakeTerminal',
 
@@ -102,6 +105,7 @@ local apps = {
 local config = {
   -- Used for valid ways to layout awesomewm windows
   layouts = {
+    awful.layout.suit.spiral.dwindle,
     awful.layout.suit.tile.left,
     awful.layout.suit.floating,
     awful.layout.suit.max
@@ -144,6 +148,17 @@ local config = {
 			--]]
       },
       stretch = false
+    },
+
+    lockscreen = {
+      military_clock = true,
+      fallback_password = 'toor',
+      capture_intruder = true,
+      face_capture_dir = '$(xdg-user-dir PICTURES)/Intruders/',
+      blur_background = true,
+      wall_dir = 'theme/wallpapers/',
+      default_wall_name = 'morning-wallpaper.jpg',
+      tmp_wall_dir = '/tmp/awesomewm/' .. os.getenv('USER') .. '/'
     }
   },
   widget = {
@@ -177,17 +192,6 @@ local config = {
       save_directory = '$(xdg-user-dir VIDEOS)/Recordings/',
       mic_level = '20',
       fps = '30'
-    },
-
-    lockscreen = {
-      military_clock = true,
-      fallback_password = 'toor',
-      capture_intruder = true,
-      face_capture_dir = '$(xdg-user-dir PICTURES)/Intruders/',
-      blur_background = true,
-      wall_dir = 'theme/wallpapers/',
-      default_wall_name = 'morning-wallpaper.jpg',
-      tmp_wall_dir = '/tmp/awesomewm/' .. os.getenv('USER') .. '/'
     }
   },
   -- Default Applications

@@ -4,12 +4,11 @@
 -- Kyle Pfromer
 -- Based off of glorius dotfiles
 -- Banner generated using `toilet -f pagga text`
-
 -- Standard awesome library
-local gears = require("gears")
+local gears = require('gears')
 local awful = require('awful')
-local beautiful = require("beautiful")
-require("awful.autofocus")
+local beautiful = require('beautiful')
+require('awful.autofocus')
 
 -- ░█▀▀░█░█░█▀▀░█░░░█░░
 -- ░▀▀█░█▀█░█▀▀░█░░░█░░
@@ -22,13 +21,13 @@ awful.util.shell = 'sh'
 -- ░░█░░█▀█░█▀▀░█░█░█▀▀
 -- ░░▀░░▀░▀░▀▀▀░▀░▀░▀▀▀
 
-beautiful.init(require("theme"))
+beautiful.init(require('theme'))
 
 -- ░█░░░█▀█░█░█░█▀█░█░█░▀█▀
 -- ░█░░░█▀█░░█░░█░█░█░█░░█░
 -- ░▀▀▀░▀░▀░░▀░░▀▀▀░▀▀▀░░▀░
-          
-require("layout")
+
+require('layout')
 
 -- ░█▀▀░█▀█░█▀█░█▀▀░▀█▀░█▀▀░█░█░█▀▄░█▀█░▀█▀░▀█▀░█▀█░█▀█
 -- ░█░░░█░█░█░█░█▀▀░░█░░█░█░█░█░█▀▄░█▀█░░█░░░█░░█░█░█░█
@@ -37,14 +36,14 @@ require("layout")
 require('configuration.client')
 require('configuration.root')
 require('configuration.tags')
-_G.root.keys(require("configuration.keys.global"))
+_G.root.keys(require('configuration.keys.global'))
 
 -- ░█▄█░█▀█░█▀▄░█░█░█░░░█▀▀░█▀▀
 -- ░█░█░█░█░█░█░█░█░█░░░█▀▀░▀▀█
 -- ░▀░▀░▀▀▀░▀▀░░▀▀▀░▀▀▀░▀▀▀░▀▀▀
 
 -- Configuration/layout for system notifications (using naughty)
-require('module.notifications') 
+require('module.notifications')
 -- Handles staring up programs like picom
 require('module.auto-start')
 -- Titlebars for clients (windows)
@@ -52,26 +51,33 @@ require('module.titlebar')
 -- TODO: Fix weird load up bug (lockscreen fixes this?)
 require('module.dynamic-wallpaper')
 
+require('module.menu')
+
+-- TODO: fix
+require('module.lockscreen')
+
 -- ░█░█░█▀█░█░░░█░░░█▀█░█▀█░█▀█░█▀▀░█▀▄
 -- ░█▄█░█▀█░█░░░█░░░█▀▀░█▀█░█▀▀░█▀▀░█▀▄
 -- ░▀░▀░▀░▀░▀▀▀░▀▀▀░▀░░░▀░▀░▀░░░▀▀▀░▀░▀
 
-screen.connect_signal('request::wallpaper', function(s)
-    -- If wallpaper is a function, call it with the screen
-    if beautiful.wallpaper then
+screen.connect_signal(
+    'request::wallpaper', function(s)
+      -- If wallpaper is a function, call it with the screen
+      if beautiful.wallpaper then
         if type(beautiful.wallpaper) == 'string' then
 
-            -- Check if beautiful.wallpaper is color/image
-            if beautiful.wallpaper:sub(1, #'#') == '#' then
-                -- If beautiful.wallpaper is color
-                gears.wallpaper.set(beautiful.wallpaper)
+          -- Check if beautiful.wallpaper is color/image
+          if beautiful.wallpaper:sub(1, #'#') == '#' then
+            -- If beautiful.wallpaper is color
+            gears.wallpaper.set(beautiful.wallpaper)
 
-            elseif beautiful.wallpaper:sub(1, #'/') == '/' then
-                -- If beautiful.wallpaper is path/image
-                gears.wallpaper.maximized(beautiful.wallpaper, s)
-            end
+          elseif beautiful.wallpaper:sub(1, #'/') == '/' then
+            -- If beautiful.wallpaper is path/image
+            gears.wallpaper.maximized(beautiful.wallpaper, s)
+          end
         else
-            beautiful.wallpaper(s)
+          beautiful.wallpaper(s)
         end
+      end
     end
-end)
+)
