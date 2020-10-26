@@ -36,4 +36,6 @@ declare module 'beautiful' {
   // CUSTOM types
   export const useless_gap: number;
   export const client_radius: number;
+
+  export const awesome_icon: string;
 }

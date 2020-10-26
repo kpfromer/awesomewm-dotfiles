@@ -372,4 +372,26 @@ declare module 'awful' {
   };
 
   export const layout: Layout;
+
+  interface SpawnFunctions {
+    /**
+     * Call spawn.easy_async with a shell. This calls cmd with $SHELL -c (via awful.util.shell).
+     *
+     * https://awesomewm.org/doc/api/libraries/awful.spawn.html#easy_async_with_shell
+     */
+    easy_async_with_shell: (
+      this: void,
+      command: string,
+      callback: (
+        stdout: string,
+        stderr: string,
+        exitReason: string,
+        exitCode: number
+      ) => void
+    ) => void;
+  }
+
+  type Spawn = SpawnFunctions;
+
+  export const spawn: Spawn;
 }

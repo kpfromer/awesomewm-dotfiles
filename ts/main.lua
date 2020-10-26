@@ -1837,6 +1837,14 @@ local apps = {
         screenshot = "spectacle //region",
         quake = "kitty //name QuakeTerminal",
         editor = "vim"
+    },
+    startUp = {
+        "force-composition-pipeline",
+        ("picom -b --experimental-backends --dbus --config " .. tostring(config_dir)) .. "/configuration/picom.conf",
+        "xrdb merge .Xresources",
+        "start-pulseaudio-x11",
+        "redshift -l 40.014984:-105.270546",
+        "blueberry-tray"
     }
 }
 local config = {modkey = "Mod4", layouts = {awful.layout.suit.spiral.dwindle, awful.layout.suit.tile.left, awful.layout.suit.floating, awful.layout.suit.max}, module = {auto_start = {debug_mode = false}, dynamic_wallpaper = {wall_dir = "theme/wallpapers/", valid_picture_formats = {"jpg", "png", "jpeg"}, stretch = false}}, apps = apps}
@@ -2214,12 +2222,48 @@ tag.connect_signal(
 )
 return ____exports
 end,
+["module.auto-start"] = function() require("lualib_bundle");
+local ____exports = {}
+local awful = require("awful")
+local naughty = require("naughty")
+local beautiful = require("beautiful")
+local ____config = require("configuration.config")
+local config = ____config.default
+local debug_mode = (function(____lhs)
+    if ____lhs == nil then
+        return false
+    else
+        return ____lhs
+    end
+end)(config.module.auto_start.debug_mode)
+local function run_once(cmd)
+    local findme = cmd
+    local firstspace = (string.find(cmd, " ", nil, true) or 0) - 1
+    if firstspace then
+        findme = __TS__StringSubstring(cmd, 0, firstspace - 1)
+    end
+    awful.spawn.easy_async_with_shell(
+        string.format("pgrep -u $USER -x %s > /dev/null || (%s)", findme, cmd),
+        function(stdout, stderr)
+            if ((not stderr) or (stderr == "")) or (not debug_mode) then
+                return
+            end
+            naughty.notification({app_name = "Start-up Applications", title = "<b>Oof! Error detected when starting an application!</b>", message = stderr, timeout = 20, icon = beautiful.awesome_icon})
+        end
+    )
+end
+for ____, app in ipairs(config.apps.startUp) do
+    run_once(app)
+end
+return ____exports
+end,
 ["rc"] = function() require("lualib_bundle");
 local ____exports = {}
 local awful = require("awful")
 local beautiful = require("beautiful")
 require("configuration.client.index")
 require("configuration.tags.index")
+require("module.auto-start")
 awful.util.shell = "sh"
 beautiful.init(
     require("theme")
