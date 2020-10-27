@@ -111,6 +111,7 @@ const apps = {
 };
 
 const config = {
+  debug: true,
   modkey: 'Mod4',
 
   // Used for valid ways to layout awesomewm windows
