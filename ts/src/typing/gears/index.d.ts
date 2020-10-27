@@ -35,6 +35,8 @@ declare module 'gears' {
     ) => void;
   }
 
+  export type GearsShape = NoSelfGearsShape;
+
   export const shape: NoSelfGearsShape;
 
   // /** @luaTable */

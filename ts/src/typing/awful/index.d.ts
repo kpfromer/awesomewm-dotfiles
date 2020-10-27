@@ -216,6 +216,11 @@ declare module 'awful' {
     raise: (this: any) => void;
     swap: (this: any, client: Client) => void;
     move_to_screen: (this: any, screen?: Screen) => void;
+    /**
+     * Connect to a signal.
+     *
+     * https://awesomewm.org/doc/api/classes/client.html#client:connect_signal
+     */
     connect_signal: (
       this: void,
       // this: any,
@@ -233,8 +238,8 @@ declare module 'awful' {
   export const client: Client;
 
   interface MouseClientFunctions {
-    resize: (client: Client, corner?: string, args?: Table) => void;
-    move: (client: Client, snap?: any) => void;
+    resize: (this: void, client: Client, corner?: string, args?: Table) => void;
+    move: (this: void, client: Client, snap?: any) => void;
   }
 
   type MouseClient = MouseClientFunctions;
