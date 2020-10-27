@@ -6,36 +6,36 @@ import * as awful from 'awful';
 import * as beautiful from 'beautiful';
 
 // Signal function to execute when a new client appears.
-client.connect_signal('manage', function (c) {
+client.connect_signal('manage', client => {
   // Set the windows at the slave,
   // i.e. put it at the end of others instead of setting it master.
   // if not awesome.startup then client.setslave(c) end
   if (
     awesome.startup &&
-    !c.size_hints.user_position &&
-    !c.size_hints.program_position
+    !client.size_hints.user_position &&
+    !client.size_hints.program_position
   ) {
     // Prevent clients from being unreachable after screen count changes.
-    awful.placement.no_offscreen(c);
+    awful.placement.no_offscreen(client);
   }
 });
 
 // Enable sloppy focus, so that focus follows mouse.
-client.connect_signal('mouse::enter', function (c) {
-  c.emit_signal('request::activate', 'mouse_enter', {raise: false});
+client.connect_signal('mouse::enter', client => {
+  client.emit_signal('request::activate', 'mouse_enter', {raise: false});
 });
-client.connect_signal('focus', function (c) {
-  c.border_color = beautiful.border_focus;
+client.connect_signal('focus', client => {
+  client.border_color = beautiful.border_focus;
 });
-client.connect_signal('unfocus', function (c) {
-  c.border_color = beautiful.border_normal;
+client.connect_signal('unfocus', client => {
+  client.border_color = beautiful.border_normal;
 });
 // Make the focused window have a glowing border
-client.connect_signal('focus', function (c) {
-  c.border_color = beautiful.border_focus;
+client.connect_signal('focus', client => {
+  client.border_color = beautiful.border_focus;
 });
-client.connect_signal('unfocus', function (c) {
-  c.border_color = beautiful.border_normal;
+client.connect_signal('unfocus', client => {
+  client.border_color = beautiful.border_normal;
 });
 
 // TODO:
