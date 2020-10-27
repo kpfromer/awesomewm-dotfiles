@@ -1,28 +1,25 @@
 import * as awful from 'awful';
-import * as naughty from 'naughty';
 import * as beautiful from 'beautiful';
 import config from '../configuration/config';
+import {log} from '../helper/log';
 
-const debug_mode = config.module?.auto_start?.debug_mode ?? false;
+const run_once = function (this: void, command: string) {
+  const firstSpace = command.indexOf(' ');
 
-const run_once = function (this: void, cmd: string) {
-  let findme = cmd;
-  const firstspace = cmd.indexOf(' ');
-  if (firstspace) {
-    findme = cmd.substring(0, firstspace - 1);
-  }
+  // converts something like "command --args" -> "command"
+  const program = firstSpace >= 0 ? command.substring(0, firstSpace) : command;
 
   awful.spawn.easy_async_with_shell(
-    string.format('pgrep -u $USER -x %s > /dev/null || (%s)', findme, cmd),
+    `pgrep -u $USER -x ${program} > /dev/null || (${command})`,
+    // string.format('pgrep -u $USER -x %s > /dev/null || (%s)', findMe, cmd),
     function (stdout, stderr) {
-      if (!stderr || stderr === '' || !debug_mode) {
+      if (!stderr || stderr === '' || !config.debug) {
         return;
       }
-
-      naughty.notification({
+      // message: stderr, // todo: stderr.replaceAll('%\n', ''),
+      log(stderr, {
         app_name: 'Start-up Applications',
         title: '<b>Oof! Error detected when starting an application!</b>',
-        message: stderr, // todo: stderr.replaceAll('%\n', ''),
         timeout: 20,
         icon: beautiful.awesome_icon,
       });
