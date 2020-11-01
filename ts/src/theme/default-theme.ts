@@ -49,27 +49,27 @@ const awesome_overrides = function (theme: any) {
 
   // Tooltips
   theme.tooltip_bg = '#232323';
-  // theme.tooltip_border_color = '#232323'
+  theme.tooltip_border_color = '#232323';
   theme.tooltip_border_width = 0;
   theme.tooltip_shape = (cr: any, w: any, h: any) => {
     gears.shape.rounded_rect(cr, w, h, dpi(6));
   };
 
   // Layout
-  // theme.layout_max = theme.icons .. 'layouts/arrow-expand-all.png'
-  // theme.layout_tile = theme.icons .. 'layouts/view-quilt.png'
-  // theme.layout_floating = theme.icons .. 'layouts/floating.png'
+  theme.layout_max = `${theme.icons}layouts/arrow-expand-all.png`;
+  theme.layout_tile = `${theme.icons}layouts/view-quilt.png`;
+  theme.layout_floating = `${theme.icons}layouts/floating.png`;
 
   // // UI Groups
-  // theme.groups_title_bg = '#ffffff' .. '15'
-  // theme.groups_bg = '#ffffff' .. '10'
-  // theme.groups_radius = dpi(16)
+  theme.groups_title_bg = '#ffffff15';
+  theme.groups_bg = '#ffffff10';
+  theme.groups_radius = dpi(16);
 
   // // UI events
-  // theme.leave_event = theme.transparent
-  // theme.enter_event = '#ffffff' .. '10'
-  // theme.press_event = '#ffffff' .. '15'
-  // theme.release_event = '#ffffff' .. '10'
+  theme.leave_event = theme.transparent;
+  theme.enter_event = '#ffffff10';
+  theme.press_event = '#ffffff15';
+  theme.release_event = '#ffffff10';
 
   // Client Decorations
 
@@ -91,11 +91,11 @@ const awesome_overrides = function (theme: any) {
   theme.menu_height = dpi(34);
   theme.menu_width = dpi(200);
   theme.menu_border_width = dpi(20);
-  // theme.menu_bg_focus = theme.accent .. 'CC'
+  theme.menu_bg_focus = `${theme.accent}CC`;
 
   // theme.menu_bg_normal = theme.background:sub(1, 7) .. '33'
-  // theme.menu_fg_normal = '#ffffff'
-  // theme.menu_fg_focus = '#ffffff'
+  theme.menu_fg_normal = '#ffffff';
+  theme.menu_fg_focus = '#ffffff';
   // theme.menu_border_color = theme.background:sub(1, 7) .. '5C'
 
   // Tooltips
@@ -112,119 +112,119 @@ const awesome_overrides = function (theme: any) {
   theme.separator_color = '#f2f2f244';
 
   // // Layoutbox icons
-  // theme.layout_max = theme.icons .. 'layouts/max.svg'
-  // theme.layout_tile = theme.icons .. 'layouts/tile.svg'
-  // theme.layout_dwindle = theme.icons .. 'layouts/dwindle.svg'
-  // theme.layout_floating = theme.icons .. 'layouts/floating.svg'
+  theme.layout_max = `${theme.icons}layouts/max.svg`;
+  theme.layout_tile = `${theme.icons}layouts/tile.svg`;
+  theme.layout_dwindle = `${theme.icons}layouts/dwindle.svg`;
+  theme.layout_floating = `${theme.icons}layouts/floating.svg`;
 
   // // Taglist
-  // theme.taglist_bg_empty = theme.background .. '99'
-  // theme.taglist_bg_occupied = '#ffffff' .. '1A'
-  // theme.taglist_bg_urgent = '#E91E63' .. '99'
-  // theme.taglist_bg_focus = theme.background
-  // theme.taglist_spacing = dpi(0)
+  theme.taglist_bg_empty = `${theme.background}99`;
+  theme.taglist_bg_occupied = '#ffffff1A';
+  theme.taglist_bg_urgent = '#E91E6399';
+  theme.taglist_bg_focus = theme.background;
+  theme.taglist_spacing = dpi(0);
 
   // // Tasklist
-  // theme.tasklist_font = 'Inter Regular 10'
-  // theme.tasklist_bg_normal = theme.background .. '99'
-  // theme.tasklist_bg_focus = theme.background
-  // theme.tasklist_bg_urgent = '#E91E63' .. '99'
-  // theme.tasklist_fg_focus = '#DDDDDD'
-  // theme.tasklist_fg_urgent = '#ffffff'
-  // theme.tasklist_fg_normal = '#AAAAAA'
+  theme.tasklist_font = 'Inter Regular 10';
+  theme.tasklist_bg_normal = `${theme.background}99`;
+  theme.tasklist_bg_focus = theme.background;
+  theme.tasklist_bg_urgent = '#E91E6399';
+  theme.tasklist_fg_focus = '#DDDDDD';
+  theme.tasklist_fg_urgent = '#ffffff';
+  theme.tasklist_fg_normal = '#AAAAAA';
 
   // // Notification
-  // theme.notification_position = 'top_left'
-  // theme.notification_bg = theme.transparent
-  // theme.notification_margin = dpi(5)
-  // theme.notification_border_width = dpi(0)
-  // theme.notification_border_color = theme.transparent
-  // theme.notification_spacing = dpi(5)
-  // theme.notification_icon_resize_strategy = 'center'
-  // theme.notification_icon_size = dpi(32)
+  theme.notification_position = 'top_left';
+  theme.notification_bg = theme.transparent;
+  theme.notification_margin = dpi(5);
+  theme.notification_border_width = dpi(0);
+  theme.notification_border_color = theme.transparent;
+  theme.notification_spacing = dpi(5);
+  theme.notification_icon_resize_strategy = 'center';
+  theme.notification_icon_size = dpi(32);
 
   // // Client Snap Theme
-  // theme.snap_bg = theme.background
-  // theme.snap_shape = gears.shape.rectangle
-  // theme.snap_border_width = dpi(15)
+  theme.snap_bg = theme.background;
+  theme.snap_shape = gears.shape.rectangle;
+  theme.snap_border_width = dpi(15);
 
   // // Hotkey popup
-  // theme.hotkeys_font = 'Inter Bold'
-  // theme.hotkeys_description_font = 'Inter Regular Regular'
-  // theme.hotkeys_bg = theme.background
-  // theme.hotkeys_group_margin = dpi(20)
+  theme.hotkeys_font = 'Inter Bold';
+  theme.hotkeys_description_font = 'Inter Regular Regular';
+  theme.hotkeys_bg = theme.background;
+  theme.hotkeys_group_margin = dpi(20);
 
   // // Titlebar
-  // theme.titlebar_size = dpi(34)
-  // theme.titlebar_bg_focus = gtk_variable().bg_color:sub(1, 7) .. '66'
-  // theme.titlebar_bg_normal = gtk_variable().base_color:sub(1, 7) .. '66'
-  // theme.titlebar_fg_focus = gtk_variable().fg_color .. '00'
-  // theme.titlebar_fg_normal = gtk_variable().fg_color .. '00'
+  theme.titlebar_size = dpi(34);
+  // TODO: ensure correct
+  theme.titlebar_bg_focus = `${gtk_variable().bg_color.substr(0, 7)}66`;
+  theme.titlebar_bg_normal = `${gtk_variable().base_color.substr(0, 7)}66`;
+  theme.titlebar_fg_focus = `${gtk_variable().fg_color}00`;
+  theme.titlebar_fg_normal = `${gtk_variable().fg_color}00`;
 
   // // Close Button
-  // theme.titlebar_close_button_normal = tip .. 'close_normal.svg'
-  // theme.titlebar_close_button_focus = tip .. 'close_focus.svg'
+  theme.titlebar_close_button_normal = `${tip}close_normal.svg`;
+  theme.titlebar_close_button_focus = `${tip}close_focus.svg`;
 
   // // Minimize Button
-  // theme.titlebar_minimize_button_normal = tip .. 'minimize_normal.svg'
-  // theme.titlebar_minimize_button_focus = tip .. 'minimize_focus.svg'
+  theme.titlebar_minimize_button_normal = `${tip}minimize_normal.svg`;
+  theme.titlebar_minimize_button_focus = `${tip}minimize_focus.svg`;
 
-  // // Ontop Button
-  // theme.titlebar_ontop_button_normal_inactive = tip .. 'ontop_normal_inactive.svg'
-  // theme.titlebar_ontop_button_focus_inactive = tip .. 'ontop_focus_inactive.svg'
-  // theme.titlebar_ontop_button_normal_active = tip .. 'ontop_normal_active.svg'
-  // theme.titlebar_ontop_button_focus_active = tip .. 'ontop_focus_active.svg'
+  // Ontop Button
+  theme.titlebar_ontop_button_normal_inactive = `${tip}ontop_normal_inactive.svg`;
+  theme.titlebar_ontop_button_focus_inactive = `${tip}ontop_focus_inactive.svg`;
+  theme.titlebar_ontop_button_normal_active = `${tip}ontop_normal_active.svg`;
+  theme.titlebar_ontop_button_focus_active = `${tip}ontop_focus_active.svg`;
 
-  // // Sticky Button
-  // theme.titlebar_sticky_button_normal_inactive = tip .. 'sticky_normal_inactive.svg'
-  // theme.titlebar_sticky_button_focus_inactive = tip .. 'sticky_focus_inactive.svg'
-  // theme.titlebar_sticky_button_normal_active = tip .. 'sticky_normal_active.svg'
-  // theme.titlebar_sticky_button_focus_active = tip .. 'sticky_focus_active.svg'
+  // Sticky Button
+  theme.titlebar_sticky_button_normal_inactive = `${tip}sticky_normal_inactive.svg`;
+  theme.titlebar_sticky_button_focus_inactive = `${tip}sticky_focus_inactive.svg`;
+  theme.titlebar_sticky_button_normal_active = `${tip}sticky_normal_active.svg`;
+  theme.titlebar_sticky_button_focus_active = `${tip}sticky_focus_active.svg`;
 
-  // // Floating Button
-  // theme.titlebar_floating_button_normal_inactive = tip .. 'floating_normal_inactive.svg'
-  // theme.titlebar_floating_button_focus_inactive = tip .. 'floating_focus_inactive.svg'
-  // theme.titlebar_floating_button_normal_active = tip .. 'floating_normal_active.svg'
-  // theme.titlebar_floating_button_focus_active = tip .. 'floating_focus_active.svg'
+  // Floating Button
+  theme.titlebar_floating_button_normal_inactive = `${tip}floating_normal_inactive.svg`;
+  theme.titlebar_floating_button_focus_inactive = `${tip}floating_focus_inactive.svg`;
+  theme.titlebar_floating_button_normal_active = `${tip}floating_normal_active.svg`;
+  theme.titlebar_floating_button_focus_active = `${tip}floating_focus_active.svg`;
 
-  // // Maximized Button
-  // theme.titlebar_maximized_button_normal_inactive = tip .. 'maximized_normal_inactive.svg'
-  // theme.titlebar_maximized_button_focus_inactive = tip .. 'maximized_focus_inactive.svg'
-  // theme.titlebar_maximized_button_normal_active = tip .. 'maximized_normal_active.svg'
-  // theme.titlebar_maximized_button_focus_active = tip .. 'maximized_focus_active.svg'
+  // Maximized Button
+  theme.titlebar_maximized_button_normal_inactive = `${tip}maximized_normal_inactive.svg`;
+  theme.titlebar_maximized_button_focus_inactive = `${tip}maximized_focus_inactive.svg`;
+  theme.titlebar_maximized_button_normal_active = `${tip}maximized_normal_active.svg`;
+  theme.titlebar_maximized_button_focus_active = `${tip}maximized_focus_active.svg`;
 
-  // // Hovered Close Button
-  // theme.titlebar_close_button_normal_hover = tip .. 'close_normal_hover.svg'
-  // theme.titlebar_close_button_focus_hover = tip .. 'close_focus_hover.svg'
+  // Hovered Close Button
+  theme.titlebar_close_button_normal_hover = `${tip}close_normal_hover.svg`;
+  theme.titlebar_close_button_focus_hover = `${tip}close_focus_hover.svg`;
 
-  // // Hovered Minimize Buttin
-  // theme.titlebar_minimize_button_normal_hover = tip .. 'minimize_normal_hover.svg'
-  // theme.titlebar_minimize_button_focus_hover = tip .. 'minimize_focus_hover.svg'
+  // Hovered Minimize Buttin
+  theme.titlebar_minimize_button_normal_hover = `${tip}minimize_normal_hover.svg`;
+  theme.titlebar_minimize_button_focus_hover = `${tip}minimize_focus_hover.svg`;
 
-  // // Hovered Ontop Button
-  // theme.titlebar_ontop_button_normal_inactive_hover = tip .. 'ontop_normal_inactive_hover.svg'
-  // theme.titlebar_ontop_button_focus_inactive_hover = tip .. 'ontop_focus_inactive_hover.svg'
-  // theme.titlebar_ontop_button_normal_active_hover = tip .. 'ontop_normal_active_hover.svg'
-  // theme.titlebar_ontop_button_focus_active_hover = tip .. 'ontop_focus_active_hover.svg'
+  // Hovered Ontop Button
+  theme.titlebar_ontop_button_normal_inactive_hover = `${tip}ontop_normal_inactive_hover.svg`;
+  theme.titlebar_ontop_button_focus_inactive_hover = `${tip}ontop_focus_inactive_hover.svg`;
+  theme.titlebar_ontop_button_normal_active_hover = `${tip}ontop_normal_active_hover.svg`;
+  theme.titlebar_ontop_button_focus_active_hover = `${tip}ontop_focus_active_hover.svg`;
 
-  // // Hovered Sticky Button
-  // theme.titlebar_sticky_button_normal_inactive_hover = tip .. 'sticky_normal_inactive_hover.svg'
-  // theme.titlebar_sticky_button_focus_inactive_hover = tip .. 'sticky_focus_inactive_hover.svg'
-  // theme.titlebar_sticky_button_normal_active_hover = tip .. 'sticky_normal_active_hover.svg'
-  // theme.titlebar_sticky_button_focus_active_hover = tip .. 'sticky_focus_active_hover.svg'
+  // Hovered Sticky Button
+  theme.titlebar_sticky_button_normal_inactive_hover = `${tip}sticky_normal_inactive_hover.svg`;
+  theme.titlebar_sticky_button_focus_inactive_hover = `${tip}sticky_focus_inactive_hover.svg`;
+  theme.titlebar_sticky_button_normal_active_hover = `${tip}sticky_normal_active_hover.svg`;
+  theme.titlebar_sticky_button_focus_active_hover = `${tip}sticky_focus_active_hover.svg`;
 
-  // // Hovered Floating Button
-  // theme.titlebar_floating_button_normal_inactive_hover = tip .. 'floating_normal_inactive_hover.svg'
-  // theme.titlebar_floating_button_focus_inactive_hover = tip .. 'floating_focus_inactive_hover.svg'
-  // theme.titlebar_floating_button_normal_active_hover = tip .. 'floating_normal_active_hover.svg'
-  // theme.titlebar_floating_button_focus_active_hover = tip .. 'floating_focus_active_hover.svg'
+  // Hovered Floating Button
+  theme.titlebar_floating_button_normal_inactive_hover = `${tip}floating_normal_inactive_hover.svg`;
+  theme.titlebar_floating_button_focus_inactive_hover = `${tip}floating_focus_inactive_hover.svg`;
+  theme.titlebar_floating_button_normal_active_hover = `${tip}floating_normal_active_hover.svg`;
+  theme.titlebar_floating_button_focus_active_hover = `${tip}floating_focus_active_hover.svg`;
 
-  // // Hovered Maximized Button
-  // theme.titlebar_maximized_button_normal_inactive_hover =
-  //     tip .. 'maximized_normal_inactive_hover.svg'
-  // theme.titlebar_maximized_button_focus_inactive_hover = tip .. 'maximized_focus_inactive_hover.svg'
-  // theme.titlebar_maximized_button_normal_active_hover = tip .. 'maximized_normal_active_hover.svg'
-  // theme.titlebar_maximized_button_focus_active_hover = tip .. 'maximized_focus_active_hover.svg'
+  // Hovered Maximized Button
+  theme.titlebar_maximized_button_normal_inactive_hover = `${tip}maximized_normal_inactive_hover.svg`;
+  theme.titlebar_maximized_button_focus_inactive_hover = `${tip}maximized_focus_inactive_hover.svg`;
+  theme.titlebar_maximized_button_normal_active_hover = `${tip}maximized_normal_active_hover.svg`;
+  theme.titlebar_maximized_button_focus_active_hover = `${tip}maximized_focus_active_hover.svg`;
 };
 
 export default {

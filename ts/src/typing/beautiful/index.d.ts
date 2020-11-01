@@ -23,8 +23,12 @@ declare module 'beautiful' {
   }
   export const gtk: GTK;
 
+  /**
+   * @noSelf
+   */
   interface XResources {
     apply_dpi: (dpi: number) => number;
+    get_current_theme: () => {[key: string]: string};
   }
   export const xresources: XResources;
 
@@ -38,4 +42,6 @@ declare module 'beautiful' {
   export const client_radius: number;
 
   export const awesome_icon: string;
+
+  export const titlebar_size: number;
 }

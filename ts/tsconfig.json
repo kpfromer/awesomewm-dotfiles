@@ -6,7 +6,9 @@
     "lib": ["esnext"],
     "moduleResolution": "node",
     "types": ["lua-types/5.1"],
-    "strict": true
+    "strict": true,
+    "jsx": "react",
+    "jsxFactory": "jsxFactory.createElement",
   },
   "tstl": {
     "luaTarget": "5.1",
@@ -14,6 +16,33 @@
     "noImplicitSelf": true,
     "noHeader": true,
     "luaBundle": "./main.lua",
-    "luaBundleEntry": "./src/rc.ts"
+    "luaBundleEntry": "./src/rc.ts",
+    "luaPlugins": [
+      {"name": "./src/jsx.ts"}
+    ]
   }
 }
+
+// {
+//   "compilerOptions": {
+//     "rootDir": "src",
+//     // "outDir": "build",
+//     "target": "esnext",
+//     "lib": ["esnext"],
+//     "moduleResolution": "node",
+//     "types": ["lua-types/5.1"],
+//     "strict": true,
+//     "jsx": "react"
+//   },
+//   "tstl": {
+//     "luaTarget": "5.1",
+//     "luaLibImport": "always",
+//     "noImplicitSelf": true,
+//     "noHeader": true,
+//     "luaBundle": "./main.lua",
+//     "luaBundleEntry": "./src/rc.ts",
+//     "luaPlugins": [
+//       {"name": "./src/jsx.ts"}
+//     ]
+//   }
+// }

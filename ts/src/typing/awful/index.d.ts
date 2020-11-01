@@ -399,4 +399,81 @@ declare module 'awful' {
   type Spawn = SpawnFunctions;
 
   export const spawn: Spawn;
+
+  /**
+   * @noSelf
+   */
+  interface Widget {
+    /**
+     * @noSelf
+     */
+    titlewidget: (c: Client) => unknown;
+    /**
+     * @noSelf
+     */
+    iconwidget: (c: Client) => unknown;
+    /**
+     * @noSelf
+     */
+    button: (
+      c: Client,
+      name: string,
+      selector: unknown,
+      action: unknown
+    ) => unknown;
+    /**
+     * @noSelf
+     */
+    floatingbutton: (c: Client) => unknown;
+    /**
+     * @noSelf
+     */
+    maximizedbutton: (c: Client) => unknown;
+    /**
+     * @noSelf
+     */
+    minimizebutton: (c: Client) => unknown;
+    /**
+     * @noSelf
+     */
+    closebutton: (c: Client) => unknown;
+    /**
+     * @noSelf
+     */
+    ontopbutton: (c: Client) => unknown;
+    /**
+     * @noSelf
+     */
+    stickybutton: (c: Client) => unknown;
+  }
+
+  export interface Titlebar {
+    // widget: Widget;
+    setup: (this: any, args: unknown) => unknown;
+    show: (this: any, client: Client, position?: string) => unknown;
+    hide: (this: any, client: Client, position?: string) => unknown;
+    toggle: (this: any, client: Client, position?: string) => unknown;
+  }
+
+  /**
+   * @noSelf
+   */
+  export const titlebar: {
+    (
+      c: Client,
+      args: Partial<{
+        size: number;
+        position: string;
+        bg_normal: string;
+        bg_focus: string;
+        bgimage_normal: string;
+        bgimage_focus: string;
+        fg_normal: string;
+        fg_focus: string;
+        font: string;
+        bg: string;
+      }>
+    ): Titlebar;
+    widget: Widget;
+  };
 }

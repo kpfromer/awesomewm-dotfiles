@@ -64,6 +64,7 @@ declare module 'gears' {
 /**
  * @noSelf
  */
+/** @noResolution */
 declare module 'gears.filesystem' {
   /**
    * Get the path to the user’s config dir. This is the directory containing the configuration file (“rc.lua”).
@@ -73,4 +74,74 @@ declare module 'gears.filesystem' {
    * https://awesomewm.org/doc/api/libraries/gears.filesystem.html#get_configuration_dir
    */
   export const get_configuration_dir: () => string;
+}
+
+/**
+ * @noSelf
+ */
+/** @noResolution */
+declare module 'gears.table' {
+  import {Table} from 'gears';
+
+  // interface GTable {
+  // /**
+  //  * @noSelf
+  //  */
+  // find_keys: (
+  //   t: Table,
+  //   matcher: function,
+  //   ordered: boolean,
+  //   max: number
+  // ) => unknown;
+  // /**
+  //  * @noSelf
+  //  */
+  // find_first_key: (t: Table, matcher: function, ordered: boolean) => unknown;
+  // }
+
+  /**
+   * @noSelf
+   */
+  export const join: (...tables: Table[]) => Table;
+  /**
+   * @noSelf
+   */
+  export const crush: (t: Table, set: Table, raw?: boolean) => Table;
+  /**
+   * @noSelf
+   */
+  export const from_sparse: (t: Table) => unknown;
+  /**
+   * @noSelf
+   */
+  export const hasitem: (t: Table, item: unknown) => unknown;
+
+  /**
+   * @noSelf
+   */
+  export const keys: (t: Table) => unknown;
+  /**
+   * @noSelf
+   */
+  export const keys_filter: (t: Table, ...rest: string[]) => unknown;
+  /**
+   * @noSelf
+   */
+  export const reverse: (t: Table) => unknown;
+  // /**
+  //  * @noSelf
+  //  */
+  // clone: (t: Table, deep: bool) => unknown;
+  // /**
+  //  * @noSelf
+  //  */
+  // iterate: (t: Table, filter: func, start: int) => unknown;
+  /**
+   * @noSelf
+   */
+  export const merge: (t: Table, set: Table) => unknown;
+  // /**
+  //  * @noSelf
+  //  */
+  // map: (f: function, tbl: Table) => unknown;
 }
