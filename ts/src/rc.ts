@@ -6,7 +6,6 @@
 // Banner generated using `toilet -f pagga text`
 // Standard awesome library
 
-import * as gears from 'gears';
 import * as awful from 'awful';
 import * as beautiful from 'beautiful';
 // TODO: require('awful.autofocus')
@@ -22,7 +21,8 @@ awful.util.shell = 'sh';
 // ░░█░░█▀█░█▀▀░█░█░█▀▀
 // ░░▀░░▀░▀░▀▀▀░▀░▀░▀▀▀
 
-beautiful.init(require('theme'));
+import theme from './theme/index';
+beautiful.init(theme);
 
 // ░█░░░█▀█░█░█░█▀█░█░█░▀█▀
 // ░█░░░█▀█░░█░░█░█░█░█░░█░
@@ -56,6 +56,7 @@ import './configuration/tags/index';
 import './module/auto-start';
 // // Titlebars for clients (windows)
 // require('module.titlebar')
+import './module/titlebar';
 // // TODO: Fix weird load up bug (lockscreen fixes this?)
 // require('module.dynamic-wallpaper')
 
@@ -89,3 +90,5 @@ import './module/auto-start';
 //       end
 //     end
 // )
+
+import {CoolReact} from './test';
