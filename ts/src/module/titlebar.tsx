@@ -6,55 +6,21 @@ import * as jsxFactory from '../helper/jsx-factory';
 import * as awful from 'awful';
 import * as gears from 'gears';
 import * as beautiful from 'beautiful';
-import * as wibox from 'wibox';
 const dpi = beautiful.xresources.apply_dpi;
 
-const double_click_event_handler = (handle: (this: void) => void): void => {
-  // todo:
-  //   if double_click_timer then
-  //   double_click_timer:stop()
-  //   double_click_timer = nil
-  //   double_click_event()
-  //   return
-  // end
-  // double_click_timer = gears.timer.start_new(
-  //   0.20,
-  //   function()
-  //     double_click_timer = nil
-  //     return false
-  //   end
-  // )
-};
+let timer: gears.Timer | undefined;
 
-// WORKS:
-/*
- awful.titlebar(client, {position = pos, bg = bg, size = size}):setup(
-        {
-            { -- Left
-            awful.titlebar.widget.iconwidget(client),
-            buttons = buttons,
-            layout  = wibox.layout.fixed.horizontal
-        },
-        { -- Middle
-            { -- Title
-                align  = 'center',
-                widget = awful.titlebar.widget.titlewidget(client)
-            },
-            buttons = buttons,
-            layout  = wibox.layout.flex.horizontal
-        },
-        { -- Right
-            awful.titlebar.widget.floatingbutton (client),
-            awful.titlebar.widget.maximizedbutton(client),
-            awful.titlebar.widget.stickybutton   (client),
-            awful.titlebar.widget.ontopbutton    (client),
-            awful.titlebar.widget.closebutton    (client),
-            layout = wibox.layout.fixed.horizontal
-        },
-        layout = wibox.layout.align.horizontal
-        }
-    )
-*/
+const double_click_event_handler = (handle: (this: void) => void): void => {
+  if (timer) {
+    timer.stop();
+    timer = undefined;
+    handle();
+  }
+  timer = gears.timer.start_new(0.2, () => {
+    timer = undefined;
+    return false;
+  });
+};
 
 const create_horizontal_bar = (
   client: awful.Client,
@@ -99,10 +65,14 @@ client.connect_signal('request::titlebars', client => {
         client.maximized = !client.maximized;
         client.raise();
       });
-      // client.activate({context:"titlebar", action: 'mouse_move})
+      client.emit_signal('request::activate', 'titlebar', {
+        action: 'mouse_move',
+      });
     }),
     awful.button([], 3, () => {
-      // client.activate({context: 'titlebar', action: 'mouse_resize'});
+      client.emit_signal('request::activate', 'titlebar', {
+        action: 'mouse_resize',
+      });
     })
   );
 
