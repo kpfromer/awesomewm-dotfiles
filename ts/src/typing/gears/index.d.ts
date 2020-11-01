@@ -59,6 +59,45 @@ declare module 'gears' {
   export type GearsTable = NoSelfGearsTable;
 
   export const table: GearsTable;
+
+  // interface Gears {
+  //   /**
+  //    * @noSelf
+  //    */
+  //   timer: (args: {
+  //     timeout: number;
+  //     autostart: boolean;
+  //     call_now: boolean;
+  //     callback: Function;
+  //     single_shot: boolean;
+  //   }) => unknown;
+  // }
+  interface Timer {
+    /**
+     * Stop the timer.
+     */
+    stop: () => void;
+    /**
+     * Start the timer.
+     */
+    start: () => void;
+    /**
+     * Restart the timer. This is equivalent to stopping the timer if it is running and then starting it.
+     */
+    again: () => void;
+  }
+
+  export const timer: {
+    start_new: (this: void, timeout: number, callback: () => void) => Timer;
+
+    weak_start_new: (
+      this: void,
+      timeout: number,
+      callback: () => void
+    ) => Timer;
+
+    // 'delayed_call': (this: void, callback: function,...: unknown) => unknown;
+  };
 }
 
 /**
