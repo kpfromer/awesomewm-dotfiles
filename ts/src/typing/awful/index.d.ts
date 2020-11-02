@@ -313,6 +313,7 @@ declare module 'awful' {
 
   interface ScreenProps {
     tags: Table;
+    dpi: number;
   }
   interface ScreenFunctions {
     preferred: (this: any, client: Client) => Screen;

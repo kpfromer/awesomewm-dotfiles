@@ -3,6 +3,8 @@
 
 declare module 'wibox' {
   interface Widget {
+    // TODO: ARGS
+    (this: void, args: any): unknown;
     /**
      * @noSelf
      */
