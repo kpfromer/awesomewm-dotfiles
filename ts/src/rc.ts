@@ -37,6 +37,9 @@ beautiful.init(theme);
 import './configuration/client/index';
 // import './configuration/root'
 import './configuration/tags/index';
+import globalKeys from './configuration/keys/global';
+// eslint-disable-next-line node/no-deprecated-api
+root.keys(globalKeys);
 
 // import * as globalKeys from './configuration/keys/global';
 // root.keys(globalKeys);
@@ -55,8 +58,8 @@ import './configuration/tags/index';
 // // Handles staring up programs like picom
 import './module/auto-start';
 // // Titlebars for clients (windows)
-// require('module.titlebar')
 import './module/titlebar';
+
 // // TODO: Fix weird load up bug (lockscreen fixes this?)
 // require('module.dynamic-wallpaper')
 
@@ -90,5 +93,3 @@ import './module/titlebar';
 //       end
 //     end
 // )
-
-import {CoolReact} from './test';
