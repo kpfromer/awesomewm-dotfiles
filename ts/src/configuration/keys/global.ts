@@ -247,16 +247,15 @@ let globalkeys = gears.table.join(
       group: 'awesome',
     }
   ),
-  // TODO:
-  // awful.key(
-  //   [modkey],
-  //   'd',
-  //   () => {
-  //     awful.spawn(config.apps.default.rofi_appmenu, false);
-  //   },
-  //   () => {},
-  //   {description: 'app launcher', group: 'launcher'}
-  // ),
+  awful.key(
+    [modkey],
+    'd',
+    () => {
+      awful.spawn(config.apps.default.rofiAppmenu, false);
+    },
+    () => {},
+    {description: 'app launcher', group: 'launcher'}
+  ),
   awful.key(
     [modkey],
     'w',

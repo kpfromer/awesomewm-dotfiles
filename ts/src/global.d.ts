@@ -27,6 +27,8 @@ declare global {
       type: string,
       func: (screen: Screen) => void
     ) => void;
+
+    primary: Screen;
   };
 
   /** @forRange */

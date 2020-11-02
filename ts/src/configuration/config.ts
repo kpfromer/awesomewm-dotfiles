@@ -36,12 +36,14 @@ const apps = {
     lock: 'awesome-client "awesome.emit_signal(\'module::lockscreen_show\')"',
 
     // Screenshot
-    screenshot: 'spectacle //region',
+    screenshot: 'spectacle --region',
 
     // Quake-like Terminal
-    quake: 'kitty //name QuakeTerminal',
+    quake: 'kitty --name QuakeTerminal',
 
     editor: 'vim',
+
+    rofiAppmenu: `rofi -dpi ${screen.primary.dpi} -show drun -theme ${config_dir}configuration/rofi/appmenu/rofi.rasi`,
 
     // Rofi Web Search
     // rofi_global:'rofi -dpi ' .. screen.primary.dpi ..
