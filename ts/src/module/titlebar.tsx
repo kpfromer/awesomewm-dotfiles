@@ -6,6 +6,15 @@ import * as jsxFactory from '../helper/jsx-factory';
 import * as awful from 'awful';
 import * as gears from 'gears';
 import * as beautiful from 'beautiful';
+import {
+  CloseButton,
+  FloatingButton,
+  Layout,
+  Margin,
+  MaximizedButton,
+  MinimizeButton,
+  OnTopButton,
+} from '../helper/base/index';
 const dpi = beautiful.xresources.apply_dpi;
 
 let timer: gears.Timer | undefined;
@@ -22,6 +31,44 @@ const double_click_event_handler = (handle: (this: void) => void): void => {
   });
 };
 
+// local create_vertical_bar = function(c, buttons, pos, bg, size)
+
+// 	-- Check if passed position is valid for this position
+// 	if (pos == 'top' or pos == 'bottom') then
+// 		pos = 'left'
+// 		bg = '#FF00FF'
+// 	end
+
+// 	awful.titlebar(c, {position = pos, bg = bg, size = size}) : setup {
+// 		{
+// 			{
+// 				awful.titlebar.widget.closebutton(c),
+// 				awful.titlebar.widget.maximizedbutton(c),
+// 				awful.titlebar.widget.minimizebutton(c),
+// 				spacing = dpi(7),
+// 				layout  = wibox.layout.fixed.vertical
+// 			},
+// 			margins = dpi(10),
+// 			widget = wibox.container.margin
+// 		},
+// 		{
+// 			buttons = buttons,
+// 			layout = wibox.layout.flex.vertical
+// 		},
+// 		{
+// 			{
+// 				awful.titlebar.widget.ontopbutton(c),
+// 				awful.titlebar.widget.floatingbutton(c),
+// 				spacing = dpi(7),
+// 				layout  = wibox.layout.fixed.vertical
+// 			},
+// 			margins = dpi(10),
+// 			widget = wibox.container.margin
+// 		},
+// 		layout = wibox.layout.align.vertical
+// 	}
+// end
+
 const create_horizontal_bar = (
   client: awful.Client,
   buttons: unknown,
@@ -35,22 +82,24 @@ const create_horizontal_bar = (
   // }
 
   awful.titlebar(client, {position: pos, bg, size}).setup(
-    <align-horizontal>
-      <margin margins={dpi(10)}>
-        <fixed-horizontal spacing={dpi(7)}>
-          {awful.titlebar.widget.ontopbutton(client)}
-          {awful.titlebar.widget.floatingbutton(client)}
-        </fixed-horizontal>
-      </margin>
-      <flex-horizontal buttons={buttons} />
-      <margin margins={dpi(10)}>
-        <fixed-horizontal spacing={dpi(7)}>
-          {awful.titlebar.widget.minimizebutton(client)}
-          {awful.titlebar.widget.maximizedbutton(client)}
-          {awful.titlebar.widget.closebutton(client)}
-        </fixed-horizontal>
-      </margin>
-    </align-horizontal>
+    <Layout align horizontal>
+      <Margin margins={dpi(10)}>
+        <Layout fixed horizontal spacing={dpi(7)}>
+          <OnTopButton client={client} />
+          <FloatingButton client={client} />
+        </Layout>
+      </Margin>
+
+      <Layout flex horizontal buttons={buttons} />
+
+      <Margin margins={dpi(10)}>
+        <Layout fixed horizontal spacing={dpi(7)}>
+          <MinimizeButton client={client} />
+          <MaximizedButton client={client} />
+          <CloseButton client={client} />
+        </Layout>
+      </Margin>
+    </Layout>
   );
 };
 

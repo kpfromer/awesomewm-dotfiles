@@ -24,7 +24,7 @@ declare namespace JSX {
   type PropsWithChildren<P> = P & {children?: AwesomeNode};
 
   interface FunctionComponent<P = {}> {
-    (props: PropsWithChildren<P>, context?: any): AwesomeElement<
+    (this: void, props: PropsWithChildren<P>, context?: any): AwesomeElement<
       any,
       any
     > | null;
@@ -108,9 +108,7 @@ declare namespace JSX {
   // >;
 
   interface IntrinsicElements {
-    h1: any;
-    // div: any;
-    // ...
+    base: ElementProps<any>;
 
     fragment: ElementProps<{}>;
 
@@ -122,14 +120,5 @@ declare namespace JSX {
     }>;
 
     textbox: TextBoxProps;
-
-    margin: Partial<WiboxMargin>;
-
-    'fixed-horizontal': ElementProps<{spacing?: number; buttons?: any}>;
-    'fixed-vertical': ElementProps<{spacing?: number; buttons?: any}>;
-
-    'align-horizontal': ElementProps<{buttons?: any}>;
-
-    'flex-horizontal': ElementProps<{align?: string; buttons?: any}>;
   }
 }

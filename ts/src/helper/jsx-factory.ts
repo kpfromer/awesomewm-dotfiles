@@ -1,6 +1,4 @@
 /// <reference types="./jsx-factory" />
-import * as naughty from 'naughty';
-import * as wibox from 'wibox';
 
 /** @luaTable */
 declare class Table<K extends {} = {}, V = any> {
@@ -20,7 +18,7 @@ function createMap(
     map.set(key, value);
   }
 
-  for (let i = 0; i < children.length; ++i) {
+  for (const i of forRange(0, children.length)) {
     // Remember that lua is base 1 thus we need to start at index 1 for the map
     // this is because this is because "map.set(i, children[i])" is transpiled to "map[i] = children[i + 1]"
     map.set(i + 1, children[i]);
@@ -30,12 +28,18 @@ function createMap(
 }
 
 export function createElement(
-  tagName: keyof JSX.IntrinsicElements,
+  tagName: keyof JSX.IntrinsicElements | JSX.FunctionComponent,
   attributes: any,
-  children: any[] = []
-  // ...children: any[]
+  ...children: any[]
 ): any {
-  if (tagName === 'naughtybox') {
+  if (tagName === 'base') {
+    // Code based from React.createElement
+    // https://github.com/facebook/react/blob/master/packages/react/src/ReactElement.js#L526
+    if (children.length === 1) {
+      return createMap(attributes, children[0]);
+    }
+    return createMap(attributes, children);
+  } else if (tagName === 'naughtybox') {
     // const map = new Table();
     // Object.entries(attributes).forEach(([key, value]) => {
     //   map.set(key, value);
@@ -58,28 +62,10 @@ export function createElement(
     //   text: props.children ?? '',
     //   widget: wibox.widget.textbox,
     // };
-  } else if (tagName === 'margin') {
-    const map = createMap(attributes, children);
-    map.set('widget', wibox.container.margin);
-    return map;
-  } else if (tagName === 'fixed-horizontal') {
-    const map = createMap(attributes, children);
-    map.set('layout', wibox.layout.fixed.horizontal);
-    return map;
-  } else if (tagName === 'fixed-vertical') {
-    const map = createMap(attributes, children);
-    map.set('layout', wibox.layout.fixed.vertical);
-    return map;
-  } else if (tagName === 'align-horizontal') {
-    const map = createMap(attributes, children);
-    map.set('layout', wibox.layout.align.horizontal);
-    return map;
-  } else if (tagName === 'flex-horizontal') {
-    const map = createMap(attributes, children);
-    map.set('layout', wibox.layout.flex.horizontal);
-    return map;
   } else if (tagName === 'fragment') {
     return createMap(attributes, children);
+  } else if (tagName !== null) {
+    return tagName({...attributes, children});
   }
 
   return null;
