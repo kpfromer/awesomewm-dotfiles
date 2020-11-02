@@ -28,4 +28,7 @@ declare global {
       func: (screen: Screen) => void
     ) => void;
   };
+
+  /** @forRange */
+  function forRange(start: number, limit: number, step?: number): number[];
 }

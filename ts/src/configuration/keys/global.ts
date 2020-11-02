@@ -313,13 +313,6 @@ let globalkeys = gears.table.join(
   )
 );
 
-/** @forRange */
-declare function forRange(
-  start: number,
-  limit: number,
-  step?: number
-): number[];
-
 // Bind all key numbers to tags.
 // Be careful: we use keycodes to make it work on any keyboard layout.
 // This should map on the top row of your keyboard, usually 1 to 9.
