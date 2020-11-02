@@ -460,10 +460,11 @@ declare module 'awful' {
       bottom: T;
       top: T;
     };
+    floating: T;
   }
 
   interface LayoutFunctions {
-    append_default_layouts: (this: void, layouts: ClientLayouts[]) => void;
+    append_default_layouts: (this: void, layouts: string[]) => void;
     inc: (
       this: void,
       relativeIndex: number,

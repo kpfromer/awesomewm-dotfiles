@@ -1,5 +1,5 @@
-const filesystem = require('gears.filesystem');
-const awful = require('awful');
+import * as filesystem from 'gears.filesystem';
+import * as awful from 'awful';
 
 const config_dir = filesystem.get_configuration_dir();
 const bin_dir = `${config_dir}utilities/`;
@@ -111,7 +111,7 @@ const apps = {
 };
 
 const config = {
-  debug: true,
+  debug: false,
   modkey: 'Mod4',
 
   // Used for valid ways to layout awesomewm windows
@@ -119,7 +119,7 @@ const config = {
     awful.layout.suit.spiral.dwindle,
     awful.layout.suit.tile.left,
     awful.layout.suit.floating,
-    awful.layout.suit.max,
+    awful.layout.suit.max as string,
     // awful.layout.suit.floating, awful.layout.suit.tile,
     // // awful.layout.suit.tile.left, awful.layout.suit.tile.bottom,
     // // awful.layout.suit.tile.top, awful.layout.suit.fair,

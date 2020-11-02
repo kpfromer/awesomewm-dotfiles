@@ -72,7 +72,7 @@ screen.connect_signal('request::desktop_decoration', s => {
     awful.tag.add(index.toString(), {
       icon: tag.icon,
       icon_only: true,
-      layout: tag.layout || config.layouts[0],
+      layout: tag.layout ?? config.layouts[0],
       gap_single_client: true,
       gap: tag.gap,
       screen: s,
