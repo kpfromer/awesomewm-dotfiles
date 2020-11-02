@@ -63,11 +63,11 @@ const tags: Partial<awful.Tag>[] = [
   },
 ];
 
-tag.connect_signal('request::default_layouts', function () {
+tag.connect_signal('request::default_layouts', () => {
   awful.layout.append_default_layouts(config.layouts);
 });
 
-screen.connect_signal('request::desktop_decoration', function (s) {
+screen.connect_signal('request::desktop_decoration', s => {
   tags.forEach((tag, index) => {
     awful.tag.add(index.toString(), {
       icon: tag.icon,
@@ -82,7 +82,7 @@ screen.connect_signal('request::desktop_decoration', function (s) {
   });
 });
 
-tag.connect_signal('property::layout', function (tag) {
+tag.connect_signal('property::layout', tag => {
   const current_layout = tag.layout;
   if (current_layout === awful.layout.suit.max) {
     tag.gap = 0;

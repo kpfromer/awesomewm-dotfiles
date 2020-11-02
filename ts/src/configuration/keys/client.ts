@@ -4,14 +4,14 @@ import config from '../config';
 const {modkey} = config;
 
 const clientbuttons = gears.table.join(
-  awful.button([], 1, function (c) {
+  awful.button([], 1, c => {
     c.emit_signal('request::activate', 'mouse_click', {raise: true});
   }),
-  awful.button([modkey], 1, function (c) {
+  awful.button([modkey], 1, c => {
     c.emit_signal('request::activate', 'mouse_click', {raise: true});
     awful.mouse.client.move(c);
   }),
-  awful.button([modkey], 3, function (c) {
+  awful.button([modkey], 3, c => {
     c.emit_signal('request::activate', 'mouse_click', {raise: true});
     awful.mouse.client.resize(c);
   })
@@ -21,7 +21,7 @@ const clientkeys = gears.table.join(
   awful.key(
     [modkey],
     'f',
-    function (c) {
+    c => {
       c.fullscreen = !c.fullscreen;
       c.raise();
     },
@@ -31,7 +31,7 @@ const clientkeys = gears.table.join(
   awful.key(
     [modkey],
     'q',
-    function (c) {
+    c => {
       c.kill();
     },
     () => {},
@@ -52,7 +52,7 @@ const clientkeys = gears.table.join(
   awful.key(
     [modkey, 'Control'],
     'Return',
-    function (c) {
+    c => {
       c.swap(awful.client.getmaster());
     },
     () => {},
@@ -61,7 +61,7 @@ const clientkeys = gears.table.join(
   awful.key(
     [modkey],
     'o',
-    function (c) {
+    c => {
       c.move_to_screen();
     },
     () => {},
@@ -70,7 +70,7 @@ const clientkeys = gears.table.join(
   awful.key(
     [modkey],
     't',
-    function (c) {
+    c => {
       c.ontop = !c.ontop;
     },
     () => {},
@@ -79,7 +79,7 @@ const clientkeys = gears.table.join(
   awful.key(
     [modkey],
     'n',
-    function (c) {
+    c => {
       c.minimized = true;
     },
     () => {},
@@ -88,7 +88,7 @@ const clientkeys = gears.table.join(
   awful.key(
     [modkey],
     'm',
-    function (c) {
+    c => {
       c.maximized = !c.maximized;
       c.raise();
     },
@@ -98,7 +98,7 @@ const clientkeys = gears.table.join(
   awful.key(
     [modkey, 'Control'],
     'm',
-    function (c) {
+    c => {
       c.maximized_vertical = !c.maximized_vertical;
       c.raise();
     },
@@ -108,7 +108,7 @@ const clientkeys = gears.table.join(
   awful.key(
     [modkey, 'Shift'],
     'm',
-    function (c) {
+    c => {
       c.maximized_horizontal = !c.maximized_horizontal;
       c.raise();
     },
@@ -118,7 +118,7 @@ const clientkeys = gears.table.join(
   awful.key(
     [modkey],
     'p',
-    function (c) {
+    c => {
       if (c.floating) {
         c.ontop = false;
         c.sticky = false;

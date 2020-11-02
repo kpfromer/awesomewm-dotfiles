@@ -233,7 +233,50 @@ declare module 'awful' {
     getmaster: () => Client;
   }
 
-  type Client = ClientProps & ClientFunctions;
+  interface Swap {
+    bydirection: (
+      this: void,
+      dir: string,
+      client?: Client,
+      stacked?: boolean
+    ) => unknown;
+
+    global_bydirection: (this: void, dir: unknown, sel: Client) => unknown;
+
+    byidx: (this: void, i: unknown, client?: Client) => unknown;
+  }
+
+  interface Focus {
+    // history: History;
+
+    byidx: (this: void, index: number, client?: Client) => unknown;
+
+    filter: (this: void, c: Client) => unknown;
+
+    bydirection: (
+      this: void,
+      dir: string,
+      client?: Client,
+      stacked?: boolean
+    ) => unknown;
+
+    global_bydirection: (
+      this: void,
+      dir: unknown,
+      client?: Client,
+      stacked?: boolean
+    ) => unknown;
+  }
+
+  type Client = {
+    swap: Swap;
+    focus: Focus;
+    /**
+     * @noSelf
+     */
+    restore: (screen?: Screen) => Client;
+  } & ClientProps &
+    ClientFunctions;
 
   export const client: Client;
 
@@ -273,6 +316,18 @@ declare module 'awful' {
   }
   interface ScreenFunctions {
     preferred: (this: any, client: Client) => Screen;
+
+    getbycoord: (this: void, x: number, y: number) => unknown;
+
+    focus: (this: void, screen?: Screen) => unknown;
+
+    focus_bydirection: (this: void, dir: unknown, screen: unknown) => unknown;
+
+    focus_relative: (this: void, offset: number) => unknown;
+
+    focused: (this: void, args?: {client: boolean; mouse: boolean}) => Screen;
+
+    connect_for_each_screen: (this: void, func: {screen: Screen}) => unknown;
   }
 
   export type Screen = ScreenProps & ScreenFunctions;
@@ -337,6 +392,45 @@ declare module 'awful' {
       signal?: string,
       callback?: (screen: Screen) => void
     ) => void;
+
+    find_fallback: (this: void, screen: unknown, invalids: unknown) => unknown;
+
+    incmwfact: (this: void, add: unknown, t: unknown) => unknown;
+
+    incgap: (this: void, add: unknown, t: unknown) => unknown;
+
+    togglemfpol: (this: void, t: Tag) => unknown;
+
+    incnmaster: (
+      this: void,
+      add: unknown,
+      t: unknown,
+      sensible: boolean
+    ) => unknown;
+
+    incncol: (
+      this: void,
+      add: unknown,
+      t: unknown,
+      sensible: boolean
+    ) => unknown;
+
+    viewnone: (this: void, screen?: Screen | number) => unknown;
+
+    viewidx: (this: void, i: unknown, screen: unknown) => unknown;
+
+    viewnext: (this: void, screen?: Screen) => unknown;
+
+    viewprev: (this: void, screen?: Screen) => unknown;
+
+    viewmore: (
+      this: void,
+      tags: unknown,
+      screen: unknown,
+      maximum: number
+    ) => unknown;
+
+    viewtoggle: (this: void, t: Tag) => unknown;
   }
 
   type Tag = TagProps & TagFunctions;
@@ -370,6 +464,12 @@ declare module 'awful' {
 
   interface LayoutFunctions {
     append_default_layouts: (this: void, layouts: ClientLayouts[]) => void;
+    inc: (
+      this: void,
+      relativeIndex: number,
+      screen?: Screen,
+      layouts?: unknown
+    ) => void;
   }
 
   type Layout = LayoutFunctions & {
@@ -379,6 +479,7 @@ declare module 'awful' {
   export const layout: Layout;
 
   interface SpawnFunctions {
+    (this: void, command: string, rules?: boolean, callback?: () => void): void;
     /**
      * Call spawn.easy_async with a shell. This calls cmd with $SHELL -c (via awful.util.shell).
      *

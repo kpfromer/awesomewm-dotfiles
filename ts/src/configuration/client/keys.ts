@@ -14,7 +14,7 @@ export default gears.table.join(
   awful.key(
     [modkey],
     'f',
-    function (c) {
+    c => {
       c.fullscreen = !c.fullscreen;
       c.raise();
     },
@@ -24,7 +24,7 @@ export default gears.table.join(
   awful.key(
     [modkey],
     'q',
-    function (c) {
+    c => {
       c.kill();
     },
     () => {},
@@ -45,7 +45,7 @@ export default gears.table.join(
   awful.key(
     [modkey, 'Control'],
     'Return',
-    function (c) {
+    c => {
       c.swap(awful.client.getmaster());
     },
     () => {},
@@ -54,7 +54,7 @@ export default gears.table.join(
   awful.key(
     [modkey],
     'o',
-    function (c) {
+    c => {
       c.move_to_screen();
     },
     () => {},
@@ -63,7 +63,7 @@ export default gears.table.join(
   awful.key(
     [modkey],
     't',
-    function (c) {
+    c => {
       c.ontop = !c.ontop;
     },
     () => {},
@@ -72,7 +72,7 @@ export default gears.table.join(
   awful.key(
     [modkey],
     'n',
-    function (c) {
+    c => {
       c.minimized = true;
     },
     () => {},
@@ -81,7 +81,7 @@ export default gears.table.join(
   awful.key(
     [modkey],
     'm',
-    function (c) {
+    c => {
       c.maximized = !c.maximized;
       c.raise();
     },
@@ -91,7 +91,7 @@ export default gears.table.join(
   awful.key(
     [modkey, 'Control'],
     'm',
-    function (c) {
+    c => {
       c.maximized_vertical = !c.maximized_vertical;
       c.raise();
     },
@@ -101,7 +101,7 @@ export default gears.table.join(
   awful.key(
     [modkey, 'Shift'],
     'm',
-    function (c) {
+    c => {
       c.maximized_horizontal = !c.maximized_horizontal;
       c.raise();
     },
@@ -111,7 +111,7 @@ export default gears.table.join(
   awful.key(
     [modkey],
     'p',
-    function (c) {
+    c => {
       if (c.floating) {
         c.ontop = false;
         c.sticky = false;

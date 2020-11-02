@@ -1,7 +1,4 @@
-// import file
-
-// todo:
-const filesystem = require('gears.filesystem');
+import * as filesystem from 'gears.filesystem';
 const theme_dir = `${filesystem.get_configuration_dir()}/theme`;
 
 // todo: typing
