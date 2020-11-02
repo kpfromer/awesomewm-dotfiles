@@ -12,6 +12,20 @@ import {
   VisitorResult,
 } from 'typescript-to-lua';
 import {literalVisitors} from 'typescript-to-lua/dist/transformation/visitors/literal';
+import {
+  transformArguments,
+  transformCallExpression,
+} from 'typescript-to-lua/dist/transformation/visitors/call';
+import {
+  LuaLibFeature,
+  transformLuaLibFunction,
+} from 'typescript-to-lua/dist/transformation/utils/lualib';
+
+/*
+Tools:
+https://babeljs.io/en/repl
+https://ts-ast-viewer.com/
+*/
 
 const transformObjectLiteral = literalVisitors[
   ts.SyntaxKind.ObjectLiteralExpression
@@ -24,26 +38,111 @@ function transformJsxAttributesExpression(
   expression: ts.JsxAttributes,
   context: TransformationContext
 ): VisitorResult<ts.Expression> {
-  if (
-    expression.properties.find(
-      element => element.kind === ts.SyntaxKind.JsxSpreadAttribute
-    )
-  ) {
-    throw new Error('Unsupported: JsxSpreadAttribute');
-  }
-  const properties = expression.properties
-    .filter(
-      (element): element is ts.JsxAttribute =>
-        element.kind !== ts.SyntaxKind.JsxSpreadAttribute
-    )
-    .map(element => {
-      const valueOrExpression = element.initializer
-        ? element.initializer
-        : ts.createLiteral(true);
-      return ts.createPropertyAssignment(element.name, valueOrExpression);
-    });
+  const hasSpread = expression.properties.some(
+    element => element.kind === ts.SyntaxKind.JsxSpreadAttribute
+  );
+  /*
+    Documents referenced:
+    - https://ts-ast-viewer.com/
+    - https://babeljs.io/en/repl
+    For how babel transpiles jsx spread to object.assign
+    - https://babeljs.io/en/repl#?browsers=defaults%2C%20not%20ie%2011%2C%20not%20ie_mob%2011&build=&builtIns=false&spec=false&loose=false&code_lz=MYewdgzgLgBAllApgWwjAvDA2gKAJAA8ARgE4wD0AfADQ4wyGkWU4C6OOoksAFhjAQAqiaC3rjxBBChgBvAHSKSIqAF85i-cugAmdQDN0sgIzqqdCeNnTUqixILlhooA&debug=false&forceAllTransforms=false&shippedProposals=false&circleciRepo=&evaluate=false&fileSize=false&timeTravel=false&sourceType=module&lineWrap=true&presets=env%2Creact%2Cstage-2&prettier=false&targets=&version=7.12.3&externalPlugins=
+    Rest for how to create object.assign in typescript-to-lua
+    - https://github.com/TypeScriptToLua/TypeScriptToLua/blob/b1eb04141da93263d80a8bb762f4dfc1b6d2b207/src/transformation/builtins/object.ts#L17
+    - https://github.com/TypeScriptToLua/TypeScriptToLua/blob/9783568df3f30bea598ac539aa61cf70cf365eeb/src/transformation/visitors/literal.ts#L86
+    - 
+  */
+  if (hasSpread) {
+    // const expressions: (
+    //   | ts.StringLiteral
+    //   | ts.JsxExpression
+    //   | ts.BooleanLiteral
+    //   | ts.Expression
+    // )[] = expression.properties.map(element => {
+    //   if (element.kind === ts.SyntaxKind.JsxSpreadAttribute) {
+    //     return element.expression;
+    //   } else {
+    //     const valueOrExpression = element.initializer
+    //       ? element.initializer
+    //       : ts.createLiteral(true);
+    //     return ts.createPropertyAssignment(element.name, valueOrExpression);
+    //   }
+    // });
 
-  return transformObjectLiteral(ts.createObjectLiteral(properties), context);
+    // TODO: break out to function and document
+    const expressions = expression.properties.reduce((prev, element) => {
+      if (element.kind === ts.SyntaxKind.JsxSpreadAttribute) {
+        // {...spread1} x={1} y={10} {...spread2} = [spread1, {x:1, y: 10}, spread2]
+        const properties: ts.PropertyAssignment[] = [];
+        while (
+          prev[prev.length - 1] &&
+          prev[prev.length - 1].kind === ts.SyntaxKind.PropertyAssignment
+        ) {
+          properties.push(prev.pop()! as ts.PropertyAssignment);
+        }
+        const objectLiteral = ts.createObjectLiteral(properties);
+        return [...prev, objectLiteral, element.expression];
+      } else {
+        const valueOrExpression = element.initializer
+          ? element.initializer
+          : ts.createLiteral(true);
+        return [
+          ...prev,
+          ts.createPropertyAssignment(element.name, valueOrExpression),
+        ];
+      }
+    }, [] as (ts.ObjectLiteralExpression | ts.Expression | ts.PropertyAssignment | ts.JsxExpression)[]);
+    const properties: ts.PropertyAssignment[] = [];
+    while (
+      expressions[expressions.length - 1] &&
+      expressions[expressions.length - 1].kind ===
+        ts.SyntaxKind.PropertyAssignment
+    ) {
+      properties.push(expressions.pop()! as ts.PropertyAssignment);
+    }
+    const objectLiteral = ts.createObjectLiteral(properties);
+    const objectExpressions =
+      properties.length > 0
+        ? ([...expressions, objectLiteral] as (
+            | ts.ObjectLiteralExpression
+            | ts.Expression
+          )[])
+        : (expressions as ts.Expression[]);
+
+    // Object.assign({}, ...expressions)
+    return transformLuaLibFunction(
+      context,
+      LuaLibFeature.ObjectAssign,
+      ts.createObjectLiteral([], false),
+      ...transformArguments(context, objectExpressions)
+    );
+
+    // return transformCallExpression(
+    //   ts.createCall(
+    //     ts.createPropertyAccess(
+    //       ts.createIdentifier('Object'),
+    //       ts.createIdentifier('assign')
+    //     ),
+    //     undefined,
+    //     [ts.createObjectLiteral([], false), ...expressions]
+    //   ),
+    //   context
+    // );
+  } else {
+    const properties = expression.properties
+      .filter(
+        (element): element is ts.JsxAttribute =>
+          element.kind !== ts.SyntaxKind.JsxSpreadAttribute
+      )
+      .map(element => {
+        const valueOrExpression = element.initializer
+          ? element.initializer
+          : ts.createLiteral(true);
+        return ts.createPropertyAssignment(element.name, valueOrExpression);
+      }, []);
+
+    return transformObjectLiteral(ts.createObjectLiteral(properties), context);
+  }
 }
 function transformJsxOpeningElement(
   expression: ts.JsxSelfClosingElement | ts.JsxOpeningElement,
