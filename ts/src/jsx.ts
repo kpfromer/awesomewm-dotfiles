@@ -12,10 +12,7 @@ import {
   VisitorResult,
 } from 'typescript-to-lua';
 import {literalVisitors} from 'typescript-to-lua/dist/transformation/visitors/literal';
-import {
-  transformArguments,
-  transformCallExpression,
-} from 'typescript-to-lua/dist/transformation/visitors/call';
+import {transformArguments} from 'typescript-to-lua/dist/transformation/visitors/call';
 import {
   LuaLibFeature,
   transformLuaLibFunction,
@@ -30,9 +27,6 @@ https://ts-ast-viewer.com/
 const transformObjectLiteral = literalVisitors[
   ts.SyntaxKind.ObjectLiteralExpression
 ] as FunctionVisitor<ts.ObjectLiteralExpression>;
-const transformArrayLiteral = literalVisitors[
-  ts.SyntaxKind.ArrayLiteralExpression
-] as FunctionVisitor<ts.ArrayLiteralExpression>;
 
 function transformJsxAttributesExpression(
   expression: ts.JsxAttributes,
@@ -50,25 +44,8 @@ function transformJsxAttributesExpression(
     Rest for how to create object.assign in typescript-to-lua
     - https://github.com/TypeScriptToLua/TypeScriptToLua/blob/b1eb04141da93263d80a8bb762f4dfc1b6d2b207/src/transformation/builtins/object.ts#L17
     - https://github.com/TypeScriptToLua/TypeScriptToLua/blob/9783568df3f30bea598ac539aa61cf70cf365eeb/src/transformation/visitors/literal.ts#L86
-    - 
   */
   if (hasSpread) {
-    // const expressions: (
-    //   | ts.StringLiteral
-    //   | ts.JsxExpression
-    //   | ts.BooleanLiteral
-    //   | ts.Expression
-    // )[] = expression.properties.map(element => {
-    //   if (element.kind === ts.SyntaxKind.JsxSpreadAttribute) {
-    //     return element.expression;
-    //   } else {
-    //     const valueOrExpression = element.initializer
-    //       ? element.initializer
-    //       : ts.createLiteral(true);
-    //     return ts.createPropertyAssignment(element.name, valueOrExpression);
-    //   }
-    // });
-
     // TODO: break out to function and document
     const expressions = expression.properties.reduce((prev, element) => {
       if (element.kind === ts.SyntaxKind.JsxSpreadAttribute) {
@@ -92,6 +69,7 @@ function transformJsxAttributesExpression(
         ];
       }
     }, [] as (ts.ObjectLiteralExpression | ts.Expression | ts.PropertyAssignment | ts.JsxExpression)[]);
+    // add remaining x={1} y={10} to their own object
     const properties: ts.PropertyAssignment[] = [];
     while (
       expressions[expressions.length - 1] &&
@@ -116,18 +94,6 @@ function transformJsxAttributesExpression(
       ts.createObjectLiteral([], false),
       ...transformArguments(context, objectExpressions)
     );
-
-    // return transformCallExpression(
-    //   ts.createCall(
-    //     ts.createPropertyAccess(
-    //       ts.createIdentifier('Object'),
-    //       ts.createIdentifier('assign')
-    //     ),
-    //     undefined,
-    //     [ts.createObjectLiteral([], false), ...expressions]
-    //   ),
-    //   context
-    // );
   } else {
     const properties = expression.properties
       .filter(
@@ -176,11 +142,12 @@ function transformJsxOpeningElement(
       .map(child =>
         ts.isJsxText(child) ? ts.createStringLiteral(child.text.trim()) : child
       );
-    const arrayLiteral = ts.createArrayLiteral(childrenOrStringLiterals, true);
 
+    // React.createElement is based on jsx factory - thus it change change
+    // React.createElement(tag, props, ...childrenOrStringLiterals)
     return createCallExpression(
       createElement,
-      [tag, props, transformArrayLiteral(arrayLiteral, context)],
+      [tag, props, ...transformArguments(context, childrenOrStringLiterals)],
       expression
     );
   }
