@@ -1816,11 +1816,405 @@ function __TS__TypeOf(value)
 end
 
 end,
+["jsx"] = function() require("lualib_bundle");
+local ____exports = {}
+local ts = require("typescript")
+local ____typescript_2Dto_2Dlua = require("typescript-to-lua")
+local createCallExpression = ____typescript_2Dto_2Dlua.createCallExpression
+local createIdentifier = ____typescript_2Dto_2Dlua.createIdentifier
+local createNilLiteral = ____typescript_2Dto_2Dlua.createNilLiteral
+local createStringLiteral = ____typescript_2Dto_2Dlua.createStringLiteral
+local createTableIndexExpression = ____typescript_2Dto_2Dlua.createTableIndexExpression
+local ____literal = require("typescript-to-lua.dist.transformation.visitors.literal")
+local literalVisitors = ____literal.literalVisitors
+local ____call = require("typescript-to-lua.dist.transformation.visitors.call")
+local transformArguments = ____call.transformArguments
+local ____lualib = require("typescript-to-lua.dist.transformation.utils.lualib")
+local LuaLibFeature = ____lualib.LuaLibFeature
+local transformLuaLibFunction = ____lualib.transformLuaLibFunction
+local transformObjectLiteral = literalVisitors[ts.SyntaxKind.ObjectLiteralExpression]
+local function transformJsxAttributesExpression(expression, context)
+    local hasSpread = __TS__ArraySome(
+        expression.properties,
+        function(____, element) return element.kind == ts.SyntaxKind.JsxSpreadAttribute end
+    )
+    if hasSpread then
+        local expressions = __TS__ArrayReduce(
+            expression.properties,
+            function(____, prev, element)
+                if element.kind == ts.SyntaxKind.JsxSpreadAttribute then
+                    local properties = {}
+                    while prev[#prev] and (prev[#prev].kind == ts.SyntaxKind.PropertyAssignment) do
+                        __TS__ArrayPush(
+                            properties,
+                            table.remove(prev)
+                        )
+                    end
+                    local objectLiteral = ts:createObjectLiteral(properties)
+                    return {
+                        unpack(
+                            __TS__ArrayConcat(
+                                {
+                                    unpack(prev)
+                                },
+                                {objectLiteral, element.expression}
+                            )
+                        )
+                    }
+                else
+                    local valueOrExpression = (element.initializer and element.initializer) or ts:createLiteral(true)
+                    return {
+                        unpack(
+                            __TS__ArrayConcat(
+                                {
+                                    unpack(prev)
+                                },
+                                {
+                                    ts:createPropertyAssignment(element.name, valueOrExpression)
+                                }
+                            )
+                        )
+                    }
+                end
+            end,
+            {}
+        )
+        local properties = {}
+        while expressions[#expressions] and (expressions[#expressions].kind == ts.SyntaxKind.PropertyAssignment) do
+            __TS__ArrayPush(
+                properties,
+                table.remove(expressions)
+            )
+        end
+        local objectLiteral = ts:createObjectLiteral(properties)
+        local objectExpressions = ((#properties > 0) and ({
+            unpack(
+                __TS__ArrayConcat(
+                    {
+                        unpack(expressions)
+                    },
+                    {objectLiteral}
+                )
+            )
+        })) or expressions
+        return transformLuaLibFunction(
+            nil,
+            context,
+            LuaLibFeature.ObjectAssign,
+            ts:createObjectLiteral({}, false),
+            unpack(
+                transformArguments(nil, context, objectExpressions)
+            )
+        )
+    else
+        local properties = __TS__ArrayMap(
+            __TS__ArrayFilter(
+                expression.properties,
+                function(____, element) return element.kind ~= ts.SyntaxKind.JsxSpreadAttribute end
+            ),
+            function(____, element)
+                local valueOrExpression = (element.initializer and element.initializer) or ts:createLiteral(true)
+                return ts:createPropertyAssignment(element.name, valueOrExpression)
+            end,
+            {}
+        )
+        return transformObjectLiteral(
+            nil,
+            ts:createObjectLiteral(properties),
+            context
+        )
+    end
+end
+local function transformJsxOpeningElement(expression, context, children)
+    local library, create = unpack(
+        (context.options.jsxFactory and __TS__StringSplit(context.options.jsxFactory, ".")) or ({"React", "createElement"})
+    )
+    local createElement = createTableIndexExpression(
+        nil,
+        createIdentifier(nil, library),
+        createStringLiteral(nil, create)
+    )
+    local tagName = expression.tagName:getText()
+    local tag = ((string.lower(tagName) == tagName) and createStringLiteral(nil, tagName)) or createIdentifier(nil, tagName)
+    local props = transformJsxAttributesExpression(expression.attributes, context)
+    if children then
+        local childrenOrStringLiterals = __TS__ArrayMap(
+            __TS__ArrayFilter(
+                children,
+                function(____, child) return (not ts:isJsxText(child)) or (__TS__StringTrim(child.text) ~= "") end
+            ),
+            function(____, child) return (ts:isJsxText(child) and ts:createStringLiteral(
+                __TS__StringTrim(child.text)
+            )) or child end
+        )
+        return createCallExpression(
+            nil,
+            createElement,
+            {
+                tag,
+                props,
+                unpack(
+                    transformArguments(nil, context, childrenOrStringLiterals)
+                )
+            },
+            expression
+        )
+    end
+    return createCallExpression(nil, createElement, {tag, props}, expression)
+end
+local function transformJsxElement(expression, context)
+    if ts:isJsxSelfClosingElement(expression) then
+        return transformJsxOpeningElement(expression, context)
+    end
+    return transformJsxOpeningElement(expression.openingElement, context, expression.children)
+end
+____exports.default = {
+    visitors = {
+        [ts.SyntaxKind.JsxSelfClosingElement] = function(____, node, context) return transformJsxElement(node, context) end,
+        [ts.SyntaxKind.JsxElement] = function(____, node, context) return transformJsxElement(node, context) end,
+        [ts.SyntaxKind.JsxExpression] = function(____, node, context)
+            if node.expression then
+                return context:transformExpression(node.expression)
+            end
+            return createNilLiteral(nil)
+        end
+    }
+}
+return ____exports
+end,
+["theme.default-theme"] = function() require("lualib_bundle");
+local ____exports = {}
+local filesystem = require("gears.filesystem")
+local beautiful = require("beautiful")
+local gears = require("gears")
+local dpi = beautiful.xresources.apply_dpi
+local gtk_variable = beautiful.gtk.get_theme_variables
+local theme_dir = tostring(
+    filesystem.get_configuration_dir()
+) .. "/theme"
+local titlebar_theme = "stoplight"
+local titlebar_icon_path = ((tostring(theme_dir) .. "/icons/titlebar/") .. tostring(titlebar_theme)) .. "/"
+local tip = titlebar_icon_path
+local theme = {}
+theme.font = "Inter Regular 10"
+theme.font_bold = "Inter Bold 10"
+theme.icon_theme = "Tela-blue-dark"
+local function awesome_overrides(theme)
+    theme.dir = theme_dir
+    theme.icons = tostring(theme.dir) .. "/icons/"
+    theme.wallpaper = tostring(theme.dir) .. "/wallpapers/morning-wallpaper.jpg"
+    theme.font = "Inter Regular 10"
+    theme.fg_normal = "#ffffffde"
+    theme.fg_focus = "#e4e4e4"
+    theme.fg_urgent = "#CC9393"
+    theme.bg_normal = theme.background
+    theme.bg_focus = "#5a5a5a"
+    theme.bg_urgent = "#3F3F3F"
+    theme.bg_systray = theme.background
+    theme.systray_icon_spacing = dpi(16)
+    theme.menu_height = dpi(16)
+    theme.menu_width = dpi(160)
+    theme.tooltip_bg = "#232323"
+    theme.tooltip_border_color = "#232323"
+    theme.tooltip_border_width = 0
+    theme.tooltip_shape = function(cr, w, h)
+        gears.shape.rounded_rect(
+            cr,
+            w,
+            h,
+            dpi(6)
+        )
+    end
+    theme.layout_max = tostring(theme.icons) .. "layouts/arrow-expand-all.png"
+    theme.layout_tile = tostring(theme.icons) .. "layouts/view-quilt.png"
+    theme.layout_floating = tostring(theme.icons) .. "layouts/floating.png"
+    theme.groups_title_bg = "#ffffff15"
+    theme.groups_bg = "#ffffff10"
+    theme.groups_radius = dpi(16)
+    theme.leave_event = theme.transparent
+    theme.enter_event = "#ffffff10"
+    theme.press_event = "#ffffff15"
+    theme.release_event = "#ffffff10"
+    theme.border_focus = gtk_variable().bg_color
+    theme.border_normal = gtk_variable().base_color
+    theme.border_marked = "#CC9393"
+    theme.border_width = dpi(0)
+    theme.border_radius = dpi(12)
+    theme.client_radius = dpi(9)
+    theme.useless_gap = dpi(4)
+    theme.menu_font = "Inter Regular 11"
+    theme.menu_submenu = ""
+    theme.menu_height = dpi(34)
+    theme.menu_width = dpi(200)
+    theme.menu_border_width = dpi(20)
+    theme.menu_bg_focus = tostring(theme.accent) .. "CC"
+    theme.menu_fg_normal = "#ffffff"
+    theme.menu_fg_focus = "#ffffff"
+    theme.tooltip_bg = theme.background
+    theme.tooltip_border_color = theme.transparent
+    theme.tooltip_border_width = 0
+    theme.tooltip_gaps = dpi(5)
+    theme.tooltip_shape = function(cr, w, h)
+        gears.shape.rounded_rect(
+            cr,
+            w,
+            h,
+            dpi(6)
+        )
+    end
+    theme.separator_color = "#f2f2f244"
+    theme.layout_max = tostring(theme.icons) .. "layouts/max.svg"
+    theme.layout_tile = tostring(theme.icons) .. "layouts/tile.svg"
+    theme.layout_dwindle = tostring(theme.icons) .. "layouts/dwindle.svg"
+    theme.layout_floating = tostring(theme.icons) .. "layouts/floating.svg"
+    theme.taglist_bg_empty = tostring(theme.background) .. "99"
+    theme.taglist_bg_occupied = "#ffffff1A"
+    theme.taglist_bg_urgent = "#E91E6399"
+    theme.taglist_bg_focus = theme.background
+    theme.taglist_spacing = dpi(0)
+    theme.tasklist_font = "Inter Regular 10"
+    theme.tasklist_bg_normal = tostring(theme.background) .. "99"
+    theme.tasklist_bg_focus = theme.background
+    theme.tasklist_bg_urgent = "#E91E6399"
+    theme.tasklist_fg_focus = "#DDDDDD"
+    theme.tasklist_fg_urgent = "#ffffff"
+    theme.tasklist_fg_normal = "#AAAAAA"
+    theme.notification_position = "top_left"
+    theme.notification_bg = theme.transparent
+    theme.notification_margin = dpi(5)
+    theme.notification_border_width = dpi(0)
+    theme.notification_border_color = theme.transparent
+    theme.notification_spacing = dpi(5)
+    theme.notification_icon_resize_strategy = "center"
+    theme.notification_icon_size = dpi(32)
+    theme.snap_bg = theme.background
+    theme.snap_shape = gears.shape.rectangle
+    theme.snap_border_width = dpi(15)
+    theme.hotkeys_font = "Inter Bold"
+    theme.hotkeys_description_font = "Inter Regular Regular"
+    theme.hotkeys_bg = theme.background
+    theme.hotkeys_group_margin = dpi(20)
+    theme.titlebar_size = dpi(34)
+    theme.titlebar_bg_focus = tostring(
+        __TS__StringSubstr(
+            gtk_variable().bg_color,
+            0,
+            7
+        )
+    ) .. "66"
+    theme.titlebar_bg_normal = tostring(
+        __TS__StringSubstr(
+            gtk_variable().base_color,
+            0,
+            7
+        )
+    ) .. "66"
+    theme.titlebar_fg_focus = tostring(
+        gtk_variable().fg_color
+    ) .. "00"
+    theme.titlebar_fg_normal = tostring(
+        gtk_variable().fg_color
+    ) .. "00"
+    theme.titlebar_close_button_normal = tostring(tip) .. "close_normal.svg"
+    theme.titlebar_close_button_focus = tostring(tip) .. "close_focus.svg"
+    theme.titlebar_minimize_button_normal = tostring(tip) .. "minimize_normal.svg"
+    theme.titlebar_minimize_button_focus = tostring(tip) .. "minimize_focus.svg"
+    theme.titlebar_ontop_button_normal_inactive = tostring(tip) .. "ontop_normal_inactive.svg"
+    theme.titlebar_ontop_button_focus_inactive = tostring(tip) .. "ontop_focus_inactive.svg"
+    theme.titlebar_ontop_button_normal_active = tostring(tip) .. "ontop_normal_active.svg"
+    theme.titlebar_ontop_button_focus_active = tostring(tip) .. "ontop_focus_active.svg"
+    theme.titlebar_sticky_button_normal_inactive = tostring(tip) .. "sticky_normal_inactive.svg"
+    theme.titlebar_sticky_button_focus_inactive = tostring(tip) .. "sticky_focus_inactive.svg"
+    theme.titlebar_sticky_button_normal_active = tostring(tip) .. "sticky_normal_active.svg"
+    theme.titlebar_sticky_button_focus_active = tostring(tip) .. "sticky_focus_active.svg"
+    theme.titlebar_floating_button_normal_inactive = tostring(tip) .. "floating_normal_inactive.svg"
+    theme.titlebar_floating_button_focus_inactive = tostring(tip) .. "floating_focus_inactive.svg"
+    theme.titlebar_floating_button_normal_active = tostring(tip) .. "floating_normal_active.svg"
+    theme.titlebar_floating_button_focus_active = tostring(tip) .. "floating_focus_active.svg"
+    theme.titlebar_maximized_button_normal_inactive = tostring(tip) .. "maximized_normal_inactive.svg"
+    theme.titlebar_maximized_button_focus_inactive = tostring(tip) .. "maximized_focus_inactive.svg"
+    theme.titlebar_maximized_button_normal_active = tostring(tip) .. "maximized_normal_active.svg"
+    theme.titlebar_maximized_button_focus_active = tostring(tip) .. "maximized_focus_active.svg"
+    theme.titlebar_close_button_normal_hover = tostring(tip) .. "close_normal_hover.svg"
+    theme.titlebar_close_button_focus_hover = tostring(tip) .. "close_focus_hover.svg"
+    theme.titlebar_minimize_button_normal_hover = tostring(tip) .. "minimize_normal_hover.svg"
+    theme.titlebar_minimize_button_focus_hover = tostring(tip) .. "minimize_focus_hover.svg"
+    theme.titlebar_ontop_button_normal_inactive_hover = tostring(tip) .. "ontop_normal_inactive_hover.svg"
+    theme.titlebar_ontop_button_focus_inactive_hover = tostring(tip) .. "ontop_focus_inactive_hover.svg"
+    theme.titlebar_ontop_button_normal_active_hover = tostring(tip) .. "ontop_normal_active_hover.svg"
+    theme.titlebar_ontop_button_focus_active_hover = tostring(tip) .. "ontop_focus_active_hover.svg"
+    theme.titlebar_sticky_button_normal_inactive_hover = tostring(tip) .. "sticky_normal_inactive_hover.svg"
+    theme.titlebar_sticky_button_focus_inactive_hover = tostring(tip) .. "sticky_focus_inactive_hover.svg"
+    theme.titlebar_sticky_button_normal_active_hover = tostring(tip) .. "sticky_normal_active_hover.svg"
+    theme.titlebar_sticky_button_focus_active_hover = tostring(tip) .. "sticky_focus_active_hover.svg"
+    theme.titlebar_floating_button_normal_inactive_hover = tostring(tip) .. "floating_normal_inactive_hover.svg"
+    theme.titlebar_floating_button_focus_inactive_hover = tostring(tip) .. "floating_focus_inactive_hover.svg"
+    theme.titlebar_floating_button_normal_active_hover = tostring(tip) .. "floating_normal_active_hover.svg"
+    theme.titlebar_floating_button_focus_active_hover = tostring(tip) .. "floating_focus_active_hover.svg"
+    theme.titlebar_maximized_button_normal_inactive_hover = tostring(tip) .. "maximized_normal_inactive_hover.svg"
+    theme.titlebar_maximized_button_focus_inactive_hover = tostring(tip) .. "maximized_focus_inactive_hover.svg"
+    theme.titlebar_maximized_button_normal_active_hover = tostring(tip) .. "maximized_normal_active_hover.svg"
+    theme.titlebar_maximized_button_focus_active_hover = tostring(tip) .. "maximized_focus_active_hover.svg"
+end
+____exports.default = {theme = theme, awesome_overrides = awesome_overrides}
+return ____exports
+end,
+["theme.werewolf.index"] = function() require("lualib_bundle");
+local ____exports = {}
+local filesystem = require("gears.filesystem")
+local theme_dir = tostring(
+    filesystem.get_configuration_dir()
+) .. "/theme"
+local theme = {}
+theme.icons = tostring(theme_dir) .. "/icons/"
+theme.font = "Inter Regular 10"
+theme.font_bold = "Inter Bold 10"
+theme.system_black_dark = "#3D4C5F"
+theme.system_black_light = "#56687E"
+theme.system_red_dark = "#EE4F84"
+theme.system_red_light = "#F48FB1"
+theme.system_green_dark = "#53E2AE"
+theme.system_green_light = "#A1EFD3"
+theme.system_yellow_dark = "#F1FF52"
+theme.system_yellow_light = "#F1FA8C"
+theme.system_blue_dark = "#6498EF"
+theme.system_blue_light = "#92B6F4"
+theme.system_magenta_dark = "#985EFF"
+theme.system_magenta_light = "#BD99FF"
+theme.system_cyan_dark = "#24D1E7"
+theme.system_cyan_light = "#87DFEB"
+theme.system_white_dark = "#E5E5E5"
+theme.system_white_light = "#F8F8F2"
+theme.accent = theme.system_blue_dark
+theme.background = "#00000066"
+theme.background_light = "#f2f2f266"
+theme.transparent = "#00000000"
+theme.awesome_icon = tostring(theme.icons) .. "awesome.svg"
+____exports.awesome_overrides = function(theme)
+end
+____exports.default = {theme = theme, awesome_overrides = ____exports.awesome_overrides}
+return ____exports
+end,
+["theme.index"] = function() require("lualib_bundle");
+local ____exports = {}
+local gtable = require("gears.table")
+local ____default_2Dtheme = require("theme.default-theme")
+local defaultTheme = ____default_2Dtheme.default
+local ____index = require("theme.werewolf.index")
+local theme = ____index.default
+local finalTheme = {}
+gtable.crush(finalTheme, defaultTheme.theme)
+gtable.crush(finalTheme, theme.theme)
+defaultTheme.awesome_overrides(finalTheme)
+theme.awesome_overrides(finalTheme)
+____exports.default = finalTheme
+return ____exports
+end,
 ["configuration.config"] = function() require("lualib_bundle");
 local ____exports = {}
 local filesystem = require("gears.filesystem")
 local awful = require("awful")
-local config_dir = filesystem:get_configuration_dir()
+local config_dir = filesystem.get_configuration_dir()
 local bin_dir = tostring(config_dir) .. "utilities/"
 local apps = {
     default = {
@@ -1834,9 +2228,10 @@ local apps = {
         powerManager = "xfce4-power-manager",
         packageManager = "pamac-manager",
         lock = "awesome-client \"awesome.emit_signal('module::lockscreen_show')\"",
-        screenshot = "spectacle //region",
-        quake = "kitty //name QuakeTerminal",
-        editor = "vim"
+        screenshot = "spectacle --region",
+        quake = "kitty --name QuakeTerminal",
+        editor = "vim",
+        rofiAppmenu = ((("rofi -dpi " .. tostring(screen.primary.dpi)) .. " -show drun -theme ") .. tostring(config_dir)) .. "configuration/rofi/appmenu/rofi.rasi"
     },
     startUp = {
         "force-composition-pipeline",
@@ -1847,7 +2242,7 @@ local apps = {
         "blueberry-tray"
     }
 }
-local config = {modkey = "Mod4", layouts = {awful.layout.suit.spiral.dwindle, awful.layout.suit.tile.left, awful.layout.suit.floating, awful.layout.suit.max}, module = {auto_start = {debug_mode = false}, dynamic_wallpaper = {wall_dir = "theme/wallpapers/", valid_picture_formats = {"jpg", "png", "jpeg"}, stretch = false}}, apps = apps}
+local config = {debug = false, modkey = "Mod4", layouts = {awful.layout.suit.spiral.dwindle, awful.layout.suit.tile.left, awful.layout.suit.floating, awful.layout.suit.max}, module = {auto_start = {debug_mode = false}, dynamic_wallpaper = {wall_dir = "theme/wallpapers/", valid_picture_formats = {"jpg", "png", "jpeg"}, stretch = false}}, apps = apps}
 ____exports.default = config
 return ____exports
 end,
@@ -1871,7 +2266,7 @@ ____exports.default = gears.table.join(
         1,
         function(client)
             client:emit_signal("request::activate", "mouse_click", {raise = true})
-            awful.mouse.client:move(client)
+            awful.mouse.client.move(client)
         end
     ),
     awful.button(
@@ -1879,7 +2274,7 @@ ____exports.default = gears.table.join(
         3,
         function(client)
             client:emit_signal("request::activate", "mouse_click", {raise = true})
-            awful.mouse.client:resize(client)
+            awful.mouse.client.resize(client)
         end
     )
 )
@@ -2064,40 +2459,40 @@ local awful = require("awful")
 local beautiful = require("beautiful")
 client.connect_signal(
     "manage",
-    function(c)
-        if (awesome.startup and (not c.size_hints.user_position)) and (not c.size_hints.program_position) then
-            awful.placement.no_offscreen(c)
+    function(client)
+        if (awesome.startup and (not client.size_hints.user_position)) and (not client.size_hints.program_position) then
+            awful.placement.no_offscreen(client)
         end
     end
 )
 client.connect_signal(
     "mouse::enter",
-    function(c)
-        c:emit_signal("request::activate", "mouse_enter", {raise = false})
+    function(client)
+        client:emit_signal("request::activate", "mouse_enter", {raise = false})
     end
 )
 client.connect_signal(
     "focus",
-    function(c)
-        c.border_color = beautiful.border_focus
+    function(client)
+        client.border_color = beautiful.border_focus
     end
 )
 client.connect_signal(
     "unfocus",
-    function(c)
-        c.border_color = beautiful.border_normal
+    function(client)
+        client.border_color = beautiful.border_normal
     end
 )
 client.connect_signal(
     "focus",
-    function(c)
-        c.border_color = beautiful.border_focus
+    function(client)
+        client.border_color = beautiful.border_focus
     end
 )
 client.connect_signal(
     "unfocus",
-    function(c)
-        c.border_color = beautiful.border_normal
+    function(client)
+        client.border_color = beautiful.border_normal
     end
 )
 return ____exports
@@ -2222,33 +2617,421 @@ tag.connect_signal(
 )
 return ____exports
 end,
+["configuration.keys.global"] = function() require("lualib_bundle");
+local ____exports = {}
+local gears = require("gears")
+local awful = require("awful")
+local ____config = require("configuration.config")
+local config = ____config.default
+local modkey = config.modkey
+local function move_mouse_onto_focused_client()
+    if client.focus then
+        local client_to_focus = client.focus
+        local geometry = client_to_focus:geometry()
+        local x = geometry.x + (geometry.width / 2)
+        local y = geometry.y + (geometry.height / 2)
+        mouse:coords({x = x, y = y}, true)
+    end
+end
+local function move_focus_or_view_tag(original_focus, direction)
+    if (original_focus == client.focus) or (not client.focus) then
+        if direction == "left" then
+            awful.tag.viewprev()
+        else
+            awful.tag.viewnext()
+        end
+    else
+        move_mouse_onto_focused_client()
+    end
+end
+local globalkeys = gears.table.join(
+    awful.key(
+        {modkey},
+        "Up",
+        function()
+            awful.client.focus.bydirection("up")
+            move_mouse_onto_focused_client()
+        end,
+        function()
+        end,
+        {description = "swap focus to top window", group = "client"}
+    ),
+    awful.key(
+        {modkey},
+        "Down",
+        function()
+            awful.client.focus.bydirection("down")
+            move_mouse_onto_focused_client()
+        end,
+        function()
+        end,
+        {description = "swap focus to bottom window", group = "client"}
+    ),
+    awful.key(
+        {modkey},
+        "Left",
+        function()
+            local original_focus = client.focus
+            awful.client.focus.bydirection("left")
+            move_focus_or_view_tag(original_focus, "left")
+        end,
+        function()
+        end,
+        {description = "swap focus to left window", group = "client"}
+    ),
+    awful.key(
+        {modkey},
+        "Right",
+        function()
+            local original_focus = client.focus
+            awful.client.focus.bydirection("right")
+            move_focus_or_view_tag(original_focus, "right")
+        end,
+        function()
+        end,
+        {description = "swap focus to right window", group = "client"}
+    ),
+    awful.key(
+        {modkey},
+        "j",
+        function()
+            awful.client.focus.byidx(1)
+        end,
+        function()
+        end,
+        {description = "focus next by index", group = "client"}
+    ),
+    awful.key(
+        {modkey},
+        "k",
+        function()
+            awful.client.focus.byidx(-1)
+        end,
+        function()
+        end,
+        {description = "focus previous by index", group = "client"}
+    ),
+    awful.key(
+        {modkey, "Shift"},
+        "j",
+        function()
+            awful.client.swap.byidx(1)
+        end,
+        function()
+        end,
+        {description = "swap with next client by index", group = "client"}
+    ),
+    awful.key(
+        {modkey, "Shift"},
+        "k",
+        function()
+            awful.client.swap.byidx(-1)
+        end,
+        function()
+        end,
+        {description = "swap with previous client by index", group = "client"}
+    ),
+    awful.key(
+        {modkey, "Control"},
+        "j",
+        function()
+            awful.screen.focus_relative(1)
+        end,
+        function()
+        end,
+        {description = "focus the next screen", group = "screen"}
+    ),
+    awful.key(
+        {modkey, "Control"},
+        "k",
+        function()
+            awful.screen.focus_relative(-1)
+        end,
+        function()
+        end,
+        {description = "focus the previous screen", group = "screen"}
+    ),
+    awful.key(
+        {modkey},
+        "Return",
+        function()
+            awful.spawn(config.apps.default.terminal)
+        end,
+        function()
+        end,
+        {description = "open a terminal", group = "launcher"}
+    ),
+    awful.key(
+        {modkey, "Shift"},
+        "s",
+        function()
+            awful.spawn(config.apps.default.screenshot)
+        end,
+        function()
+        end,
+        {description = "capture a screenshot", group = "launcher"}
+    ),
+    awful.key(
+        {modkey, "Control"},
+        "r",
+        awesome.restart,
+        function()
+        end,
+        {description = "reload awesome", group = "awesome"}
+    ),
+    awful.key(
+        {modkey, "Shift"},
+        "q",
+        awesome.quit,
+        function()
+        end,
+        {description = "quit awesome", group = "awesome"}
+    ),
+    awful.key(
+        {modkey},
+        "l",
+        function()
+            awful.spawn(config.apps.default.lock, false)
+        end,
+        function()
+        end,
+        {description = "lock the screen", group = "Utility"}
+    ),
+    awful.key(
+        {modkey},
+        "space",
+        function()
+            awful.layout.inc(1)
+        end,
+        function()
+        end,
+        {description = "select next", group = "layout"}
+    ),
+    awful.key(
+        {modkey, "Shift"},
+        "space",
+        function()
+            awful.layout.inc(-1)
+        end,
+        function()
+        end,
+        {description = "select previous", group = "layout"}
+    ),
+    awful.key(
+        {modkey, "Control"},
+        "n",
+        function()
+            local c = awful.client:restore()
+            if c then
+                c:emit_signal("request::activate", "key.unminimize", {raise = true})
+            end
+        end,
+        function()
+        end,
+        {description = "restore minimized", group = "client"}
+    ),
+    awful.key(
+        {modkey},
+        "x",
+        function()
+        end,
+        function()
+        end,
+        {description = "lua execute prompt", group = "awesome"}
+    ),
+    awful.key(
+        {modkey},
+        "d",
+        function()
+            awful.spawn(config.apps.default.rofiAppmenu, false)
+        end,
+        function()
+        end,
+        {description = "app launcher", group = "launcher"}
+    ),
+    awful.key(
+        {modkey},
+        "w",
+        function()
+            awful.spawn(config.apps.default.browser)
+        end,
+        function()
+        end,
+        {description = "launch browser", group = "apps"}
+    ),
+    awful.key(
+        {modkey, "Shift"},
+        "-",
+        function()
+            awful.spawn("pulsemixer --change-volume -5")
+        end,
+        function()
+        end,
+        {description = "decrease volume", group = "audio"}
+    ),
+    awful.key(
+        {modkey, "Shift"},
+        "=",
+        function()
+            awful.spawn("pulsemixer --change-volume +5")
+        end,
+        function()
+        end,
+        {description = "increase volume", group = "audio"}
+    ),
+    awful.key(
+        {modkey, "Shift"},
+        ",",
+        function()
+            awful.spawn("playerctl previous -p spotify")
+        end,
+        function()
+        end,
+        {description = "previous song", group = "audio"}
+    ),
+    awful.key(
+        {modkey, "Shift"},
+        ".",
+        function()
+            awful.spawn("playerctl next -p spotify")
+        end,
+        function()
+        end,
+        {description = "next song", group = "audio"}
+    ),
+    awful.key(
+        {modkey, "Shift"},
+        "p",
+        function()
+            awful.spawn("playerctl play-pause -p spotify")
+        end,
+        function()
+        end,
+        {description = "start/stop song", group = "audio"}
+    )
+)
+for i = 1, 9 do
+    globalkeys = gears.table.join(
+        globalkeys,
+        awful.key(
+            {modkey},
+            "#" .. tostring(i + 9),
+            function()
+                local screen = awful.screen.focused()
+                local tag = screen.tags[i]
+                if tag then
+                    tag:view_only()
+                end
+            end,
+            function()
+            end,
+            {
+                description = "view tag #" .. tostring(i),
+                group = "tag"
+            }
+        ),
+        awful.key(
+            {modkey, "Control"},
+            "#" .. tostring(i + 9),
+            function()
+                local screen = awful.screen.focused()
+                local tag = screen.tags[i]
+                if tag then
+                    awful.tag.viewtoggle(tag)
+                end
+            end,
+            function()
+            end,
+            {
+                description = "toggle tag #" .. tostring(i),
+                group = "tag"
+            }
+        ),
+        awful.key(
+            {modkey, "Shift"},
+            "#" .. tostring(i + 9),
+            function()
+                if client.focus then
+                    local tag = client.focus.screen.tags[i]
+                    if tag then
+                        client.focus:move_to_tag(tag)
+                    end
+                end
+            end,
+            function()
+            end,
+            {
+                description = "move focused client to tag #" .. tostring(i),
+                group = "tag"
+            }
+        ),
+        awful.key(
+            {modkey, "Control", "Shift"},
+            "#" .. tostring(i + 9),
+            function()
+                if client.focus then
+                    local tag = client.focus.screen.tags[i]
+                    if tag then
+                    end
+                end
+            end,
+            function()
+            end,
+            {
+                description = "toggle focused client on tag #" .. tostring(i),
+                group = "tag"
+            }
+        )
+    )
+end
+____exports.default = globalkeys
+return ____exports
+end,
+["helper.log"] = function() require("lualib_bundle");
+local ____exports = {}
+local ____naughty = require("naughty")
+local notification = ____naughty.notification
+local beautiful = require("beautiful")
+____exports.log = function(message, opts)
+    local ____ = opts or ({})
+    local app_name = ____.app_name
+    if app_name == nil then
+        app_name = "AwesomeWM Log"
+    end
+    local title = ____.title
+    if title == nil then
+        title = "<b>Log from AwesomeWM</b>"
+    end
+    local timeout = ____.timeout
+    if timeout == nil then
+        timeout = 50
+    end
+    local icon = ____.icon
+    if icon == nil then
+        icon = beautiful.awesome_icon
+    end
+    notification({app_name = app_name, title = title, timeout = timeout, icon = icon, message = message})
+end
+return ____exports
+end,
 ["module.auto-start"] = function() require("lualib_bundle");
 local ____exports = {}
 local awful = require("awful")
-local naughty = require("naughty")
 local beautiful = require("beautiful")
 local ____config = require("configuration.config")
 local config = ____config.default
-local debug_mode = (function(____lhs)
-    if ____lhs == nil then
-        return false
-    else
-        return ____lhs
-    end
-end)(config.module.auto_start.debug_mode)
-local function run_once(cmd)
-    local findme = cmd
-    local firstspace = (string.find(cmd, " ", nil, true) or 0) - 1
-    if firstspace then
-        findme = __TS__StringSubstring(cmd, 0, firstspace - 1)
-    end
+local ____log = require("helper.log")
+local log = ____log.log
+local function run_once(command)
+    local firstSpace = (string.find(command, " ", nil, true) or 0) - 1
+    local program = ((firstSpace >= 0) and __TS__StringSubstring(command, 0, firstSpace)) or command
     awful.spawn.easy_async_with_shell(
-        string.format("pgrep -u $USER -x %s > /dev/null || (%s)", findme, cmd),
+        ((("pgrep -u $USER -x " .. tostring(program)) .. " > /dev/null || (") .. tostring(command)) .. ")",
         function(stdout, stderr)
-            if ((not stderr) or (stderr == "")) or (not debug_mode) then
+            if ((not stderr) or (stderr == "")) or (not config.debug) then
                 return
             end
-            naughty.notification({app_name = "Start-up Applications", title = "<b>Oof! Error detected when starting an application!</b>", message = stderr, timeout = 20, icon = beautiful.awesome_icon})
+            log(stderr, {app_name = "Start-up Applications", title = "<b>Oof! Error detected when starting an application!</b>", timeout = 20, icon = beautiful.awesome_icon})
         end
     )
 end
@@ -2257,17 +3040,301 @@ for ____, app in ipairs(config.apps.startUp) do
 end
 return ____exports
 end,
+["helper.jsx-factory"] = function() require("lualib_bundle");
+local ____exports = {}
+local function createMap(attributes, children)
+    if children == nil then
+        children = {}
+    end
+    local map = {}
+    for ____, ____value in ipairs(
+        __TS__ObjectEntries(attributes)
+    ) do
+        local key
+        key = ____value[1]
+        local value
+        value = ____value[2]
+        map[key] = value
+    end
+    for i = 0, #children do
+        map[i + 1] = children[i + 1]
+    end
+    return map
+end
+function ____exports.createElement(tagName, attributes, ...)
+    local children = {...}
+    if tagName == "base" then
+        if #children == 1 then
+            return createMap(attributes, children[1])
+        end
+        return createMap(attributes, children)
+    elseif tagName == "naughtybox" then
+    elseif tagName == "textbox" then
+    elseif tagName == "fragment" then
+        return createMap(attributes, children)
+    elseif tagName ~= nil then
+        return tagName(
+            __TS__ObjectAssign({}, attributes, {children = children})
+        )
+    end
+    return nil
+end
+return ____exports
+end,
+["helper.base.index"] = function() require("lualib_bundle");
+local ____exports = {}
+local jsxFactory = require("helper.jsx-factory")
+local awful = require("awful")
+local wibox = require("wibox")
+____exports.Margin = function(____bindingPattern0)
+    local children
+    children = ____bindingPattern0.children
+    local rest
+    rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
+    return jsxFactory.createElement(
+        "base",
+        __TS__ObjectAssign({}, rest, {widget = wibox.container.margin}),
+        children
+    )
+end
+____exports.Layout = function(____bindingPattern0)
+    local fixed
+    fixed = ____bindingPattern0.fixed
+    if fixed == nil then
+        fixed = false
+    end
+    local flex
+    flex = ____bindingPattern0.flex
+    if flex == nil then
+        flex = false
+    end
+    local align
+    align = ____bindingPattern0.align
+    if align == nil then
+        align = false
+    end
+    local vertical
+    vertical = ____bindingPattern0.vertical
+    if vertical == nil then
+        vertical = false
+    end
+    local horizontal
+    horizontal = ____bindingPattern0.horizontal
+    if horizontal == nil then
+        horizontal = false
+    end
+    local children
+    children = ____bindingPattern0.children
+    local rest
+    rest = __TS__ObjectRest(____bindingPattern0, {fixed = true, flex = true, align = true, vertical = true, horizontal = true, children = true, rest = true})
+    local layout
+    if fixed then
+        if horizontal then
+            layout = wibox.layout.fixed.horizontal
+        elseif vertical then
+            layout = wibox.layout.fixed.vertical
+        end
+    elseif flex then
+        if horizontal then
+            layout = wibox.layout.flex.horizontal
+        elseif vertical then
+            layout = wibox.layout.flex.vertical
+        end
+    elseif align then
+        if horizontal then
+            layout = wibox.layout.align.horizontal
+        elseif vertical then
+            layout = wibox.layout.align.vertical
+        end
+    end
+    if layout == nil then
+        return jsxFactory.createElement(
+            "base",
+            __TS__ObjectAssign({}, rest),
+            children
+        )
+    end
+    return jsxFactory.createElement(
+        "base",
+        __TS__ObjectAssign({}, rest, {layout = layout}),
+        children
+    )
+end
+____exports.ClientIcon = function(____bindingPattern0)
+    local client
+    client = ____bindingPattern0.client
+    return awful.titlebar.widget.iconwidget(client)
+end
+____exports.OnTopButton = function(____bindingPattern0)
+    local client
+    client = ____bindingPattern0.client
+    return awful.titlebar.widget.ontopbutton(client)
+end
+____exports.FloatingButton = function(____bindingPattern0)
+    local client
+    client = ____bindingPattern0.client
+    return awful.titlebar.widget.floatingbutton(client)
+end
+____exports.MinimizeButton = function(____bindingPattern0)
+    local client
+    client = ____bindingPattern0.client
+    return awful.titlebar.widget.minimizebutton(client)
+end
+____exports.MaximizedButton = function(____bindingPattern0)
+    local client
+    client = ____bindingPattern0.client
+    return awful.titlebar.widget.maximizedbutton(client)
+end
+____exports.CloseButton = function(____bindingPattern0)
+    local client
+    client = ____bindingPattern0.client
+    return awful.titlebar.widget.closebutton(client)
+end
+return ____exports
+end,
+["module.titlebar"] = function() require("lualib_bundle");
+local ____exports = {}
+local jsxFactory = require("helper.jsx-factory")
+local awful = require("awful")
+local gears = require("gears")
+local beautiful = require("beautiful")
+local ____index = require("helper.base.index")
+local CloseButton = ____index.CloseButton
+local FloatingButton = ____index.FloatingButton
+local Layout = ____index.Layout
+local Margin = ____index.Margin
+local MaximizedButton = ____index.MaximizedButton
+local MinimizeButton = ____index.MinimizeButton
+local OnTopButton = ____index.OnTopButton
+local dpi = beautiful.xresources.apply_dpi
+local timer
+local function double_click_event_handler(handle)
+    if timer then
+        timer:stop()
+        timer = nil
+        handle()
+    end
+    timer = gears.timer.start_new(
+        0.2,
+        function()
+            timer = nil
+            return false
+        end
+    )
+end
+local function create_horizontal_bar(client, buttons, pos, bg, size)
+    awful.titlebar(client, {position = pos, bg = bg, size = size}):setup(
+        jsxFactory.createElement(
+            Layout,
+            {align = true, horizontal = true},
+            jsxFactory.createElement(
+                Margin,
+                {
+                    margins = dpi(10)
+                },
+                jsxFactory.createElement(
+                    Layout,
+                    {
+                        fixed = true,
+                        horizontal = true,
+                        spacing = dpi(7)
+                    },
+                    jsxFactory.createElement(OnTopButton, {client = client}),
+                    jsxFactory.createElement(FloatingButton, {client = client})
+                )
+            ),
+            jsxFactory.createElement(Layout, {flex = true, horizontal = true, buttons = buttons}),
+            jsxFactory.createElement(
+                Margin,
+                {
+                    margins = dpi(10)
+                },
+                jsxFactory.createElement(
+                    Layout,
+                    {
+                        fixed = true,
+                        horizontal = true,
+                        spacing = dpi(7)
+                    },
+                    jsxFactory.createElement(MinimizeButton, {client = client}),
+                    jsxFactory.createElement(MaximizedButton, {client = client}),
+                    jsxFactory.createElement(CloseButton, {client = client})
+                )
+            )
+        )
+    )
+end
+client.connect_signal(
+    "request::titlebars",
+    function(client)
+        local buttons = gears.table.join(
+            awful.button(
+                {},
+                1,
+                function()
+                    double_click_event_handler(
+                        function()
+                            if client.floating then
+                                client.floating = false
+                                return
+                            end
+                            client.maximized = not client.maximized
+                            client:raise()
+                        end
+                    )
+                    client:emit_signal("request::activate", "titlebar", {action = "mouse_move"})
+                end
+            ),
+            awful.button(
+                {},
+                3,
+                function()
+                    client:emit_signal("request::activate", "titlebar", {action = "mouse_resize"})
+                end
+            )
+        )
+        if (client.class == "XTerm") or (client.class == "UXTerm") then
+            create_horizontal_bar(
+                client,
+                buttons,
+                "top",
+                beautiful.xresources.get_current_theme().background,
+                beautiful.titlebar_size
+            )
+        elseif client.class == "Nemo" then
+            create_horizontal_bar(
+                client,
+                buttons,
+                "top",
+                beautiful.gtk.get_theme_variables().bg_color,
+                beautiful.titlebar_size
+            )
+        elseif client.type == "normal" then
+            create_horizontal_bar(client, buttons, "top", "#000000AA", beautiful.titlebar_size)
+        elseif (client.type == "dialog") or (client.type == "modal") then
+            create_horizontal_bar(client, buttons, "top", "#000000AA", beautiful.titlebar_size)
+        else
+            create_horizontal_bar(client, buttons, "top", "#000000AA", beautiful.titlebar_size)
+        end
+    end
+)
+return ____exports
+end,
 ["rc"] = function() require("lualib_bundle");
 local ____exports = {}
 local awful = require("awful")
 local beautiful = require("beautiful")
+local ____index = require("theme.index")
+local theme = ____index.default
 require("configuration.client.index")
 require("configuration.tags.index")
+local ____global = require("configuration.keys.global")
+local globalKeys = ____global.default
 require("module.auto-start")
+require("module.titlebar")
 awful.util.shell = "sh"
-beautiful.init(
-    require("theme")
-)
+beautiful.init(theme)
+root.keys(globalKeys)
 return ____exports
 end,
 ["configuration.keys.client"] = function() require("lualib_bundle");
@@ -2290,7 +3357,7 @@ local clientbuttons = gears.table.join(
         1,
         function(c)
             c:emit_signal("request::activate", "mouse_click", {raise = true})
-            awful.mouse.client:move(c)
+            awful.mouse.client.move(c)
         end
     ),
     awful.button(
@@ -2298,7 +3365,7 @@ local clientbuttons = gears.table.join(
         3,
         function(c)
             c:emit_signal("request::activate", "mouse_click", {raise = true})
-            awful.mouse.client:resize(c)
+            awful.mouse.client.resize(c)
         end
     )
 )
@@ -2431,120 +3498,11 @@ local clientkeys = gears.table.join(
 ____exports.default = {clientbuttons = clientbuttons, clientkeys = clientkeys}
 return ____exports
 end,
-["configuration.keys.global"] = function() require("lualib_bundle");
-end,
 ["configuration.root.index"] = function() require("lualib_bundle");
 local ____exports = {}
 return ____exports
 end,
-["theme.default-theme"] = function() require("lualib_bundle");
-local ____exports = {}
-local filesystem = require("theme.gears.filesystem")
-local beautiful = require("beautiful")
-local gears = require("gears")
-local dpi = beautiful.xresources.apply_dpi
-local gtk_variable = beautiful.gtk.get_theme_variables
-local theme_dir = tostring(
-    filesystem.get_configuration_dir()
-) .. "/theme"
-local titlebar_theme = "stoplight"
-local titlebar_icon_path = ((tostring(theme_dir) .. "/icons/titlebar/") .. tostring(titlebar_theme)) .. "/"
-local tip = titlebar_icon_path
-local theme = {}
-theme.font = "Inter Regular 10"
-theme.font_bold = "Inter Bold 10"
-theme.icon_theme = "Tela-blue-dark"
-local function awesome_overrides(theme)
-    theme.dir = theme_dir
-    theme.icons = tostring(theme.dir) .. "/icons/"
-    theme.wallpaper = tostring(theme.dir) .. "/wallpapers/morning-wallpaper.jpg"
-    theme.font = "Inter Regular 10"
-    theme.fg_normal = "#ffffffde"
-    theme.fg_focus = "#e4e4e4"
-    theme.fg_urgent = "#CC9393"
-    theme.bg_normal = theme.background
-    theme.bg_focus = "#5a5a5a"
-    theme.bg_urgent = "#3F3F3F"
-    theme.bg_systray = theme.background
-    theme.systray_icon_spacing = dpi(nil, 16)
-    theme.menu_height = dpi(nil, 16)
-    theme.menu_width = dpi(nil, 160)
-    theme.tooltip_bg = "#232323"
-    theme.tooltip_border_width = 0
-    theme.tooltip_shape = function(cr, w, h)
-        gears.shape.rounded_rect(
-            cr,
-            w,
-            h,
-            dpi(nil, 6)
-        )
-    end
-    theme.border_focus = gtk_variable().bg_color
-    theme.border_normal = gtk_variable().base_color
-    theme.border_marked = "#CC9393"
-    theme.border_width = dpi(nil, 0)
-    theme.border_radius = dpi(nil, 12)
-    theme.client_radius = dpi(nil, 9)
-    theme.useless_gap = dpi(nil, 4)
-    theme.menu_font = "Inter Regular 11"
-    theme.menu_submenu = ""
-    theme.menu_height = dpi(nil, 34)
-    theme.menu_width = dpi(nil, 200)
-    theme.menu_border_width = dpi(nil, 20)
-    theme.tooltip_bg = theme.background
-    theme.tooltip_border_color = theme.transparent
-    theme.tooltip_border_width = 0
-    theme.tooltip_gaps = dpi(nil, 5)
-    theme.tooltip_shape = function(cr, w, h)
-        gears.shape.rounded_rect(
-            cr,
-            w,
-            h,
-            dpi(nil, 6)
-        )
-    end
-    theme.separator_color = "#f2f2f244"
-end
-____exports.default = {theme = theme, awesome_overrides = awesome_overrides}
-return ____exports
-end,
-["theme.index"] = function() require("lualib_bundle");
-end,
-["theme.werewolf.index"] = function() require("lualib_bundle");
-local ____exports = {}
-local filesystem = require("gears.filesystem")
-local theme_dir = tostring(
-    filesystem:get_configuration_dir()
-) .. "/theme"
-local theme = {}
-theme.icons = tostring(theme_dir) .. "/icons/"
-theme.font = "Inter Regular 10"
-theme.font_bold = "Inter Bold 10"
-theme.system_black_dark = "#3D4C5F"
-theme.system_black_light = "#56687E"
-theme.system_red_dark = "#EE4F84"
-theme.system_red_light = "#F48FB1"
-theme.system_green_dark = "#53E2AE"
-theme.system_green_light = "#A1EFD3"
-theme.system_yellow_dark = "#F1FF52"
-theme.system_yellow_light = "#F1FA8C"
-theme.system_blue_dark = "#6498EF"
-theme.system_blue_light = "#92B6F4"
-theme.system_magenta_dark = "#985EFF"
-theme.system_magenta_light = "#BD99FF"
-theme.system_cyan_dark = "#24D1E7"
-theme.system_cyan_light = "#87DFEB"
-theme.system_white_dark = "#E5E5E5"
-theme.system_white_light = "#F8F8F2"
-theme.accent = theme.system_blue_dark
-theme.background = "#00000066"
-theme.background_light = "#f2f2f266"
-theme.transparent = "#00000000"
-theme.awesome_icon = tostring(theme.icons) .. "awesome.svg"
-____exports.awesome_overrides = function(theme)
-end
-____exports.default = {theme = theme, awesome_overrides = ____exports.awesome_overrides}
-return ____exports
+["module.notifications"] = function() require("lualib_bundle");
 end,
 ["typing.index"] = function() require("lualib_bundle");
 end,
