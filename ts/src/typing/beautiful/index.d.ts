@@ -37,11 +37,16 @@ declare module 'beautiful' {
   export const border_width: number;
   export const border_marked: string;
 
-  // CUSTOM types
+  // CUSTOM types from theme
   export const useless_gap: number;
   export const client_radius: number;
 
   export const awesome_icon: string;
 
   export const titlebar_size: number;
+  export const transparent: string;
+  export const fg_normal: string;
+
+  export const background: string;
+  export const notification_margin: number;
 }

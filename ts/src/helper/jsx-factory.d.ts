@@ -16,12 +16,19 @@ declare namespace JSX {
   //   render(): any;
   // }
 
-  // type AwesomeText = string | number;
-  type AwesomeChild = AwesomeElement;
-  type AwesomeNode = AwesomeChild | boolean | null | undefined;
+  export type AwesomeEmpty = null | void | boolean;
+
+  export type AwesomeText = number | string;
+
+  export type AwesomeChild = AwesomeElement | AwesomeText;
+
+  export type AwesomeNode = AwesomeChild | AwesomeElement | AwesomeEmpty;
+
+  export type AwesomeNodeArray = AwesomeNode[];
+
   // type ReactNode = ReactChild | ReactFragment | ReactPortal | boolean | null | undefined;
 
-  type PropsWithChildren<P> = P & {children?: AwesomeNode};
+  type PropsWithChildren<P> = P & {children?: AwesomeNodeArray};
 
   interface FunctionComponent<P = {}> {
     (this: void, props: PropsWithChildren<P>, context?: any): AwesomeElement<
@@ -40,22 +47,6 @@ declare namespace JSX {
   type ElementWithChildren<P> = P & {children?: AwesomeNode};
 
   // Elements
-  export type WiboxTextBox = {
-    markup: string;
-    text: string;
-    ellipsize: 'start' | 'middle' | 'end';
-    wrap: 'word' | 'char' | 'word_char';
-    valign: 'top' | 'center' | 'bottom';
-    align: 'top' | 'center' | 'bottom';
-    font: string;
-    forced_height?: number;
-    forced_width?: number;
-    opacity?: number;
-    visible: boolean;
-  };
-  export type TextBoxProps = ElementWithChildren<
-    Partial<Omit<WiboxTextBox, 'markup' | 'text'>> & {markup?: boolean}
-  >;
 
   export type WiboxMargin = {
     /**
@@ -118,7 +109,5 @@ declare namespace JSX {
       // screen: Screen;
       // shape: NoSelfGearsShape;
     }>;
-
-    textbox: TextBoxProps;
   }
 }

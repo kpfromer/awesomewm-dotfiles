@@ -59,6 +59,7 @@ root.keys(globalKeys);
 import './module/auto-start';
 // // Titlebars for clients (windows)
 import './module/titlebar';
+// import './module/notifications';
 
 // // TODO: Fix weird load up bug (lockscreen fixes this?)
 // require('module.dynamic-wallpaper')

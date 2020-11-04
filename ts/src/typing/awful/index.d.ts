@@ -316,7 +316,7 @@ declare module 'awful' {
     dpi: number;
   }
   interface ScreenFunctions {
-    preferred: (this: any, client: Client) => Screen;
+    preferred: (this: void, client?: Client) => Screen;
 
     getbycoord: (this: void, x: number, y: number) => unknown;
 

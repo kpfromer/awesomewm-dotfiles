@@ -45,7 +45,10 @@ require('layout')
 -- ░▀░▀░▀▀▀░▀▀░░▀▀▀░▀▀▀░▀▀▀░▀▀▀
 
 -- Configuration/layout for system notifications (using naughty)
+
+
 require('module.notifications')
+
 -- Handles staring up programs like picom
 -- require('module.auto-start')
 -- Titlebars for clients (windows)

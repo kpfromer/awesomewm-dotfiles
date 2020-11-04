@@ -7,6 +7,7 @@ declare module 'naughty' {
 
   // todo:
   interface NotificationProps {
+    urgency?: 'critical' | 'normal' | 'low';
     shape?: GearsShape;
     opacity?: number;
     margin?: number;
@@ -21,7 +22,7 @@ declare module 'naughty' {
     app_name: string;
     title: string;
     message: string;
-    timeout: number;
+    timeout?: number;
     icon: string;
   }
 
@@ -49,7 +50,8 @@ declare module 'naughty' {
     notification: any;
     type: string;
     screen: Screen;
-    shape: GearsShape;
+    shape: unknown;
+    // shape: GearsShape;
     widget_template: Widget;
   };
   type Box = (options: Partial<BoxProps>) => Widget;
@@ -59,4 +61,44 @@ declare module 'naughty' {
   }
 
   export const layout: Layout;
+
+  export const config: {
+    padding: number;
+    spacing: number;
+    icon_dirs: Table;
+    icon_formats: Table;
+    notify_callback: (this: void) => void;
+    presets: Table;
+    defaults: Table;
+  };
+
+  export const connect_signal: {
+    (
+      this: void,
+      name: 'request::display_error',
+      callback: (message: string, startup: boolean) => void
+    ): void;
+    (
+      this: void,
+      name: 'request::icon',
+      callback: (
+        n: Notification,
+        context: string,
+        hits: {app_icon: string; path: string; image: string}
+      ) => void
+    ): void;
+    (
+      this: void,
+      name: 'request::display',
+      callback: (notification: Table, context: string) => void
+    ): void;
+  };
+
+  interface NaughtyWidget {
+    icon: (this: void) => unknown;
+    title: (this: void) => unknown;
+    message: (this: void) => unknown;
+  }
+
+  export const widget: NaughtyWidget;
 }

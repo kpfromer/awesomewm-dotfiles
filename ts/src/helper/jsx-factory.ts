@@ -10,7 +10,7 @@ declare class Table<K extends {} = {}, V = any> {
 function createMap(
   this: void,
   attributes: object,
-  children: any[] = []
+  children: JSX.AwesomeNode[] = []
 ): Table {
   const map = new Table();
 
@@ -27,16 +27,105 @@ function createMap(
   return map;
 }
 
+/**
+ * Lua version to check if table is array.
+ * @param value value in question.
+ */
+function isArray<T>(value: any): value is T[] {
+  if (type(value) !== 'table') return false;
+  let i = 0;
+  for (const key of Object.keys(value as {[key: string]: any})) {
+    if (value.get(i + 1) === undefined) return false;
+    i++;
+  }
+  return true;
+}
+
+// Heavily based on the React Core code
+// https://github.com/facebook/react/blob/454c2211c09bfa2fd5475c25665f3bbeb6882841/packages/react/src/ReactChildren.js#L73
+function mapIntoArray<T>(
+  this: void,
+  children: JSX.AwesomeNode | JSX.AwesomeNode[],
+  array: T[],
+  func: (node: JSX.AwesomeNode) => T
+): number {
+  let invokeCallback = false;
+
+  if (children === null) {
+    invokeCallback = true;
+  } else {
+    switch (type(children)) {
+      case 'string':
+      case 'number':
+        invokeCallback = true;
+        break;
+    }
+  }
+
+  if (invokeCallback) {
+    const child = children;
+    const mappedChild = func(child as number | string);
+
+    if (isArray<JSX.AwesomeNode>(mappedChild)) {
+      mapIntoArray(mappedChild, array, func);
+    } else {
+      array.push(mappedChild);
+    }
+
+    return 1;
+  }
+
+  let subTreeCount = 0;
+
+  if (isArray<JSX.AwesomeNode>(children)) {
+    for (const i of forRange(0, children.length)) {
+      subTreeCount += mapIntoArray(children[i], array, func);
+    }
+  } else {
+    // todo: get iterator
+    // if (children !== undefined) {
+    // }
+  }
+
+  return subTreeCount;
+}
+
+function mapChildren(
+  this: void,
+  children: JSX.AwesomeNode[] | null,
+  func: (node: JSX.AwesomeNode, index: number) => JSX.AwesomeNode
+): JSX.AwesomeNode[] | null {
+  if (children === null) {
+    return children;
+  }
+  const result: JSX.AwesomeNode[] = [];
+  let count = 0;
+
+  mapIntoArray(children, result, child => func(child, count++));
+
+  return result;
+}
+
+/**
+ * Flatten a children object (typically specified as `props.children`) and
+ * return an array with appropriately re-keyed children.
+ *
+ * See https://reactjs.org/docs/react-api.html#reactchildrentoarray
+ */
+function toArray(children: JSX.AwesomeNode[]): JSX.AwesomeNode[] {
+  return mapChildren(children, child => child) ?? [];
+}
+
 export function createElement(
   tagName: keyof JSX.IntrinsicElements | JSX.FunctionComponent,
   attributes: any,
-  ...children: any[]
+  ...children: JSX.AwesomeNode[]
 ): any {
   if (tagName === 'base') {
     // Code based from React.createElement
     // https://github.com/facebook/react/blob/master/packages/react/src/ReactElement.js#L526
     if (children.length === 1) {
-      return createMap(attributes, children[0]);
+      return createMap(attributes, children);
     }
     return createMap(attributes, children);
   } else if (tagName === 'naughtybox') {
@@ -46,25 +135,14 @@ export function createElement(
     // });
     // map.set('widget_template', children);
     // return naughty.layout.box(map as any);
-  } else if (tagName === 'textbox') {
-    // // TODO:
-    // log(`${tagName}`);
-    // const props = attributes as JSX.TextBoxProps;
-    // if (props.markup) {
-    //   return {
-    //     ...attributes,
-    //     markup: props.children ?? '',
-    //     widget: wibox.widget.textbox,
-    //   };
-    // }
-    // return {
-    //   ...attributes,
-    //   text: props.children ?? '',
-    //   widget: wibox.widget.textbox,
-    // };
   } else if (tagName === 'fragment') {
     return createMap(attributes, children);
   } else if (tagName !== null) {
+    // Code based from React.createElement
+    // https://github.com/facebook/react/blob/master/packages/react/src/ReactElement.js#L526
+    // if (children.length === 1) {
+    //   return tagName({...attributes, children: children[0]});
+    // }
     return tagName({...attributes, children});
   }
 

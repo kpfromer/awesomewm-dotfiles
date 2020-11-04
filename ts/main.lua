@@ -1852,10 +1852,10 @@ local function transformJsxAttributesExpression(expression, context)
                     end
                     local objectLiteral = ts:createObjectLiteral(properties)
                     return {
-                        unpack(
+                        table.unpack(
                             __TS__ArrayConcat(
                                 {
-                                    unpack(prev)
+                                    table.unpack(prev)
                                 },
                                 {objectLiteral, element.expression}
                             )
@@ -1864,10 +1864,10 @@ local function transformJsxAttributesExpression(expression, context)
                 else
                     local valueOrExpression = (element.initializer and element.initializer) or ts:createLiteral(true)
                     return {
-                        unpack(
+                        table.unpack(
                             __TS__ArrayConcat(
                                 {
-                                    unpack(prev)
+                                    table.unpack(prev)
                                 },
                                 {
                                     ts:createPropertyAssignment(element.name, valueOrExpression)
@@ -1888,10 +1888,10 @@ local function transformJsxAttributesExpression(expression, context)
         end
         local objectLiteral = ts:createObjectLiteral(properties)
         local objectExpressions = ((#properties > 0) and ({
-            unpack(
+            table.unpack(
                 __TS__ArrayConcat(
                     {
-                        unpack(expressions)
+                        table.unpack(expressions)
                     },
                     {objectLiteral}
                 )
@@ -1902,7 +1902,7 @@ local function transformJsxAttributesExpression(expression, context)
             context,
             LuaLibFeature.ObjectAssign,
             ts:createObjectLiteral({}, false),
-            unpack(
+            table.unpack(
                 transformArguments(nil, context, objectExpressions)
             )
         )
@@ -1926,7 +1926,7 @@ local function transformJsxAttributesExpression(expression, context)
     end
 end
 local function transformJsxOpeningElement(expression, context, children)
-    local library, create = unpack(
+    local library, create = table.unpack(
         (context.options.jsxFactory and __TS__StringSplit(context.options.jsxFactory, ".")) or ({"React", "createElement"})
     )
     local createElement = createTableIndexExpression(
@@ -1953,7 +1953,7 @@ local function transformJsxOpeningElement(expression, context, children)
             {
                 tag,
                 props,
-                unpack(
+                table.unpack(
                     transformArguments(nil, context, childrenOrStringLiterals)
                 )
             },
@@ -3061,15 +3061,96 @@ local function createMap(attributes, children)
     end
     return map
 end
+local function isArray(value)
+    if type(value) ~= "table" then
+        return false
+    end
+    local i = 0
+    for ____, key in ipairs(
+        __TS__ObjectKeys(value)
+    ) do
+        if value:get(i + 1) == nil then
+            return false
+        end
+        i = i + 1
+    end
+    return true
+end
+local function mapIntoArray(children, array, func)
+    local invokeCallback = false
+    if children == nil then
+        invokeCallback = true
+    else
+        local ____switch12 = type(children)
+        if ____switch12 == "string" then
+            goto ____switch12_case_0
+        elseif ____switch12 == "number" then
+            goto ____switch12_case_1
+        end
+        goto ____switch12_end
+        ::____switch12_case_0::
+        do
+        end
+        ::____switch12_case_1::
+        do
+            invokeCallback = true
+            goto ____switch12_end
+        end
+        ::____switch12_end::
+    end
+    if invokeCallback then
+        local child = children
+        local mappedChild = func(child)
+        if isArray(mappedChild) then
+            mapIntoArray(mappedChild, array, func)
+        else
+            __TS__ArrayPush(array, mappedChild)
+        end
+        return 1
+    end
+    local subTreeCount = 0
+    if isArray(children) then
+        for i = 0, #children do
+            subTreeCount = subTreeCount + mapIntoArray(children[i + 1], array, func)
+        end
+    else
+    end
+    return subTreeCount
+end
+local function mapChildren(children, func)
+    if children == nil then
+        return children
+    end
+    local result = {}
+    local count = 0
+    mapIntoArray(
+        children,
+        result,
+        function(child) return func(
+            child,
+            (function()
+                local ____tmp = count
+                count = ____tmp + 1
+                return ____tmp
+            end)()
+        ) end
+    )
+    return result
+end
+local function toArray(children)
+    return mapChildren(
+        children,
+        function(child) return child end
+    ) or ({})
+end
 function ____exports.createElement(tagName, attributes, ...)
     local children = {...}
     if tagName == "base" then
         if #children == 1 then
-            return createMap(attributes, children[1])
+            return createMap(attributes, children)
         end
         return createMap(attributes, children)
     elseif tagName == "naughtybox" then
-    elseif tagName == "textbox" then
     elseif tagName == "fragment" then
         return createMap(attributes, children)
     elseif tagName ~= nil then
@@ -3086,6 +3167,45 @@ local ____exports = {}
 local jsxFactory = require("helper.jsx-factory")
 local awful = require("awful")
 local wibox = require("wibox")
+local naughty = require("naughty")
+____exports.Text = function(____bindingPattern0)
+    local markup
+    markup = ____bindingPattern0.markup
+    if markup == nil then
+        markup = false
+    end
+    local children
+    children = ____bindingPattern0.children
+    if children == nil then
+        children = ""
+    end
+    local rest
+    rest = __TS__ObjectRest(____bindingPattern0, {markup = true, children = true, rest = true})
+    if markup then
+        return jsxFactory.createElement(
+            "base",
+            __TS__ObjectAssign(
+                {},
+                rest,
+                {
+                    widget = wibox.widget.textbox,
+                    markup = table.concat(children, "" or ",")
+                }
+            )
+        )
+    end
+    return jsxFactory.createElement(
+        "base",
+        __TS__ObjectAssign(
+            {},
+            rest,
+            {
+                widget = wibox.widget.textbox,
+                text = table.concat(children, "" or ",")
+            }
+        )
+    )
+end
 ____exports.Margin = function(____bindingPattern0)
     local children
     children = ____bindingPattern0.children
@@ -3189,6 +3309,57 @@ ____exports.CloseButton = function(____bindingPattern0)
     local client
     client = ____bindingPattern0.client
     return awful.titlebar.widget.closebutton(client)
+end
+____exports.NaughtyIcon = function(____bindingPattern0)
+    local children = ____bindingPattern0.children
+    local rest
+    rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
+    return jsxFactory.createElement(
+        "base",
+        __TS__ObjectAssign({}, rest, {widget = naughty.widget.icon})
+    )
+end
+____exports.NaughtyTitle = function(____bindingPattern0)
+    local children = ____bindingPattern0.children
+    local rest
+    rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
+    return jsxFactory.createElement(
+        "base",
+        __TS__ObjectAssign({}, rest, {widget = naughty.widget.title})
+    )
+end
+____exports.NaughtyMessage = function(____bindingPattern0)
+    local children = ____bindingPattern0.children
+    local rest
+    rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
+    return jsxFactory.createElement(
+        "base",
+        __TS__ObjectAssign({}, rest, {widget = naughty.widget.message})
+    )
+end
+____exports.Background = function(____bindingPattern0)
+    local bg
+    bg = ____bindingPattern0.bg
+    local children
+    children = ____bindingPattern0.children
+    local rest
+    rest = __TS__ObjectRest(____bindingPattern0, {bg = true, children = true, rest = true})
+    return jsxFactory.createElement(
+        "base",
+        __TS__ObjectAssign({}, rest, {widget = wibox.container.background, bg = bg}),
+        children
+    )
+end
+____exports.Constraint = function(____bindingPattern0)
+    local children
+    children = ____bindingPattern0.children
+    local rest
+    rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
+    return jsxFactory.createElement(
+        "base",
+        __TS__ObjectAssign({}, rest, {widget = wibox.container.constraint}),
+        children
+    )
 end
 return ____exports
 end,
@@ -3503,6 +3674,205 @@ local ____exports = {}
 return ____exports
 end,
 ["module.notifications"] = function() require("lualib_bundle");
+local ____exports = {}
+local jsxFactory = require("helper.jsx-factory")
+local gears = require("gears")
+local awful = require("awful")
+local ruled = require("ruled")
+local beautiful = require("beautiful")
+local naughty = require("naughty")
+local ____index = require("helper.base.index")
+local Background = ____index.Background
+local Constraint = ____index.Constraint
+local Layout = ____index.Layout
+local Margin = ____index.Margin
+local NaughtyIcon = ____index.NaughtyIcon
+local NaughtyMessage = ____index.NaughtyMessage
+local NaughtyTitle = ____index.NaughtyTitle
+local Text = ____index.Text
+local dpi = beautiful.xresources.apply_dpi
+naughty.config.defaults.ontop = true
+naughty.config.defaults.icon_size = dpi(32)
+naughty.config.defaults.timeout = 5
+naughty.config.defaults.title = "System Notification"
+naughty.config.defaults.margin = dpi(16)
+naughty.config.defaults.border_width = 0
+naughty.config.defaults.position = "top_left"
+naughty.config.defaults.shape = function(cr, w, h)
+    gears.shape.rounded_rect(
+        cr,
+        w,
+        h,
+        dpi(6)
+    )
+end
+naughty.config.padding = dpi(8)
+naughty.config.spacing = dpi(8)
+naughty.config.icon_dirs = {"/usr/share/icons/Tela", "/usr/share/icons/Tela-blue-dark", "/usr/share/icons/Papirus/", "/usr/share/icons/la-capitaine-icon-theme/", "/usr/share/icons/gnome/", "/usr/share/icons/hicolor/", "/usr/share/pixmaps/"}
+naughty.config.icon_formats = {"svg", "png", "jpg", "gif"}
+ruled.notification.connect_signal(
+    "request::rules",
+    function()
+        ruled.notification.append_rule(
+            {
+                rule = {urgency = "critical"},
+                properties = {
+                    font = "Inter Bold 10",
+                    bg = "#ff0000",
+                    fg = "#ffffff",
+                    margin = dpi(16),
+                    position = "top_left",
+                    implicit_timeout = 0
+                }
+            }
+        )
+        ruled.notification.append_rule(
+            {
+                rule = {urgency = "normal"},
+                properties = {
+                    font = "Inter Bold 10",
+                    bg = beautiful.transparent,
+                    fg = beautiful.fg_normal,
+                    margin = dpi(16),
+                    position = "top_left",
+                    implicit_timeout = 5
+                }
+            }
+        )
+        ruled.notification.append_rule(
+            {
+                rule = {urgency = "low"},
+                properties = {
+                    font = "Inter Bold 10",
+                    bg = beautiful.transparent,
+                    fg = beautiful.fg_normal,
+                    margin = dpi(16),
+                    position = "top_left",
+                    implicit_timeout = 5
+                }
+            }
+        )
+    end
+)
+naughty.connect_signal(
+    "request::display_error",
+    function(message, startup)
+        naughty.notification(
+            {
+                urgency = "critical",
+                title = "Oops, an error happened" .. tostring((startup and " during startup!") or "!"),
+                message = message,
+                app_name = "System Notification",
+                icon = beautiful.awesome_icon
+            }
+        )
+    end
+)
+naughty.connect_signal(
+    "request::icon",
+    function(n, context, hints)
+        if context ~= "app_icon" then
+            return
+        end
+    end
+)
+naughty.connect_signal(
+    "request::display",
+    function(n)
+        local actionsTemplate = nil
+        naughty.layout.box(
+            {
+                notification = n,
+                screen = awful.screen.preferred(),
+                shape = gears.shape.rectangle,
+                type = "notification",
+                widget_template = jsxFactory.createElement(
+                    Background,
+                    {bg = beautiful.background},
+                    jsxFactory.createElement(
+                        Constraint,
+                        {
+                            strategy = "max",
+                            height = dpi(250),
+                            width = dpi(250)
+                        },
+                        jsxFactory.createElement(
+                            Constraint,
+                            {
+                                strategy = "min",
+                                width = dpi(250)
+                            },
+                            jsxFactory.createElement(
+                                Background,
+                                {id = "background_role", bg = beautiful.transparent},
+                                jsxFactory.createElement(
+                                    Background,
+                                    {bg = beautiful.transparent},
+                                    jsxFactory.createElement(
+                                        Margin,
+                                        {
+                                            margins = dpi(0)
+                                        },
+                                        jsxFactory.createElement(
+                                            Background,
+                                            {bg = beautiful.background},
+                                            jsxFactory.createElement(
+                                                Margin,
+                                                {margins = beautiful.notification_margin},
+                                                jsxFactory.createElement(
+                                                    Text,
+                                                    {markup = true, font = "Inter Bold 10", align = "center", valign = "center"},
+                                                    (function(____lhs)
+                                                        if ____lhs == nil then
+                                                            return "System Notification"
+                                                        else
+                                                            return ____lhs
+                                                        end
+                                                    end)(n.app_name)
+                                                )
+                                            )
+                                        ),
+                                        jsxFactory.createElement(
+                                            Layout,
+                                            {fixed = true, vertical = true, spacing = beautiful.notification_margin, fill_space = true},
+                                            jsxFactory.createElement(
+                                                Margin,
+                                                {margins = beautiful.notification_margin},
+                                                jsxFactory.createElement(NaughtyIcon, {resize_strategy = "center"})
+                                            ),
+                                            jsxFactory.createElement(
+                                                Layout,
+                                                {fixed = true, horizontal = true},
+                                                jsxFactory.createElement(
+                                                    Margin,
+                                                    {margins = beautiful.notification_margin},
+                                                    jsxFactory.createElement(
+                                                        Layout,
+                                                        {align = true, vertical = true, expand = "none"},
+                                                        nil,
+                                                        jsxFactory.createElement(
+                                                            Layout,
+                                                            {fixed = true, vertical = true},
+                                                            jsxFactory.createElement(NaughtyTitle, {align = "left"}),
+                                                            jsxFactory.createElement(NaughtyMessage, {align = "left"})
+                                                        ),
+                                                        nil
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                ),
+                                actionsTemplate
+                            )
+                        )
+                    )
+                )
+            }
+        )
+    end
+)
+return ____exports
 end,
 ["typing.index"] = function() require("lualib_bundle");
 end,

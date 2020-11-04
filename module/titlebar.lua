@@ -73,7 +73,7 @@ local create_horizontal_bar = function(c, buttons, pos, bg, size)
 	end 
 
 	awful.titlebar(c, {position = pos, bg = bg, size = size}) : setup {
-    {
+    {{
 			{
 				awful.titlebar.widget.ontopbutton(c),
 				awful.titlebar.widget.floatingbutton(c),

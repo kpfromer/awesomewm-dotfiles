@@ -2,13 +2,15 @@
 /** @noResolution */
 
 declare module 'wibox' {
+  import {GearsShape} from 'gears';
+
   interface Widget {
     // TODO: ARGS
     (this: void, args: any): unknown;
     /**
      * @noSelf
      */
-    textbox: (args: JSX.TextBoxProps) => unknown;
+    textbox: (args: unknown) => unknown;
   }
 
   interface Wibox {
@@ -22,6 +24,21 @@ declare module 'wibox' {
      * @noSelf
      */
     margin: (args: JSX.WiboxMargin) => unknown;
+
+    background: (
+      this: void,
+      widget: Widget,
+      bg: string,
+      shape: GearsShape | (() => GearsShape)
+    ) => unknown;
+
+    constraint: (
+      this: void,
+      widget: Widget,
+      strategy: 'min' | 'max' | 'exact',
+      width?: number,
+      height?: number
+    ) => unknown;
   }
 
   export const container: Container;
