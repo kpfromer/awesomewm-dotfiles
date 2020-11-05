@@ -2,6 +2,7 @@ import {Client} from 'awful';
 
 import * as gears from 'gears';
 import * as awful from 'awful';
+import * as hotkeysPopup from 'awful.hotkeys_popup';
 // const hotkeys_popup = require('awful.hotkeys_popup');
 import config from '../config';
 const modkey = config.modkey;
@@ -32,10 +33,10 @@ function move_focus_or_view_tag(
 }
 
 let globalkeys = gears.table.join(
-  // awful.key([modkey], 's', hotkeys_popup.show_help, {
-  //   description: 'show help',
-  //   group: 'awesome',
-  // }),
+  awful.key([modkey], 's', hotkeysPopup.widget.show_help, () => {}, {
+    description: 'show help',
+    group: 'awesome',
+  }),
   awful.key(
     [modkey],
     'Up',

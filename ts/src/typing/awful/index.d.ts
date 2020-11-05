@@ -580,3 +580,13 @@ declare module 'awful' {
     widget: Widget;
   };
 }
+
+/** @noResolution */
+declare module 'awful.hotkeys_popup' {
+  import {Client, Screen} from 'awful';
+  interface Widget {
+    show_help: (this: void, client?: Client, screen?: Screen) => void;
+  }
+
+  export const widget: Widget;
+}

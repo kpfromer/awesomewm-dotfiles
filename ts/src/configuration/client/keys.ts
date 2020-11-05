@@ -33,8 +33,10 @@ export default gears.table.join(
   awful.key(
     [modkey, 'Control'],
     'space',
-    () => {
-      awful.client.floating = !awful.client.floating;
+    client => {
+      client.floating = !client.floating;
+      client.ontop = false;
+      client.raise();
     },
     () => {},
     {
