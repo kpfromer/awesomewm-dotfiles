@@ -12,7 +12,7 @@ const run_once = function (this: void, command: string) {
   awful.spawn.easy_async_with_shell(
     `pgrep -u $USER -x ${program} > /dev/null || (${command})`,
     // string.format('pgrep -u $USER -x %s > /dev/null || (%s)', findMe, cmd),
-    function (stdout, stderr) {
+    (stdout, stderr) => {
       if (!stderr || stderr === '' || !config.debug) {
         return;
       }

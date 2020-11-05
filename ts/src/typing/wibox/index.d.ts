@@ -4,9 +4,15 @@
 declare module 'wibox' {
   import {GearsShape} from 'gears';
 
+  interface WiboxWidget {
+    connect_signal: (this: any, name: string, callback: () => void) => void;
+
+    bg: string;
+  }
+
   interface Widget {
     // TODO: ARGS
-    (this: void, args: any): unknown;
+    (this: void, args: any): WiboxWidget;
     /**
      * @noSelf
      */
@@ -39,6 +45,8 @@ declare module 'wibox' {
       width?: number,
       height?: number
     ) => unknown;
+
+    place: (this: void) => unknown;
   }
 
   export const container: Container;

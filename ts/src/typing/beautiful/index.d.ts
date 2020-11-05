@@ -51,4 +51,9 @@ declare module 'beautiful' {
   export const notification_margin: number;
 
   export const groups_bg: string;
+
+  // Events
+  export const leave_event: string;
+  export const press_event: string;
+  export const release_event: string;
 }

@@ -12,10 +12,10 @@ import config from '../config';
 const {modkey} = config;
 
 export default gears.table.join(
-  awful.button([modkey], 1, function (client) {
+  awful.button([modkey], 1, client => {
     client.emit_signal('request::activate', 'mouse_click', {raise: true});
   }),
-  awful.button([modkey], 1, function (client) {
+  awful.button([modkey], 1, client => {
     client.emit_signal('request::activate', 'mouse_click', {raise: true});
     awful.mouse.client.move(client);
   }),
@@ -23,7 +23,7 @@ export default gears.table.join(
     [config.modkey],
     // Right click
     3,
-    function (client) {
+    client => {
       client.emit_signal('request::activate', 'mouse_click', {raise: true});
       awful.mouse.client.resize(client);
     }

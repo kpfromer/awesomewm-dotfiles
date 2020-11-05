@@ -1,4 +1,4 @@
-import * as jsxFactory from '../../helper/jsx-factory';
+import * as jsxFactory from './jsx-factory';
 import * as awful from 'awful';
 import * as wibox from 'wibox';
 import * as naughty from 'naughty';
@@ -19,7 +19,10 @@ export type WiboxTextBox = {
 
 // TODO: full default font from theme
 export const Text: JSX.FunctionComponent<
-  Partial<Omit<WiboxTextBox, 'markup' | 'text'>> & {markup?: boolean}
+  Partial<Omit<WiboxTextBox, 'markup' | 'text'>> & {
+    markup?: boolean;
+    id?: string;
+  }
 > = ({markup = false, children = '', ...rest}) => {
   if (markup) {
     return (
@@ -190,6 +193,9 @@ export const Background: JSX.FunctionComponent<
   BaseWibox & {
     shape?: unknown;
     bg?: string;
+
+    forced_height?: number;
+    forced_width?: number;
   }
 > = ({bg, children, ...rest}) => {
   return (

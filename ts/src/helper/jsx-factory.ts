@@ -149,7 +149,7 @@ export function nodeToString(
       return `${tabs}{\n${body}\n${tabs}}`;
     }
     default:
-      return `undefined`;
+      return 'undefined';
   }
 }
 

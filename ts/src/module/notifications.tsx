@@ -15,7 +15,8 @@ import {
   NaughtyMessage,
   NaughtyTitle,
   Text,
-} from '../helper/base/index';
+} from '../helper/base';
+import {Clickable} from '../widgets/clickable-container';
 
 const dpi = beautiful.xresources.apply_dpi;
 // const clickable_container = require('widget.clickable-container');
@@ -104,6 +105,12 @@ naughty.connect_signal('request::display_error', (message, startup) => {
   });
 });
 
+// TODO: extract
+
+const Place: JSX.FunctionComponent = ({children}) => (
+  <base widget={wibox.container.place}>{children}</base>
+);
+
 // XDG icon lookup
 naughty.connect_signal('request::icon', (n, context, hints) => {
   if (context !== 'app_icon') {
@@ -120,66 +127,30 @@ naughty.connect_signal('request::icon', (n, context, hints) => {
 
 // Connect to naughty on display signal
 naughty.connect_signal('request::display', n => {
-  // TODO:
-  const actionsTemplate = null;
-  // wibox.widget {
-  //   notification = n,
-  //   base_layout = wibox.widget {
-  //     spacing        = dpi(0),
-  //     layout         = wibox.layout.flex.horizontal
-  //   },
-  //   widget_template = {
-  //     {
-  //       {
-  //         {
-  //           {
-  //             id     = 'text_role',
-  //             font   = 'Inter Regular 10',
-  //             widget = wibox.widget.textbox
-  //           },
-  //           widget = wibox.container.place
-  //         },
-  //         widget = clickable_container
-  //       },
-  //       bg                 = beautiful.groups_bg,
-  //       shape              = gears.shape.rounded_rect,
-  //       forced_height      = dpi(30),
-  //       widget             = wibox.container.background
-  //     },
-  //     margins = dpi(4),
-  //     widget  = wibox.container.margin
-  //   },
-  //   style = { underline_normal = false, underline_selected = true },
-  //   widget = naughty.list.actions
-  // }
-
-  // const actions = wibox.widget({
-  //   notification: n,
-  //   base_layout: wibox.widget({
-  //     spacing: dpi(0),
-  //     layout: wibox.layout.flex.horizontal,
-  //   }),
-  //   style: {
-  //     underline_normal: false,
-  //     underline_selected: true,
-  //   },
-  //   widget: naughty.list.actions,
-  //   widget_template: (
-  //     <Margin margins={dpi(4)}>
-  //       <Background
-  //         bg={beautiful.groups_bg}
-  //         shape={gears.shape.rounded_rect}
-  //         forced_height={dpi(30)}
-  //       >
-  //         <Clickable>
-  //           <Place>
-  //             <Text id="text_role" font="Inter Regular 10" />
-  //           </Place>
-  //         </Clickable>
-  //       </Background>
-  //     </Margin>
-  //   ),
-  // });
+  const actions = wibox.widget({
+    notification: n,
+    style: {
+      underline_normal: false,
+      underline_selected: true,
+    },
+    widget: naughty.list.actions,
+    base_layout: wibox.widget(<Layout flex horizontal spacing={dpi(0)} />),
+    widget_template: (
+      <Margin margins={dpi(4)}>
+        <Background
+          bg={beautiful.groups_bg}
+          shape={gears.shape.rounded_rect}
+          forced_height={dpi(30)}
+        >
+          <Clickable>
+            <Place>
+              <Text id="text_role" font="Inter Regular 10" />
+            </Place>
+          </Clickable>
+        </Background>
+      </Margin>
+    ),
+  });
 
   naughty.layout.box({
     notification: n,
@@ -219,8 +190,8 @@ naughty.connect_signal('request::display', n => {
                         </Layout>
                       </Margin>
                     </Layout>
+                    {actions}
                   </Layout>
-                  {undefined}
                 </Margin>
               </Layout>
             </Background>
