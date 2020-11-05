@@ -1,7 +1,5 @@
 /// <reference types="./jsx-factory" />
 
-import {log} from './log';
-
 /** @luaTable */
 declare class Table<K extends {} = {}, V = any> {
   readonly length: number;

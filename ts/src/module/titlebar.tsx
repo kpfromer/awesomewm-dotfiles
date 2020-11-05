@@ -14,7 +14,6 @@ import {
   MaximizedButton,
   MinimizeButton,
   OnTopButton,
-  Text,
 } from '../helper/base/index';
 const dpi = beautiful.xresources.apply_dpi;
 
