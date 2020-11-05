@@ -4,7 +4,6 @@
 // Kyle Pfromer
 // Based off of glorius dotfiles
 // Banner generated using `toilet -f pagga text`
-// Standard awesome library
 
 import * as awful from 'awful';
 import * as beautiful from 'beautiful';
@@ -59,7 +58,7 @@ root.keys(globalKeys);
 import './module/auto-start';
 // // Titlebars for clients (windows)
 import './module/titlebar';
-// import './module/notifications';
+import './module/notifications';
 
 // // TODO: Fix weird load up bug (lockscreen fixes this?)
 // require('module.dynamic-wallpaper')

@@ -49,4 +49,6 @@ declare module 'beautiful' {
 
   export const background: string;
   export const notification_margin: number;
+
+  export const groups_bg: string;
 }

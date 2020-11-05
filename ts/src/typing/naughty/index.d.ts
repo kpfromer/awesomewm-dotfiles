@@ -101,4 +101,10 @@ declare module 'naughty' {
   }
 
   export const widget: NaughtyWidget;
+
+  interface NaughtyList {
+    actions: unknown;
+  }
+
+  export const list: NaughtyList;
 }

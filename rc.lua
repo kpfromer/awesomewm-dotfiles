@@ -47,7 +47,7 @@ require('layout')
 -- Configuration/layout for system notifications (using naughty)
 
 
-require('module.notifications')
+-- require('module.notifications')
 
 -- Handles staring up programs like picom
 -- require('module.auto-start')

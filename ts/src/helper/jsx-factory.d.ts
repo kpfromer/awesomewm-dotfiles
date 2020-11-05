@@ -102,12 +102,5 @@ declare namespace JSX {
     base: ElementProps<any>;
 
     fragment: ElementProps<{}>;
-
-    naughtybox: ElementProps<{
-      notification: any;
-      type: 'notification';
-      // screen: Screen;
-      // shape: NoSelfGearsShape;
-    }>;
   }
 }
