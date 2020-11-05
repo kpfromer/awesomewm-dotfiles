@@ -1,7 +1,7 @@
 import * as jsxFactory from '../helper/jsx-factory';
 import * as wibox from 'wibox';
 import * as beautiful from 'beautiful';
-import {Background} from '../helper/base';
+import {Background} from '../helper/components/base';
 
 function createClickable(this: void, children: any) {
   const container = wibox.widget(<Background />);

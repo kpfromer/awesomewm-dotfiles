@@ -14,7 +14,7 @@ import {
   MaximizedButton,
   MinimizeButton,
   OnTopButton,
-} from '../helper/base';
+} from '../helper/components/base';
 const dpi = beautiful.xresources.apply_dpi;
 
 let timer: gears.Timer | undefined;

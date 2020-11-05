@@ -15,7 +15,7 @@ import {
   NaughtyMessage,
   NaughtyTitle,
   Text,
-} from '../helper/base';
+} from '../helper/components/base';
 import {Clickable} from '../widgets/clickable-container';
 
 const dpi = beautiful.xresources.apply_dpi;

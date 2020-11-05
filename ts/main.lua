@@ -3246,12 +3246,108 @@ function ____exports.createElement(tagName, attributes, ...)
 end
 return ____exports
 end,
-["helper.base"] = function() require("lualib_bundle");
+["helper.components.naughty"] = function() require("lualib_bundle");
 local ____exports = {}
 local jsxFactory = require("helper.jsx-factory")
-local awful = require("awful")
-local wibox = require("wibox")
 local naughty = require("naughty")
+____exports.NaughtyIcon = function(____bindingPattern0)
+    local children = ____bindingPattern0.children
+    local rest
+    rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
+    return jsxFactory.createElement(
+        "base",
+        __TS__ObjectAssign({}, rest, {widget = naughty.widget.icon})
+    )
+end
+____exports.NaughtyTitle = function(____bindingPattern0)
+    local children = ____bindingPattern0.children
+    local rest
+    rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
+    return jsxFactory.createElement(
+        "base",
+        __TS__ObjectAssign({}, rest, {widget = naughty.widget.title})
+    )
+end
+____exports.NaughtyMessage = function(____bindingPattern0)
+    local children = ____bindingPattern0.children
+    local rest
+    rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
+    return jsxFactory.createElement(
+        "base",
+        __TS__ObjectAssign({}, rest, {widget = naughty.widget.message})
+    )
+end
+return ____exports
+end,
+["helper.components.titlebar"] = function() require("lualib_bundle");
+local ____exports = {}
+local awful = require("awful")
+____exports.ClientIcon = function(____bindingPattern0)
+    local client
+    client = ____bindingPattern0.client
+    return awful.titlebar.widget.iconwidget(client)
+end
+____exports.OnTopButton = function(____bindingPattern0)
+    local client
+    client = ____bindingPattern0.client
+    return awful.titlebar.widget.ontopbutton(client)
+end
+____exports.FloatingButton = function(____bindingPattern0)
+    local client
+    client = ____bindingPattern0.client
+    return awful.titlebar.widget.floatingbutton(client)
+end
+____exports.MinimizeButton = function(____bindingPattern0)
+    local client
+    client = ____bindingPattern0.client
+    return awful.titlebar.widget.minimizebutton(client)
+end
+____exports.MaximizedButton = function(____bindingPattern0)
+    local client
+    client = ____bindingPattern0.client
+    return awful.titlebar.widget.maximizedbutton(client)
+end
+____exports.CloseButton = function(____bindingPattern0)
+    local client
+    client = ____bindingPattern0.client
+    return awful.titlebar.widget.closebutton(client)
+end
+return ____exports
+end,
+["helper.components.wibox"] = function() require("lualib_bundle");
+local ____exports = {}
+local jsxFactory = require("helper.jsx-factory")
+local wibox = require("wibox")
+____exports.Background = function(____bindingPattern0)
+    local bg
+    bg = ____bindingPattern0.bg
+    local children
+    children = ____bindingPattern0.children
+    local rest
+    rest = __TS__ObjectRest(____bindingPattern0, {bg = true, children = true, rest = true})
+    return jsxFactory.createElement(
+        "base",
+        __TS__ObjectAssign({}, rest, {widget = wibox.container.background, bg = bg}),
+        children
+    )
+end
+____exports.Constraint = function(____bindingPattern0)
+    local children
+    children = ____bindingPattern0.children
+    local rest
+    rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
+    return jsxFactory.createElement(
+        "base",
+        __TS__ObjectAssign({}, rest, {widget = wibox.container.constraint}),
+        children
+    )
+end
+return ____exports
+end,
+["helper.components.base"] = function() require("lualib_bundle");
+local ____exports = {}
+local jsxFactory = require("helper.jsx-factory")
+local wibox = require("wibox")
 ____exports.Text = function(____bindingPattern0)
     local markup
     markup = ____bindingPattern0.markup
@@ -3364,86 +3460,23 @@ ____exports.Layout = function(____bindingPattern0)
         children
     )
 end
-____exports.ClientIcon = function(____bindingPattern0)
-    local client
-    client = ____bindingPattern0.client
-    return awful.titlebar.widget.iconwidget(client)
+do
+    local ____export = require("helper.components.naughty")
+    for ____exportKey, ____exportValue in pairs(____export) do
+        ____exports[____exportKey] = ____exportValue
+    end
 end
-____exports.OnTopButton = function(____bindingPattern0)
-    local client
-    client = ____bindingPattern0.client
-    return awful.titlebar.widget.ontopbutton(client)
+do
+    local ____export = require("helper.components.titlebar")
+    for ____exportKey, ____exportValue in pairs(____export) do
+        ____exports[____exportKey] = ____exportValue
+    end
 end
-____exports.FloatingButton = function(____bindingPattern0)
-    local client
-    client = ____bindingPattern0.client
-    return awful.titlebar.widget.floatingbutton(client)
-end
-____exports.MinimizeButton = function(____bindingPattern0)
-    local client
-    client = ____bindingPattern0.client
-    return awful.titlebar.widget.minimizebutton(client)
-end
-____exports.MaximizedButton = function(____bindingPattern0)
-    local client
-    client = ____bindingPattern0.client
-    return awful.titlebar.widget.maximizedbutton(client)
-end
-____exports.CloseButton = function(____bindingPattern0)
-    local client
-    client = ____bindingPattern0.client
-    return awful.titlebar.widget.closebutton(client)
-end
-____exports.NaughtyIcon = function(____bindingPattern0)
-    local children = ____bindingPattern0.children
-    local rest
-    rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
-    return jsxFactory.createElement(
-        "base",
-        __TS__ObjectAssign({}, rest, {widget = naughty.widget.icon})
-    )
-end
-____exports.NaughtyTitle = function(____bindingPattern0)
-    local children = ____bindingPattern0.children
-    local rest
-    rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
-    return jsxFactory.createElement(
-        "base",
-        __TS__ObjectAssign({}, rest, {widget = naughty.widget.title})
-    )
-end
-____exports.NaughtyMessage = function(____bindingPattern0)
-    local children = ____bindingPattern0.children
-    local rest
-    rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
-    return jsxFactory.createElement(
-        "base",
-        __TS__ObjectAssign({}, rest, {widget = naughty.widget.message})
-    )
-end
-____exports.Background = function(____bindingPattern0)
-    local bg
-    bg = ____bindingPattern0.bg
-    local children
-    children = ____bindingPattern0.children
-    local rest
-    rest = __TS__ObjectRest(____bindingPattern0, {bg = true, children = true, rest = true})
-    return jsxFactory.createElement(
-        "base",
-        __TS__ObjectAssign({}, rest, {widget = wibox.container.background, bg = bg}),
-        children
-    )
-end
-____exports.Constraint = function(____bindingPattern0)
-    local children
-    children = ____bindingPattern0.children
-    local rest
-    rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
-    return jsxFactory.createElement(
-        "base",
-        __TS__ObjectAssign({}, rest, {widget = wibox.container.constraint}),
-        children
-    )
+do
+    local ____export = require("helper.components.wibox")
+    for ____exportKey, ____exportValue in pairs(____export) do
+        ____exports[____exportKey] = ____exportValue
+    end
 end
 return ____exports
 end,
@@ -3453,7 +3486,7 @@ local jsxFactory = require("helper.jsx-factory")
 local awful = require("awful")
 local gears = require("gears")
 local beautiful = require("beautiful")
-local ____base = require("helper.base")
+local ____base = require("helper.components.base")
 local CloseButton = ____base.CloseButton
 local FloatingButton = ____base.FloatingButton
 local Layout = ____base.Layout
@@ -3580,7 +3613,7 @@ local ____exports = {}
 local jsxFactory = require("helper.jsx-factory")
 local wibox = require("wibox")
 local beautiful = require("beautiful")
-local ____base = require("helper.base")
+local ____base = require("helper.components.base")
 local Background = ____base.Background
 local function createClickable(children)
     local container = wibox.widget(
@@ -3640,7 +3673,7 @@ local awful = require("awful")
 local ruled = require("ruled")
 local beautiful = require("beautiful")
 local naughty = require("naughty")
-local ____base = require("helper.base")
+local ____base = require("helper.components.base")
 local Background = ____base.Background
 local Constraint = ____base.Constraint
 local Layout = ____base.Layout
