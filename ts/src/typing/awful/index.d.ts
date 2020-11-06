@@ -31,11 +31,11 @@ declare module 'awful' {
   /**
    * https://awesomewm.org/doc/api/classes/awful.button.html
    */
-  export function button(
+  export function button<R = Client>(
     mod: string[],
     button: number,
-    press: (client: Client) => void,
-    release?: (client: Client) => void
+    press: (value: R) => void,
+    release?: (value: R) => void
   ): Table;
 
   interface ClientProps {
@@ -266,6 +266,12 @@ declare module 'awful' {
       client?: Client,
       stacked?: boolean
     ) => unknown;
+
+    /**
+     * Toggle a tag on a client.
+     * @param tag The tag to move the client to.
+     */
+    toggle_tag: (this: any, tag: Tag) => void;
   }
 
   type Client = {
@@ -314,6 +320,11 @@ declare module 'awful' {
   interface ScreenProps {
     tags: Table;
     dpi: number;
+
+    geometry: {
+      x: number;
+      y: number;
+    };
   }
   interface ScreenFunctions {
     preferred: (this: void, client?: Client) => Screen;
@@ -328,7 +339,10 @@ declare module 'awful' {
 
     focused: (this: void, args?: {client: boolean; mouse: boolean}) => Screen;
 
-    connect_for_each_screen: (this: void, func: {screen: Screen}) => unknown;
+    connect_for_each_screen: (
+      this: void,
+      func: (this: void, screen: Screen) => void
+    ) => unknown;
   }
 
   export type Screen = ScreenProps & ScreenFunctions;
@@ -432,6 +446,13 @@ declare module 'awful' {
     ) => unknown;
 
     viewtoggle: (this: void, t: Tag) => unknown;
+
+    /**
+     * View only a tag.
+     *
+     * https://awesomewm.org/apidoc/core_components/tag.html#view_only
+     */
+    view_only: (this: any) => void;
   }
 
   type Tag = TagProps & TagFunctions;
@@ -579,6 +600,85 @@ declare module 'awful' {
     ): Titlebar;
     widget: Widget;
   };
+
+  interface Wibar {
+    connect_signal(this: any, name: string, callback: () => void): void;
+    struts(this: any, args: Table): void;
+    setup(this: any, body: unknown): void;
+  }
+
+  export const wibar: (this: void, args: Table) => Wibar;
+
+  type WidgetCommon = {
+    /**
+     * Common method to create buttons.
+     */
+    create_buttons: (this: any, buttons: Table, object: Table) => Table;
+    /**
+     * Common update method.
+     * @param widget The widget.
+     * @param buttons Buttons.
+     * @param label Function to generate label parameters from an object. The function gets passed an object from objects, and has to return text, bg, bg_image, icon.
+     * @param data Current data/cache, indexed by objects.
+     * @param objects Objects to be displayed / updated.
+     */
+    list_update: (
+      this: any,
+      widget: Widget,
+      buttons: Table,
+      label: () => {text: string; bg: string; bg_image: string; icon: string},
+      data: Table,
+      objects: Table,
+      args?: Table
+    ) => void;
+  };
+
+  interface TagListWidgetProps {
+    screen: Screen;
+    filter: (this: void, tag: Tag) => void;
+    buttons: Table;
+    base_widget?: Widget;
+    update_function?: WidgetCommon['list_update'];
+  }
+  interface TagListWidget {
+    (args: TagListWidgetProps): unknown;
+    // (args: Table, filter: (tag: Tag) => void, buttons: Table<Button>): unknown;
+    filter: {
+      noempty: (this: void, tag: Tag) => void;
+      selected: (this: void, tag: Tag) => void;
+      all: (this: void, tag: Tag) => void;
+    };
+  }
+
+  interface TaskListWidgetProps {
+    screen: Screen;
+    filter: (this: void, tag: Client, screen: Screen) => void;
+    buttons: Table;
+    base_widget?: Widget;
+    update_function?: WidgetCommon['list_update'];
+  }
+  interface TaskListWidget {
+    (args: TaskListWidgetProps): unknown;
+    // (args: Table, filter: (tag: Tag) => void, buttons: Table<Button>): unknown;
+    filter: {
+      allscreen: (this: void, client: Client, screen: Screen) => void;
+      alltags: (this: void, client: Client, screen: Screen) => void;
+      currenttags: (this: void, client: Client, screen: Screen) => void;
+      minimizedcurrenttags: (
+        this: void,
+        client: Client,
+        screen: Screen
+      ) => void;
+      focused: (this: void, client: Client, screen: Screen) => void;
+    };
+  }
+
+  interface AwfulWidget {
+    taglist: TagListWidget;
+    tasklist: TaskListWidget;
+  }
+
+  export const widget: AwfulWidget;
 }
 
 /** @noResolution */
