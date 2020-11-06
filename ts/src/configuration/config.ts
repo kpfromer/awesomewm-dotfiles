@@ -116,6 +116,12 @@ const config = {
   debug: false,
   modkey: 'Mod4',
 
+  // TODO: actually setup
+  // Shows laptop related stuff like battery level
+  laptop: false,
+  // Changes clock format from "1:00 pm" to "13:00"
+  militaryTime: false,
+
   // Used for valid ways to layout awesomewm windows
   layouts: [
     awful.layout.suit.spiral.dwindle,
