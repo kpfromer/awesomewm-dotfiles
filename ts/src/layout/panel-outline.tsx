@@ -6,7 +6,9 @@ import {Background, Margin} from '../helper/components/base';
 
 const dpi = beautiful.xresources.apply_dpi;
 
-export const PanelOutline: JSX.FunctionComponent = ({children}) => {
+export const PanelOutline: JSX.FunctionComponent<{}, wibox.BaseWiboxWidget> = ({
+  children,
+}) => {
   return wibox.widget(
     <Margin top={dpi(9)} bottom={dpi(9)}>
       <Background
@@ -20,5 +22,5 @@ export const PanelOutline: JSX.FunctionComponent = ({children}) => {
         {children}
       </Background>
     </Margin>
-  ) as any;
+  );
 };
