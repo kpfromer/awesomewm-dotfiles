@@ -1,5 +1,6 @@
 import * as jsxFactory from '../jsx-factory';
 import * as wibox from 'wibox';
+import * as awful from 'awful';
 
 export type WiboxTextBox = {
   markup: string;
@@ -40,7 +41,10 @@ export const Text: JSX.FunctionComponent<
   );
 };
 
-export const Image: JSX.FunctionComponent<wibox.ImageWidgetProps> = props => {
+export const Image: JSX.FunctionComponent<
+  wibox.ImageWidgetProps & {id?: string},
+  wibox.ImageWidget
+> = props => {
   return wibox.widget(
     <base {...props} widget={wibox.widget.imagebox} />
   ) as any;
@@ -116,6 +120,10 @@ export const Layout: JSX.FunctionComponent<{
       {children}
     </base>
   );
+};
+
+export const Tooltip: JSX.FunctionComponent<awful.Tooltip> = props => {
+  return awful.tooltip(props);
 };
 
 export * from './naughty';
