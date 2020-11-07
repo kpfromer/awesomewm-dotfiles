@@ -3,7 +3,9 @@ import * as wibox from 'wibox';
 import * as beautiful from 'beautiful';
 import {Background} from '../helper/components/base';
 
-function createClickable(this: void, children: any) {
+export type ButtonPressHandler = (this: void, button: number) => void;
+
+function createClickable(this: void, onButtonPress?: ButtonPressHandler) {
   const container = wibox.widget(<Background />);
 
   let oldCursor: string | undefined = undefined;
@@ -36,9 +38,20 @@ function createClickable(this: void, children: any) {
     container.bg = beautiful.release_event;
   });
 
+  if (onButtonPress) {
+    container.connect_signal(
+      'button::press',
+      (self: unknown, lx: number, ly: number, button: number) => {
+        onButtonPress(button);
+      }
+    );
+  }
+
   return container;
 }
 
-export const Clickable: JSX.FunctionComponent = ({children}) => {
-  return <base widget={createClickable}>{children}</base>;
+export const Clickable: JSX.FunctionComponent<{
+  onButtonPress?: ButtonPressHandler;
+}> = ({onButtonPress, children}) => {
+  return <base widget={() => createClickable(onButtonPress)}>{children}</base>;
 };
