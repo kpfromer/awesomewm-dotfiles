@@ -1,16 +1,43 @@
-// import {Screen} from 'awful';
-// import {NoSelfGearsShape} from 'gears';
-
 declare namespace JSX {
-  interface AwesomeElement<
-    P = any,
-    T extends string = string
-    // T extends string | JSXElementConstructor<any> = string | JSXElementConstructor<any>
-  > {
-    type: T;
-    props: P;
-    // key: Key | null;
-  }
+  type Table = object;
+  // TODO: remove duplicate
+  type BaseWiboxWidget = {
+    connect_signal: (
+      this: any,
+      name: string,
+      callback: (this: void, ...args: any[]) => void
+    ) => void;
+
+    bg: string;
+
+    /**
+     * Get or set the children elements.
+     */
+    children: Table;
+    /**
+     * Get all direct and indirect children widgets.
+     * This will scan all containers recursively to find widgets
+     * Warning: This method it prone to stack overflow id the widget, or any of its
+     * children, contain (directly or indirectly) itself.
+     */
+    all_children: Table;
+    /**
+     * Force a widget height.
+     */
+    forced_height?: number;
+    /**
+     * Force a widget width.
+     */
+    forced_width?: number;
+    /**
+     * The widget opacity (transparency).
+     */
+    opacity: number;
+    visible: boolean;
+    buttons: Table;
+  };
+
+  type AwesomeElement = BaseWiboxWidget;
 
   // interface ElementClass {
   //   render(): any;
@@ -30,15 +57,11 @@ declare namespace JSX {
 
   type PropsWithChildren<P> = P & {children?: AwesomeNodeArray};
 
-  interface FunctionComponent<P = {}> {
-    (this: void, props: PropsWithChildren<P>, context?: any): AwesomeElement<
-      any,
-      any
-    > | null;
-    // propTypes?: WeakValidationMap<P>;
-    // contextTypes?: ValidationMap<any>;
-    // defaultProps?: Partial<P>;
-    // displayName?: string;
+  interface FunctionComponent<
+    P = {},
+    R extends AwesomeElement = AwesomeElement
+  > {
+    (this: void, props: PropsWithChildren<P>, context?: any): R;
   }
 
   // type AwesomeComponent<P = {}> =

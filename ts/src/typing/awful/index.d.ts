@@ -2,6 +2,7 @@
 /** @noResolution */
 
 declare module 'awful' {
+  import {BaseWiboxWidget} from 'wibox';
   import {GearsShape, GearsShapeFunction, Table} from 'gears';
 
   interface Util {
@@ -741,42 +742,64 @@ declare module 'awful' {
   }
 
   interface AwfulWidget {
+    // TODO: better typing
+    /**
+     * Create a textbox that shows the output of a command and updates it at a given time interval.
+     *
+     * https://awesomewm.org/apidoc/widgets/awful.widget.watch.html#awful.widget.watch
+     *
+     * @returns The widget used by this watch.
+     */
+    watch: (
+      this: void,
+      command: string,
+      timeout?: number,
+      callback?: (
+        widget: any,
+        stdout: string,
+        stderr: string,
+        exitreason: string,
+        exitcode: number
+      ) => void,
+      baseWidget?: any
+    ) => Widget;
+
     taglist: TagListWidget;
     tasklist: TaskListWidget;
     calendar_popup: CalendarPopup;
+    layoutbox: (this: void, screen: Screen) => void;
   }
 
   export const widget: AwfulWidget;
 
+  interface Tooltip {
+    timer_function?: (this: void) => string;
+    timeout?: number;
+    objects?: BaseWiboxWidget[];
+    mode?: string;
+    delay_show?: number;
+    margin_leftright?: number;
+    margin_topbottom?: number;
+    shape?: GearsShape;
+    bg?: string;
+    fg?: string;
+    border_color?: string;
+    border_width?: number;
+    align?: string;
+    font?: string;
+    opacity?: number;
+    /**
+     * https://awesomewm.org/doc/api/classes/awful.tooltip.html#awful.tooltip.preferred_positions
+     */
+    preferred_positions?: ('top' | 'right' | 'left' | 'bottom')[];
+    /**
+     * https://awesomewm.org/doc/api/classes/awful.tooltip.html#awful.tooltip.preferred_alignments
+     */
+    preferred_alignments?: ('front' | 'middle' | 'back')[];
+  }
+
   // TODO: return type
-  export const tooltip: (
-    this: void,
-    args: {
-      timer_function: (this: void) => string;
-      timeout?: number;
-      objects?: any[];
-      mode?: string;
-      delay_show?: number;
-      margin_leftright?: number;
-      margin_topbottom?: number;
-      shape?: GearsShape;
-      bg?: string;
-      fg?: string;
-      border_color?: string;
-      border_width?: number;
-      align?: string;
-      font?: string;
-      opacity?: number;
-      /**
-       * https://awesomewm.org/doc/api/classes/awful.tooltip.html#awful.tooltip.preferred_positions
-       */
-      preferred_positions?: ('top' | 'right' | 'left' | 'bottom')[];
-      /**
-       * https://awesomewm.org/doc/api/classes/awful.tooltip.html#awful.tooltip.preferred_alignments
-       */
-      preferred_alignments?: ('front' | 'middle' | 'back')[];
-    }
-  ) => any;
+  export const tooltip: (this: void, args: Tooltip) => any;
 }
 
 /** @noResolution */

@@ -40,6 +40,8 @@ declare module 'wibox' {
     buttons: Table;
   }
 
+  export type BaseWiboxWidget = WiboxWidget;
+
   export interface ImageWidgetProps {
     /**
      * The image rendered by the imagebox.
@@ -64,7 +66,13 @@ declare module 'wibox' {
     resize?: boolean;
   }
 
-  export type ImageWidget = ImageWidgetProps & WiboxWidget;
+  interface ImageWidgetFunctions {
+    set_image: (this: any, src: string) => void;
+  }
+
+  export type ImageWidget = ImageWidgetProps &
+    ImageWidgetFunctions &
+    WiboxWidget;
 
   interface SystrayWidgetProps {
     reverse?: boolean;
@@ -114,13 +122,21 @@ declare module 'wibox' {
     /**
      * @noSelf
      */
-    margin: (args: JSX.WiboxMargin) => unknown;
+    margin: (
+      widget?: any,
+      left?: number,
+      right?: number,
+      top?: number,
+      bottom?: number,
+      color?: string,
+      draw_empty?: boolean
+    ) => unknown;
 
     background: (
       this: void,
-      widget: Widget,
-      bg: string,
-      shape: GearsShape | (() => GearsShape)
+      widget?: Widget,
+      bg?: string,
+      shape?: GearsShape | (() => GearsShape)
     ) => unknown;
 
     constraint: (
