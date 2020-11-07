@@ -2,6 +2,7 @@ import * as jsxFactory from '../helper/jsx-factory';
 import * as wibox from 'wibox';
 import * as beautiful from 'beautiful';
 import {Background} from '../helper/components/base';
+import {Table} from 'gears';
 
 export type ButtonPressHandler = (this: void, button: number) => void;
 
@@ -52,6 +53,11 @@ function createClickable(this: void, onButtonPress?: ButtonPressHandler) {
 
 export const Clickable: JSX.FunctionComponent<{
   onButtonPress?: ButtonPressHandler;
-}> = ({onButtonPress, children}) => {
-  return <base widget={() => createClickable(onButtonPress)}>{children}</base>;
+  buttons?: Table;
+}> = ({onButtonPress, children, ...rest}) => {
+  return (
+    <base {...rest} widget={() => createClickable(onButtonPress)}>
+      {children}
+    </base>
+  );
 };
