@@ -40,10 +40,19 @@ export const Text: JSX.FunctionComponent<
   );
 };
 
-export const Margin: JSX.FunctionComponent<{margins: number}> = ({
-  children,
-  ...rest
-}) => {
+export const Image: JSX.FunctionComponent<wibox.ImageWidgetProps> = props => {
+  return wibox.widget(
+    <base {...props} widget={wibox.widget.imagebox} />
+  ) as any;
+};
+
+export const Margin: JSX.FunctionComponent<{
+  margins?: number;
+  left?: number;
+  right?: number;
+  top?: number;
+  bottom?: number;
+}> = ({children, ...rest}) => {
   return (
     <base {...rest} widget={wibox.container.margin}>
       {children}
