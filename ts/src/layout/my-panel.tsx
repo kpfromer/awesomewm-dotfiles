@@ -8,6 +8,8 @@ import {Table} from 'gears';
 import config from '../configuration/config';
 import {TagList, TaskList, SystemTray} from './panel-components';
 import {Clock} from './components/clock';
+import {LayoutStatus} from './components/layout-status';
+import {Bluetooth} from './components/bluetooth';
 
 const dpi = beautiful.xresources.apply_dpi;
 
@@ -30,9 +32,11 @@ awful.screen.connect_for_each_screen((screen: awful.Screen) => {
         <TagList all screen={screen} buttons={{}} />
       </Layout>
       <TaskList currenttags screen={screen} buttons={{}} />
-      <Layout fixed horizontal>
+      <Layout fixed horizontal spacing={dpi(5)}>
         <SystemTray />
+        <Bluetooth />
         <Clock font={font} militaryTime={militaryTime} screen={screen} />
+        <LayoutStatus screen={screen} />
       </Layout>
     </Layout>
   );
