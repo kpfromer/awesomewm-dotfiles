@@ -7,11 +7,14 @@ type BaseWibox = {id?: string};
 
 export const Background: JSX.FunctionComponent<
   BaseWibox & {
-    shape?: unknown;
+    shape?: (this: void, cr: any, width: number, height: number) => void;
     bg?: string;
 
     forced_height?: number;
     forced_width?: number;
+
+    border_width?: number;
+    border_color?: string;
   }
 > = ({bg, children, ...rest}) => {
   return (
