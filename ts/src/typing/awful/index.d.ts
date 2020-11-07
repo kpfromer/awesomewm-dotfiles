@@ -2,7 +2,7 @@
 /** @noResolution */
 
 declare module 'awful' {
-  import {GearsShapeFunction, Table} from 'gears';
+  import {GearsShape, GearsShapeFunction, Table} from 'gears';
 
   interface Util {
     shell: string;
@@ -673,12 +673,110 @@ declare module 'awful' {
     };
   }
 
+  export interface CalendarPopupWidget {
+    call_calendar: (
+      this: any,
+      offset: number,
+      position: string,
+      screen: Screen
+    ) => unknown;
+
+    attach: (
+      this: any,
+      widget: Widget,
+      position: string,
+      args: {
+        on_hover: boolean;
+        on_pressed: boolean;
+      }
+    ) => unknown;
+  }
+
+  interface CalendarPopup {
+    month: (
+      this: void,
+      args: {
+        screen: Screen;
+        font: string;
+        bg?: string;
+        opacity?: number;
+        position?: string;
+        spacing?: number;
+        margin?: number;
+        week_numbers?: boolean;
+        start_sunday?: boolean;
+        long_weekdays?: boolean;
+        style_month?: Table;
+        style_header?: Table;
+        style_weekday?: Table;
+        style_weeknumber?: Table;
+        style_normal?: Table;
+        style_focus?: Table;
+      }
+    ) => unknown;
+
+    year: (
+      this: void,
+      args: {
+        position: string;
+        screen: Screen;
+        opacity: number;
+        bg: string;
+        font: string;
+        spacing: number;
+        margin: number;
+        week_numbers: boolean;
+        start_sunday: boolean;
+        long_weekdays: boolean;
+        style_year: Table;
+        style_month: Table;
+        style_yearheader: Table;
+        style_header: Table;
+        style_weekday: Table;
+        style_weeknumber: Table;
+        style_normal: Table;
+        style_focus: Table;
+      }
+    ) => unknown;
+  }
+
   interface AwfulWidget {
     taglist: TagListWidget;
     tasklist: TaskListWidget;
+    calendar_popup: CalendarPopup;
   }
 
   export const widget: AwfulWidget;
+
+  // TODO: return type
+  export const tooltip: (
+    this: void,
+    args: {
+      timer_function: (this: void) => string;
+      timeout?: number;
+      objects?: any[];
+      mode?: string;
+      delay_show?: number;
+      margin_leftright?: number;
+      margin_topbottom?: number;
+      shape?: GearsShape;
+      bg?: string;
+      fg?: string;
+      border_color?: string;
+      border_width?: number;
+      align?: string;
+      font?: string;
+      opacity?: number;
+      /**
+       * https://awesomewm.org/doc/api/classes/awful.tooltip.html#awful.tooltip.preferred_positions
+       */
+      preferred_positions?: ('top' | 'right' | 'left' | 'bottom')[];
+      /**
+       * https://awesomewm.org/doc/api/classes/awful.tooltip.html#awful.tooltip.preferred_alignments
+       */
+      preferred_alignments?: ('front' | 'middle' | 'back')[];
+    }
+  ) => any;
 }
 
 /** @noResolution */

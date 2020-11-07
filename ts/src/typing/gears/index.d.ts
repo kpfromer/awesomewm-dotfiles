@@ -20,7 +20,7 @@ declare module 'gears' {
      *
      * https://awesomewm.org/doc/api/libraries/gears.shape.html#module.rectangle
      */
-    rectangle: (cr: any, width: number, height: number) => void;
+    rectangle: (this: void, cr: any, width: number, height: number) => void;
 
     /**
      * Add a rounded rectangle to the current path. Note: If the radius is bigger than either half side, it will be reduced.
@@ -28,10 +28,37 @@ declare module 'gears' {
      * https://awesomewm.org/doc/api/libraries/gears.shape.html#module.rounded_rect
      */
     rounded_rect: (
+      this: void,
       cr: any,
       width: number,
       height: number,
-      radius: number
+      radius?: number
+    ) => void;
+
+    /**
+     * A rounded rect with only some of the corners rounded.
+     *
+     * @param cr A cairo context
+     * @param width number The shape width
+     * @param height number The shape height
+     * @param tl boolean If the top left corner is rounded
+     * @param tr boolean If the top right corner is rounded
+     * @param br boolean If the bottom right corner is rounded
+     * @param bl boolean If the bottom left corner is rounded
+     * @param rad number The corner radius
+     *
+     * https://awesomewm.org/doc/api/libraries/gears.shape.html#module.partially_rounded_rect
+     */
+    partially_rounded_rect: (
+      this: void,
+      cr: any,
+      width: number,
+      height: number,
+      tl?: boolean,
+      tr?: boolean,
+      br?: boolean,
+      bl?: boolean,
+      rad?: number
     ) => void;
   }
 

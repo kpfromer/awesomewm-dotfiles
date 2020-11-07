@@ -4,8 +4,12 @@
 declare module 'wibox' {
   import {GearsShape, Table} from 'gears';
 
-  interface WiboxWidget {
-    connect_signal: (this: any, name: string, callback: () => void) => void;
+  export interface WiboxWidget {
+    connect_signal: (
+      this: any,
+      name: string,
+      callback: (this: void, ...args: any[]) => void
+    ) => void;
 
     bg: string;
 

@@ -57,4 +57,7 @@ declare module 'beautiful' {
   export const leave_event: string;
   export const press_event: string;
   export const release_event: string;
+
+  export const groups_radius: number;
+  export const accent: string;
 }
