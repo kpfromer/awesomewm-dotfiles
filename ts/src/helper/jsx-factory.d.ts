@@ -55,7 +55,7 @@ declare namespace JSX {
 
   // type ReactNode = ReactChild | ReactFragment | ReactPortal | boolean | null | undefined;
 
-  type PropsWithChildren<P> = P & {children?: AwesomeNodeArray};
+  type PropsWithChildren<P> = P & {children?: AwesomeNodeArray | AwesomeNode};
 
   interface FunctionComponent<
     P = {},

@@ -2,6 +2,7 @@
 /** @noResolution */
 
 declare module 'wibox' {
+  import {Screen} from 'awful';
   import {GearsShape, Table} from 'gears';
 
   export interface WiboxWidget {
@@ -75,6 +76,9 @@ declare module 'wibox' {
     WiboxWidget;
 
   interface SystrayWidgetProps {
+    base_size?: number;
+    horizontal?: boolean;
+    screen?: 'primary' | Screen;
     reverse?: boolean;
   }
 

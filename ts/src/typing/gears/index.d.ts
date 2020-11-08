@@ -125,6 +125,12 @@ declare module 'gears' {
 
     // 'delayed_call': (this: void, callback: function,...: unknown) => unknown;
   };
+
+  interface Surface {
+    load_uncached: (this: void, surface: string) => undefined | string;
+  }
+
+  export const surface: Surface;
 }
 
 /**

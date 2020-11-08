@@ -1,6 +1,15 @@
 import * as jsxFactory from '../helper/jsx-factory';
 import * as awful from 'awful';
+import * as beautiful from 'beautiful';
 import * as wibox from 'wibox';
+import {
+  Background,
+  Margin,
+  Image,
+  Layout,
+  Text,
+} from '../helper/components/base';
+const dpi = beautiful.xresources.apply_dpi;
 
 export const TagList: JSX.FunctionComponent<
   Omit<awful.TagListWidgetProps, 'filter'> & {
@@ -24,6 +33,30 @@ export const TagList: JSX.FunctionComponent<
     screen,
     filter,
     buttons,
+
+    // update_function: (widget: any, buttons, label, data, objects) => {
+    //   for (const [index, object] of Object.entries(objects)) {
+    //     const {text, icon} = label(object);
+
+    //     widget.add(<Image image={icon} />);
+    //   }
+    // },
+
+    // widget_template: <Image id="icon_role" />,
+    // widget_template: (
+    //   <Background id="background_role">
+    //     <Margin left={5} right={5}>
+    //       <Layout fixed horizontal>
+    //         {{
+    //           id: 'index_role',
+    //           widget: wibox.widget.textbox,
+    //         }}
+    //       </Layout>
+    //     </Margin>
+    //   </Background>
+    // ),
+    // widget_template: children as any,
+    // ...(children === undefined ? {} : {widget_template: children as any}),
   }) as any;
 };
 
@@ -66,14 +99,10 @@ export const TaskList: JSX.FunctionComponent<
   }) as any;
 };
 
-export const SystemTray: JSX.FunctionComponent<wibox.SystrayWidgetProps> = ({
-  reverse,
-}) => {
-  return wibox.widget.systray({reverse}) as any;
+export const SystemTray: JSX.FunctionComponent<wibox.SystrayWidgetProps> = props => {
+  return <base {...props} widget={wibox.widget.systray} />;
 };
 
 export const TextClock: JSX.FunctionComponent<wibox.TextClockWidgetProps> = props => {
-  return wibox.widget(
-    <base {...props} widget={wibox.widget.textclock} />
-  ) as any;
+  return wibox.widget(<base {...props} widget={wibox.widget.textclock} />);
 };

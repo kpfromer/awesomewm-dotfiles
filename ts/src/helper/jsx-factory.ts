@@ -191,7 +191,7 @@ export function createElement(
     // return createMap(attributes, children);
     return createMap(attributes, flattenOneLevel(children));
   } else if (tagName === 'fragment') {
-    return createMap(attributes, children);
+    return createMap({}, children);
   } else if (tagName !== null) {
     // Code based from React.createElement
     // https://github.com/facebook/react/blob/master/packages/react/src/ReactElement.js#L526

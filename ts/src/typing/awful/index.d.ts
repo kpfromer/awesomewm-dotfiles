@@ -627,7 +627,9 @@ declare module 'awful' {
       this: any,
       widget: Widget,
       buttons: Table,
-      label: () => {text: string; bg: string; bg_image: string; icon: string},
+      label: (
+        object?: any
+      ) => {text: string; bg: string; bg_image: string; icon: string},
       data: Table,
       objects: Table,
       args?: Table
@@ -640,6 +642,7 @@ declare module 'awful' {
     buttons: Table;
     base_widget?: Widget;
     update_function?: WidgetCommon['list_update'];
+    widget_template?: any;
   }
   interface TagListWidget {
     (args: TagListWidgetProps): unknown;
@@ -657,6 +660,7 @@ declare module 'awful' {
     buttons: Table;
     base_widget?: Widget;
     update_function?: WidgetCommon['list_update'];
+    widget_template?: any;
   }
   interface TaskListWidget {
     (args: TaskListWidgetProps): unknown;
