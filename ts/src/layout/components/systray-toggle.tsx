@@ -15,12 +15,12 @@ const widgetIconDir = `${configDir}images/widgets/systray/`;
 export const SystemTrayToggle: JSX.FunctionComponent = () => {
   const tray = wibox.widget(
     <SystemTray screen="primary" base_size={dpi(20)} horizontal />
-  ) as wibox.WiboxWidget;
+  );
   tray.visible = false;
 
-  const icon = (
+  const icon = wibox.widget<wibox.ImageWidget>(
     <Image id="icon" image={`${widgetIconDir}right-arrow.svg`} resize />
-  ) as wibox.ImageWidget;
+  );
 
   return (
     <fragment>

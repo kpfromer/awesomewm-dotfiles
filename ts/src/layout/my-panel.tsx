@@ -11,6 +11,7 @@ import {LayoutStatus} from './components/layout-status';
 import {Bluetooth} from './components/bluetooth';
 import {PanelOutline} from './panel-outline';
 import {SystemTrayToggle} from './components/systray-toggle';
+import {Clickable} from '../widgets/clickable-container';
 const dpi = beautiful.xresources.apply_dpi;
 
 const {militaryTime} = config;
@@ -42,13 +43,26 @@ screen.connect_signal('request::desktop_decoration', (screen: awful.Screen) => {
       <Layout align horizontal expand="none">
         <Layout fixed horizontal>
           <PanelOutline>
-            <TagList all screen={screen} buttons={{}}>
-              <Background id="background_role">
-                <Margin left={dpi(5)} right={dpi(5)}>
-                  <Image id="icon_role" />
-                </Margin>
-              </Background>
-            </TagList>
+            <TagList
+              all
+              screen={screen}
+              buttons={[
+                awful.button<awful.Tag>([], 1, tag => tag.view_only()),
+                awful.button<awful.Tag>([], 4, tag =>
+                  awful.tag.viewprev(tag.screen)
+                ),
+                awful.button<awful.Tag>([], 5, tag =>
+                  awful.tag.viewnext(tag.screen)
+                ),
+              ]}
+              tag={
+                <Clickable>
+                  <Margin margins={dpi(6)}>
+                    <Image id="icon_role" />
+                  </Margin>
+                </Clickable>
+              }
+            />
           </PanelOutline>
         </Layout>
         <TaskList currenttags screen={screen} buttons={{}} />

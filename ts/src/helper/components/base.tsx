@@ -45,9 +45,7 @@ export const Image: JSX.FunctionComponent<
   wibox.ImageWidgetProps & {id?: string},
   wibox.ImageWidget
 > = props => {
-  return wibox.widget(
-    <base {...props} widget={wibox.widget.imagebox} />
-  ) as any;
+  return <base {...props} widget={wibox.widget.imagebox} />;
 };
 
 export const Margin: JSX.FunctionComponent<{

@@ -2210,6 +2210,457 @@ theme.awesome_overrides(finalTheme)
 ____exports.default = finalTheme
 return ____exports
 end,
+["helper.jsx-factory"] = function() require("lualib_bundle");
+local ____exports = {}
+local function createMap(attributes, children)
+    if children == nil then
+        children = {}
+    end
+    local map = {}
+    for ____, ____value in ipairs(
+        __TS__ObjectEntries(attributes)
+    ) do
+        local key
+        key = ____value[1]
+        local value
+        value = ____value[2]
+        map[key] = value
+    end
+    for i = 0, #children do
+        map[i + 1] = children[i + 1]
+    end
+    return map
+end
+function ____exports.isArray(value)
+    if type(value) ~= "table" then
+        return false
+    end
+    local i = 0
+    local ____table = value
+    for ____, key in ipairs(
+        __TS__ObjectKeys(____table)
+    ) do
+        if ____table[i + 1] == nil then
+            return false
+        end
+        i = i + 1
+    end
+    return true
+end
+local function mapIntoArray(children, array, func)
+    local invokeCallback = false
+    if children == nil then
+        invokeCallback = true
+    else
+        local ____switch12 = type(children)
+        if ____switch12 == "string" then
+            goto ____switch12_case_0
+        elseif ____switch12 == "number" then
+            goto ____switch12_case_1
+        end
+        goto ____switch12_end
+        ::____switch12_case_0::
+        do
+        end
+        ::____switch12_case_1::
+        do
+            invokeCallback = true
+            goto ____switch12_end
+        end
+        ::____switch12_end::
+    end
+    if invokeCallback then
+        local child = children
+        local mappedChild = func(child)
+        if ____exports.isArray(mappedChild) then
+            mapIntoArray(mappedChild, array, func)
+        else
+            __TS__ArrayPush(array, mappedChild)
+        end
+        return 1
+    end
+    local subTreeCount = 0
+    if ____exports.isArray(children) then
+        for i = 0, #children do
+            subTreeCount = subTreeCount + mapIntoArray(children[i + 1], array, func)
+        end
+    else
+    end
+    return subTreeCount
+end
+local function mapChildren(children, func)
+    if children == nil then
+        return children
+    end
+    local result = {}
+    local count = 0
+    mapIntoArray(
+        children,
+        result,
+        function(child) return func(
+            child,
+            (function()
+                local ____tmp = count
+                count = ____tmp + 1
+                return ____tmp
+            end)()
+        ) end
+    )
+    return result
+end
+local function toArray(children)
+    return mapChildren(
+        children,
+        function(child) return child end
+    ) or ({})
+end
+function ____exports.nodeToString(node, level)
+    if level == nil then
+        level = 0
+    end
+    if node == nil then
+        return "undefined"
+    end
+    local tabs = ""
+    for i = 0, level do
+        tabs = tostring(tabs) .. "  "
+    end
+    local ____switch28 = type(node)
+    if ____switch28 == "string" then
+        goto ____switch28_case_0
+    elseif ____switch28 == "number" then
+        goto ____switch28_case_1
+    elseif ____switch28 == "boolean" then
+        goto ____switch28_case_2
+    elseif ____switch28 == "table" then
+        goto ____switch28_case_3
+    end
+    goto ____switch28_case_default
+    ::____switch28_case_0::
+    do
+        return tostring(node)
+    end
+    ::____switch28_case_1::
+    do
+        return tostring(
+            tostring(node)
+        )
+    end
+    ::____switch28_case_2::
+    do
+        return tostring((node and "true") or "false")
+    end
+    ::____switch28_case_3::
+    do
+        do
+            local ____table = node
+            local body = table.concat(
+                __TS__ArrayMap(
+                    __TS__ObjectEntries(____table),
+                    function(____, ____bindingPattern0)
+                        local key
+                        key = ____bindingPattern0[1]
+                        local value
+                        value = ____bindingPattern0[2]
+                        return (((tostring(tabs) .. "  ") .. tostring(key)) .. ": ") .. tostring(
+                            ____exports.nodeToString(value, level + 2)
+                        )
+                    end
+                ),
+                ",\n" or ","
+            )
+            return ((((tostring(tabs) .. "{\n") .. tostring(body)) .. "\n") .. tostring(tabs)) .. "}"
+        end
+    end
+    ::____switch28_case_default::
+    do
+        return "undefined"
+    end
+    ::____switch28_end::
+end
+function ____exports.flattenOneLevel(children)
+    local result = {}
+    for i = 0, #children do
+        local item = children[i + 1]
+        if ____exports.isArray(item) then
+            for j = 0, #item do
+                __TS__ArrayPush(result, item[j + 1])
+            end
+        else
+            __TS__ArrayPush(result, item)
+        end
+    end
+    return result
+end
+function ____exports.createElement(tagName, attributes, ...)
+    local children = {...}
+    if tagName == "base" then
+        return createMap(
+            attributes,
+            ____exports.flattenOneLevel(children)
+        )
+    elseif tagName == "fragment" then
+        return createMap({}, children)
+    elseif tagName ~= nil then
+        return tagName(
+            __TS__ObjectAssign(
+                {},
+                attributes,
+                {
+                    children = ____exports.flattenOneLevel(children)
+                }
+            )
+        )
+    end
+    return nil
+end
+return ____exports
+end,
+["helper.components.naughty"] = function() require("lualib_bundle");
+local ____exports = {}
+local jsxFactory = require("helper.jsx-factory")
+local naughty = require("naughty")
+____exports.NaughtyIcon = function(____bindingPattern0)
+    local children = ____bindingPattern0.children
+    local rest
+    rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
+    return jsxFactory.createElement(
+        "base",
+        __TS__ObjectAssign({}, rest, {widget = naughty.widget.icon})
+    )
+end
+____exports.NaughtyTitle = function(____bindingPattern0)
+    local children = ____bindingPattern0.children
+    local rest
+    rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
+    return jsxFactory.createElement(
+        "base",
+        __TS__ObjectAssign({}, rest, {widget = naughty.widget.title})
+    )
+end
+____exports.NaughtyMessage = function(____bindingPattern0)
+    local children = ____bindingPattern0.children
+    local rest
+    rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
+    return jsxFactory.createElement(
+        "base",
+        __TS__ObjectAssign({}, rest, {widget = naughty.widget.message})
+    )
+end
+return ____exports
+end,
+["helper.components.titlebar"] = function() require("lualib_bundle");
+local ____exports = {}
+local awful = require("awful")
+____exports.ClientIcon = function(____bindingPattern0)
+    local client
+    client = ____bindingPattern0.client
+    return awful.titlebar.widget.iconwidget(client)
+end
+____exports.OnTopButton = function(____bindingPattern0)
+    local client
+    client = ____bindingPattern0.client
+    return awful.titlebar.widget.ontopbutton(client)
+end
+____exports.FloatingButton = function(____bindingPattern0)
+    local client
+    client = ____bindingPattern0.client
+    return awful.titlebar.widget.floatingbutton(client)
+end
+____exports.MinimizeButton = function(____bindingPattern0)
+    local client
+    client = ____bindingPattern0.client
+    return awful.titlebar.widget.minimizebutton(client)
+end
+____exports.MaximizedButton = function(____bindingPattern0)
+    local client
+    client = ____bindingPattern0.client
+    return awful.titlebar.widget.maximizedbutton(client)
+end
+____exports.CloseButton = function(____bindingPattern0)
+    local client
+    client = ____bindingPattern0.client
+    return awful.titlebar.widget.closebutton(client)
+end
+return ____exports
+end,
+["helper.components.wibox"] = function() require("lualib_bundle");
+local ____exports = {}
+local jsxFactory = require("helper.jsx-factory")
+local wibox = require("wibox")
+____exports.Background = function(____bindingPattern0)
+    local children
+    children = ____bindingPattern0.children
+    local rest
+    rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
+    return jsxFactory.createElement(
+        "base",
+        __TS__ObjectAssign({}, rest, {widget = wibox.container.background}),
+        children
+    )
+end
+____exports.Constraint = function(____bindingPattern0)
+    local children
+    children = ____bindingPattern0.children
+    local rest
+    rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
+    return jsxFactory.createElement(
+        "base",
+        __TS__ObjectAssign({}, rest, {widget = wibox.container.constraint}),
+        children
+    )
+end
+return ____exports
+end,
+["helper.components.base"] = function() require("lualib_bundle");
+local ____exports = {}
+local jsxFactory = require("helper.jsx-factory")
+local wibox = require("wibox")
+local awful = require("awful")
+____exports.Text = function(____bindingPattern0)
+    local markup
+    markup = ____bindingPattern0.markup
+    if markup == nil then
+        markup = false
+    end
+    local children
+    children = ____bindingPattern0.children
+    local rest
+    rest = __TS__ObjectRest(____bindingPattern0, {markup = true, children = true, rest = true})
+    if not children then
+        return jsxFactory.createElement(
+            "base",
+            __TS__ObjectAssign({}, rest, {widget = wibox.widget.textbox})
+        )
+    end
+    if markup then
+        return jsxFactory.createElement(
+            "base",
+            __TS__ObjectAssign(
+                {},
+                rest,
+                {
+                    widget = wibox.widget.textbox,
+                    markup = table.concat(children, "" or ",")
+                }
+            )
+        )
+    end
+    return jsxFactory.createElement(
+        "base",
+        __TS__ObjectAssign(
+            {},
+            rest,
+            {
+                widget = wibox.widget.textbox,
+                text = table.concat(children, "" or ",")
+            }
+        )
+    )
+end
+____exports.Image = function(props)
+    return jsxFactory.createElement(
+        "base",
+        __TS__ObjectAssign({}, props, {widget = wibox.widget.imagebox})
+    )
+end
+____exports.Margin = function(____bindingPattern0)
+    local children
+    children = ____bindingPattern0.children
+    local rest
+    rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
+    return jsxFactory.createElement(
+        "base",
+        __TS__ObjectAssign({}, rest, {widget = wibox.container.margin}),
+        children
+    )
+end
+____exports.Layout = function(____bindingPattern0)
+    local fixed
+    fixed = ____bindingPattern0.fixed
+    if fixed == nil then
+        fixed = false
+    end
+    local flex
+    flex = ____bindingPattern0.flex
+    if flex == nil then
+        flex = false
+    end
+    local align
+    align = ____bindingPattern0.align
+    if align == nil then
+        align = false
+    end
+    local vertical
+    vertical = ____bindingPattern0.vertical
+    if vertical == nil then
+        vertical = false
+    end
+    local horizontal
+    horizontal = ____bindingPattern0.horizontal
+    if horizontal == nil then
+        horizontal = false
+    end
+    local children
+    children = ____bindingPattern0.children
+    local rest
+    rest = __TS__ObjectRest(____bindingPattern0, {fixed = true, flex = true, align = true, vertical = true, horizontal = true, children = true, rest = true})
+    local layout
+    if fixed then
+        if horizontal then
+            layout = wibox.layout.fixed.horizontal
+        elseif vertical then
+            layout = wibox.layout.fixed.vertical
+        end
+    elseif flex then
+        if horizontal then
+            layout = wibox.layout.flex.horizontal
+        elseif vertical then
+            layout = wibox.layout.flex.vertical
+        end
+    elseif align then
+        if horizontal then
+            layout = wibox.layout.align.horizontal
+        elseif vertical then
+            layout = wibox.layout.align.vertical
+        end
+    end
+    if layout == nil then
+        return jsxFactory.createElement(
+            "base",
+            __TS__ObjectAssign({}, rest),
+            children
+        )
+    end
+    return jsxFactory.createElement(
+        "base",
+        __TS__ObjectAssign({}, rest, {layout = layout}),
+        children
+    )
+end
+____exports.Tooltip = function(props)
+    return awful.tooltip(props)
+end
+do
+    local ____export = require("helper.components.naughty")
+    for ____exportKey, ____exportValue in pairs(____export) do
+        ____exports[____exportKey] = ____exportValue
+    end
+end
+do
+    local ____export = require("helper.components.titlebar")
+    for ____exportKey, ____exportValue in pairs(____export) do
+        ____exports[____exportKey] = ____exportValue
+    end
+end
+do
+    local ____export = require("helper.components.wibox")
+    for ____exportKey, ____exportValue in pairs(____export) do
+        ____exports[____exportKey] = ____exportValue
+    end
+end
+return ____exports
+end,
 ["configuration.config"] = function() require("lualib_bundle");
 local ____exports = {}
 local filesystem = require("gears.filesystem")
@@ -2242,8 +2693,768 @@ local apps = {
         "blueberry-tray"
     }
 }
-local config = {debug = false, modkey = "Mod4", layouts = {awful.layout.suit.spiral.dwindle, awful.layout.suit.tile.left, awful.layout.suit.floating, awful.layout.suit.max}, module = {auto_start = {debug_mode = false}, dynamic_wallpaper = {wall_dir = "theme/wallpapers/", valid_picture_formats = {"jpg", "png", "jpeg"}, stretch = false}}, apps = apps}
+local config = {debug = false, modkey = "Mod4", laptop = false, militaryTime = false, layouts = {awful.layout.suit.spiral.dwindle, awful.layout.suit.tile.left, awful.layout.suit.floating, awful.layout.suit.max}, module = {auto_start = {debug_mode = false}, dynamic_wallpaper = {wall_dir = "theme/wallpapers/", valid_picture_formats = {"jpg", "png", "jpeg"}, stretch = false}}, apps = apps}
 ____exports.default = config
+return ____exports
+end,
+["layout.panel-components"] = function() require("lualib_bundle");
+local ____exports = {}
+local jsxFactory = require("helper.jsx-factory")
+local awful = require("awful")
+local wibox = require("wibox")
+____exports.TagList = function(____bindingPattern0)
+    local screen
+    screen = ____bindingPattern0.screen
+    local buttons
+    buttons = ____bindingPattern0.buttons
+    local all
+    all = ____bindingPattern0.all
+    if all == nil then
+        all = false
+    end
+    local selected
+    selected = ____bindingPattern0.selected
+    if selected == nil then
+        selected = false
+    end
+    local noempty
+    noempty = ____bindingPattern0.noempty
+    if noempty == nil then
+        noempty = false
+    end
+    local tag
+    tag = ____bindingPattern0.tag
+    local filter = awful.widget.taglist.filter.all
+    if all then
+        filter = awful.widget.taglist.filter.all
+    elseif selected then
+        filter = awful.widget.taglist.filter.selected
+    elseif noempty then
+        filter = awful.widget.taglist.filter.noempty
+    end
+    local options = {screen = screen, filter = filter, buttons = buttons}
+    if tag then
+        options.widget_template = tag
+    end
+    return awful.widget.taglist(options)
+end
+____exports.TaskList = function(____bindingPattern0)
+    local screen
+    screen = ____bindingPattern0.screen
+    local buttons
+    buttons = ____bindingPattern0.buttons
+    local allscreen
+    allscreen = ____bindingPattern0.allscreen
+    if allscreen == nil then
+        allscreen = false
+    end
+    local alltags
+    alltags = ____bindingPattern0.alltags
+    if alltags == nil then
+        alltags = false
+    end
+    local currenttags
+    currenttags = ____bindingPattern0.currenttags
+    if currenttags == nil then
+        currenttags = false
+    end
+    local minimizedcurrenttags
+    minimizedcurrenttags = ____bindingPattern0.minimizedcurrenttags
+    if minimizedcurrenttags == nil then
+        minimizedcurrenttags = false
+    end
+    local focused
+    focused = ____bindingPattern0.focused
+    if focused == nil then
+        focused = false
+    end
+    local filter = awful.widget.tasklist.filter.currenttags
+    if allscreen then
+        filter = awful.widget.tasklist.filter.allscreen
+    elseif alltags then
+        filter = awful.widget.tasklist.filter.alltags
+    elseif currenttags then
+        filter = awful.widget.tasklist.filter.currenttags
+    elseif minimizedcurrenttags then
+        filter = awful.widget.tasklist.filter.minimizedcurrenttags
+    elseif focused then
+        filter = awful.widget.tasklist.filter.focused
+    end
+    return awful.widget.tasklist({screen = screen, filter = filter, buttons = buttons})
+end
+____exports.SystemTray = function(props)
+    return jsxFactory.createElement(
+        "base",
+        __TS__ObjectAssign({}, props, {widget = wibox.widget.systray})
+    )
+end
+____exports.TextClock = function(props)
+    return wibox.widget(
+        jsxFactory.createElement(
+            "base",
+            __TS__ObjectAssign({}, props, {widget = wibox.widget.textclock})
+        )
+    )
+end
+return ____exports
+end,
+["widgets.clickable-container"] = function() require("lualib_bundle");
+local ____exports = {}
+local jsxFactory = require("helper.jsx-factory")
+local wibox = require("wibox")
+local beautiful = require("beautiful")
+local ____base = require("helper.components.base")
+local Background = ____base.Background
+local function createClickable(onButtonPress)
+    local container = wibox.widget(
+        jsxFactory.createElement(Background, {})
+    )
+    local oldCursor = nil
+    local oldWibox = nil
+    container:connect_signal(
+        "mouse::enter",
+        function()
+            container.bg = beautiful.groups_bg
+            local currentWibox = mouse.current_wibox
+            if currentWibox then
+                oldCursor = currentWibox.cursor
+                oldWibox = currentWibox
+                currentWibox.cursor = "hand1"
+            end
+        end
+    )
+    container:connect_signal(
+        "mouse::leave",
+        function()
+            container.bg = beautiful.leave_event
+            if oldWibox then
+                oldWibox.cursor = oldCursor
+                oldWibox = nil
+            end
+        end
+    )
+    container:connect_signal(
+        "button::press",
+        function()
+            container.bg = beautiful.press_event
+        end
+    )
+    container:connect_signal(
+        "button::release",
+        function()
+            container.bg = beautiful.release_event
+        end
+    )
+    if onButtonPress then
+        container:connect_signal(
+            "button::press",
+            function(____self, lx, ly, button)
+                onButtonPress(button)
+            end
+        )
+    end
+    return container
+end
+____exports.Clickable = function(____bindingPattern0)
+    local onButtonPress
+    onButtonPress = ____bindingPattern0.onButtonPress
+    local children
+    children = ____bindingPattern0.children
+    local rest
+    rest = __TS__ObjectRest(____bindingPattern0, {onButtonPress = true, children = true, rest = true})
+    return jsxFactory.createElement(
+        "base",
+        __TS__ObjectAssign(
+            {},
+            rest,
+            {
+                widget = function() return createClickable(onButtonPress) end
+            }
+        ),
+        children
+    )
+end
+return ____exports
+end,
+["layout.panel-outline"] = function() require("lualib_bundle");
+local ____exports = {}
+local jsxFactory = require("helper.jsx-factory")
+local wibox = require("wibox")
+local gears = require("gears")
+local beautiful = require("beautiful")
+local ____base = require("helper.components.base")
+local Background = ____base.Background
+local Margin = ____base.Margin
+local dpi = beautiful.xresources.apply_dpi
+____exports.PanelOutline = function(____bindingPattern0)
+    local children
+    children = ____bindingPattern0.children
+    return wibox.widget(
+        jsxFactory.createElement(
+            Margin,
+            {
+                top = dpi(9),
+                bottom = dpi(9)
+            },
+            jsxFactory.createElement(
+                Background,
+                {
+                    bg = beautiful.transparent,
+                    shape = function(cr, w, h)
+                        gears.shape.rounded_rect(
+                            cr,
+                            w,
+                            h,
+                            dpi(12)
+                        )
+                    end,
+                    border_color = beautiful.groups_title_bg,
+                    border_width = dpi(1)
+                },
+                children
+            )
+        )
+    )
+end
+return ____exports
+end,
+["layout.components.clock"] = function() require("lualib_bundle");
+local ____exports = {}
+local jsxFactory = require("helper.jsx-factory")
+local awful = require("awful")
+local gears = require("gears")
+local beautiful = require("beautiful")
+local ____base = require("helper.components.base")
+local Margin = ____base.Margin
+local Tooltip = ____base.Tooltip
+local ____clickable_2Dcontainer = require("widgets.clickable-container")
+local Clickable = ____clickable_2Dcontainer.Clickable
+local ____panel_2Dcomponents = require("layout.panel-components")
+local TextClock = ____panel_2Dcomponents.TextClock
+local ____panel_2Doutline = require("layout.panel-outline")
+local PanelOutline = ____panel_2Doutline.PanelOutline
+local dpi = beautiful.xresources.apply_dpi
+local function PlainClock(____bindingPattern0)
+    local militaryTime
+    militaryTime = ____bindingPattern0.militaryTime
+    if militaryTime == nil then
+        militaryTime = false
+    end
+    local font
+    font = ____bindingPattern0.font
+    local onButtonPress
+    onButtonPress = ____bindingPattern0.onButtonPress
+    return jsxFactory.createElement(
+        Clickable,
+        {onButtonPress = onButtonPress},
+        jsxFactory.createElement(
+            Margin,
+            {
+                margins = dpi(7)
+            },
+            jsxFactory.createElement(
+                TextClock,
+                {
+                    format = ((("<span font=\"" .. tostring(font)) .. "\">") .. tostring((militaryTime and "%H:%M") or "%I:%M %p")) .. "</span>"
+                }
+            )
+        )
+    )
+end
+local function Calendar(____bindingPattern0)
+    local font
+    font = ____bindingPattern0.font
+    local screen
+    screen = ____bindingPattern0.screen
+    return awful.widget.calendar_popup.month(
+        {
+            screen = screen,
+            font = font,
+            start_sunday = true,
+            spacing = dpi(5),
+            long_weekdays = true,
+            margin = dpi(5),
+            style_month = {
+                border_width = dpi(0),
+                bg_color = beautiful.background,
+                padding = dpi(20),
+                shape = function(cr, width, height)
+                    gears.shape.partially_rounded_rect(cr, width, height, true, true, true, true, beautiful.groups_radius)
+                end
+            },
+            style_header = {border_width = 0, bg_color = beautiful.transparent},
+            style_weekday = {border_width = 0, bg_color = beautiful.transparent},
+            style_normal = {border_width = 0, bg_color = beautiful.transparent},
+            style_focus = {
+                border_width = dpi(0),
+                border_color = beautiful.fg_normal,
+                bg_color = beautiful.accent,
+                shape = function(cr, width, height)
+                    gears.shape.partially_rounded_rect(
+                        cr,
+                        width,
+                        height,
+                        true,
+                        true,
+                        true,
+                        true,
+                        dpi(4)
+                    )
+                end
+            }
+        }
+    )
+end
+local function getOridinal(day)
+    if day == nil then
+        day = os.date("%d")
+    end
+    local oridnal = "th"
+    local lastDigit = string.sub(day, -1)
+    if (lastDigit == "1") and (day ~= "11") then
+        oridnal = "st"
+    elseif (lastDigit == "2") and (day ~= "12") then
+        oridnal = "nd"
+    elseif (lastDigit == "3") and (day ~= "13") then
+        oridnal = "rd"
+    end
+    return oridnal
+end
+____exports.Clock = function(____bindingPattern0)
+    local militaryTime
+    militaryTime = ____bindingPattern0.militaryTime
+    if militaryTime == nil then
+        militaryTime = false
+    end
+    local font
+    font = ____bindingPattern0.font
+    local screen
+    screen = ____bindingPattern0.screen
+    local calendarPosition
+    calendarPosition = ____bindingPattern0.calendarPosition
+    if calendarPosition == nil then
+        calendarPosition = "tr"
+    end
+    local function openClockToolTip(button)
+        if screen.clockTooltip then
+            local clockTooltip = screen.clockTooltip
+            if clockTooltip.visible and (button == 1) then
+                clockTooltip.visible = false
+            end
+        end
+    end
+    local clock = jsxFactory.createElement(
+        PanelOutline,
+        {},
+        jsxFactory.createElement(PlainClock, {font = font, militaryTime = militaryTime, onButtonPress = openClockToolTip})
+    )
+    local clockTooltip = jsxFactory.createElement(
+        Tooltip,
+        {
+            objects = {clock},
+            mode = "outside",
+            preferred_positions = {"bottom", "right", "left", "top"},
+            preferred_alignments = {"middle", "front", "back"},
+            margin_leftright = dpi(8),
+            margin_topbottom = dpi(8),
+            timer_function = function()
+                local day = os.date("%d")
+                local oridnal = getOridinal(day)
+                local month = os.date("%B")
+                local firstDigit = string.sub(day, 0, 1)
+                local lastDigit = string.sub(day, -1)
+                if firstDigit == "0" then
+                    day = lastDigit
+                end
+                return ((((("Today is the <b>" .. tostring(day)) .. tostring(oridnal)) .. " of ") .. tostring(month)) .. "</b>\nAnd it's ") .. tostring(
+                    os.date("%A")
+                )
+            end
+        }
+    )
+    screen.clockTooltip = clockTooltip
+    local calendar = jsxFactory.createElement(Calendar, {font = font, screen = screen})
+    calendar:attach(clock, calendarPosition, {on_hover = false, on_pressed = true})
+    return clock
+end
+return ____exports
+end,
+["layout.components.layout-status"] = function() require("lualib_bundle");
+local ____exports = {}
+local jsxFactory = require("helper.jsx-factory")
+local awful = require("awful")
+local gears = require("gears")
+local beautiful = require("beautiful")
+local ____base = require("helper.components.base")
+local Margin = ____base.Margin
+local ____clickable_2Dcontainer = require("widgets.clickable-container")
+local Clickable = ____clickable_2Dcontainer.Clickable
+local ____panel_2Doutline = require("layout.panel-outline")
+local PanelOutline = ____panel_2Doutline.PanelOutline
+local dpi = beautiful.xresources.apply_dpi
+____exports.LayoutStatus = function(____bindingPattern0)
+    local screen
+    screen = ____bindingPattern0.screen
+    local buttons = gears.table.join(
+        awful.button(
+            {},
+            1,
+            function()
+                awful.layout.inc(1)
+            end
+        ),
+        awful.button(
+            {},
+            3,
+            function()
+                awful.layout.inc(-1)
+            end
+        ),
+        awful.button(
+            {},
+            4,
+            function()
+                awful.layout.inc(1)
+            end
+        ),
+        awful.button(
+            {},
+            5,
+            function()
+                awful.layout.inc(-1)
+            end
+        )
+    )
+    return jsxFactory.createElement(
+        PanelOutline,
+        {},
+        jsxFactory.createElement(
+            Clickable,
+            {buttons = buttons},
+            jsxFactory.createElement(
+                Margin,
+                {
+                    margins = dpi(7)
+                },
+                awful.widget.layoutbox(screen)
+            )
+        )
+    )
+end
+return ____exports
+end,
+["layout.components.bluetooth"] = function() require("lualib_bundle");
+local ____exports = {}
+local jsxFactory = require("helper.jsx-factory")
+local awful = require("awful")
+local wibox = require("wibox")
+local gears = require("gears")
+local filesystem = require("gears.filesystem")
+local beautiful = require("beautiful")
+local ____base = require("helper.components.base")
+local Image = ____base.Image
+local Layout = ____base.Layout
+local Margin = ____base.Margin
+local Tooltip = ____base.Tooltip
+local ____clickable_2Dcontainer = require("widgets.clickable-container")
+local Clickable = ____clickable_2Dcontainer.Clickable
+local ____panel_2Doutline = require("layout.panel-outline")
+local PanelOutline = ____panel_2Doutline.PanelOutline
+local ____config = require("configuration.config")
+local config = ____config.default
+local dpi = beautiful.xresources.apply_dpi
+local ____ = config.apps.default
+local bluetoothManager = ____.bluetoothManager
+local widgetIconDir = tostring(
+    filesystem.get_configuration_dir()
+) .. "images/widgets/bluetooth/"
+____exports.Bluetooth = function()
+    local icon = wibox.widget(
+        jsxFactory.createElement(
+            Image,
+            {
+                id = "icon",
+                image = tostring(widgetIconDir) .. "bluetooth-off.svg",
+                resize = true
+            }
+        )
+    )
+    local image = jsxFactory.createElement(Layout, {align = true, horizontal = true}, icon)
+    local buttons = gears.table.join(
+        awful.button(
+            {},
+            1,
+            function()
+            end,
+            function()
+                awful.spawn(bluetoothManager, false)
+            end
+        )
+    )
+    local button = jsxFactory.createElement(
+        PanelOutline,
+        {},
+        jsxFactory.createElement(
+            Clickable,
+            {buttons = buttons},
+            jsxFactory.createElement(
+                Margin,
+                {
+                    margins = dpi(7)
+                },
+                image
+            )
+        )
+    )
+    local tooltip = jsxFactory.createElement(
+        Tooltip,
+        {
+            objects = {button},
+            mode = "outside",
+            align = "right",
+            margin_leftright = dpi(8),
+            margin_topbottom = dpi(8),
+            preferred_positions = {"right", "left", "top", "bottom"}
+        }
+    )
+    awful.widget.watch(
+        "rfkill list bluetooth",
+        5,
+        function(_, stdout)
+            local widgetIconName = ""
+            if ((string.find(stdout, "Soft blocked: yes", nil, true) or 0) - 1) > 0 then
+                widgetIconName = "bluetooth-off"
+                tooltip.markup = "Bluetooth is off"
+            else
+                widgetIconName = "bluetooth"
+                tooltip.markup = "Bluetooth is on"
+            end
+            icon:set_image(
+                (tostring(widgetIconDir) .. tostring(widgetIconName)) .. ".svg"
+            )
+            collectgarbage("collect")
+        end,
+        image
+    )
+    return button
+end
+return ____exports
+end,
+["layout.components.systray-toggle"] = function() require("lualib_bundle");
+local ____exports = {}
+local jsxFactory = require("helper.jsx-factory")
+local wibox = require("wibox")
+local gears = require("gears")
+local filesystem = require("gears.filesystem")
+local beautiful = require("beautiful")
+local ____base = require("helper.components.base")
+local Image = ____base.Image
+local Layout = ____base.Layout
+local Margin = ____base.Margin
+local ____panel_2Dcomponents = require("layout.panel-components")
+local SystemTray = ____panel_2Dcomponents.SystemTray
+local ____panel_2Doutline = require("layout.panel-outline")
+local PanelOutline = ____panel_2Doutline.PanelOutline
+local ____clickable_2Dcontainer = require("widgets.clickable-container")
+local Clickable = ____clickable_2Dcontainer.Clickable
+local dpi = beautiful.xresources.apply_dpi
+local configDir = filesystem.get_configuration_dir()
+local widgetIconDir = tostring(configDir) .. "images/widgets/systray/"
+____exports.SystemTrayToggle = function()
+    local tray = wibox.widget(
+        jsxFactory.createElement(
+            SystemTray,
+            {
+                screen = "primary",
+                base_size = dpi(20),
+                horizontal = true
+            }
+        )
+    )
+    tray.visible = false
+    local icon = wibox.widget(
+        jsxFactory.createElement(
+            Image,
+            {
+                id = "icon",
+                image = tostring(widgetIconDir) .. "right-arrow.svg",
+                resize = true
+            }
+        )
+    )
+    return jsxFactory.createElement(
+        "fragment",
+        {},
+        jsxFactory.createElement(
+            Margin,
+            {
+                top = dpi(10)
+            },
+            tray
+        ),
+        jsxFactory.createElement(
+            PanelOutline,
+            {},
+            jsxFactory.createElement(
+                Clickable,
+                {
+                    onButtonPress = function(button)
+                        if button == 1 then
+                            if tray.visible then
+                                icon:set_image(
+                                    gears.surface.load_uncached(
+                                        tostring(widgetIconDir) .. "right-arrow.svg"
+                                    )
+                                )
+                            else
+                                icon:set_image(
+                                    gears.surface.load_uncached(
+                                        tostring(widgetIconDir) .. "left-arrow.svg"
+                                    )
+                                )
+                            end
+                            tray.visible = not tray.visible
+                        end
+                    end
+                },
+                jsxFactory.createElement(
+                    Margin,
+                    {
+                        margins = dpi(7)
+                    },
+                    jsxFactory.createElement(Layout, {align = true, horizontal = true}, icon)
+                )
+            )
+        )
+    )
+end
+return ____exports
+end,
+["layout.my-panel"] = function() require("lualib_bundle");
+local ____exports = {}
+local jsxFactory = require("helper.jsx-factory")
+local awful = require("awful")
+local beautiful = require("beautiful")
+local ____base = require("helper.components.base")
+local Image = ____base.Image
+local Layout = ____base.Layout
+local Margin = ____base.Margin
+local ____config = require("configuration.config")
+local config = ____config.default
+local ____panel_2Dcomponents = require("layout.panel-components")
+local TagList = ____panel_2Dcomponents.TagList
+local TaskList = ____panel_2Dcomponents.TaskList
+local ____clock = require("layout.components.clock")
+local Clock = ____clock.Clock
+local ____layout_2Dstatus = require("layout.components.layout-status")
+local LayoutStatus = ____layout_2Dstatus.LayoutStatus
+local ____bluetooth = require("layout.components.bluetooth")
+local Bluetooth = ____bluetooth.Bluetooth
+local ____panel_2Doutline = require("layout.panel-outline")
+local PanelOutline = ____panel_2Doutline.PanelOutline
+local ____systray_2Dtoggle = require("layout.components.systray-toggle")
+local SystemTrayToggle = ____systray_2Dtoggle.SystemTrayToggle
+local ____clickable_2Dcontainer = require("widgets.clickable-container")
+local Clickable = ____clickable_2Dcontainer.Clickable
+local dpi = beautiful.xresources.apply_dpi
+local militaryTime = config.militaryTime
+local function ____debug(...)
+    local values = {...}
+    awful.spawn.easy_async_with_shell(
+        ("echo \"\\\"" .. tostring(
+            table.concat(values, "," or ",")
+        )) .. "\\\"\" > /tmp/awesome-log.txt",
+        function()
+        end
+    )
+end
+screen.connect_signal(
+    "request::desktop_decoration",
+    function(screen)
+        local panel = awful.wibar(
+            {
+                position = "top",
+                screen = screen,
+                ontop = true,
+                type = "dock",
+                height = dpi(48),
+                bg = "#00000066",
+                fg = beautiful.fg_normal
+            }
+        )
+        local font = "Inter Bold 11"
+        panel:setup(
+            jsxFactory.createElement(
+                Margin,
+                {
+                    left = dpi(5),
+                    right = dpi(5)
+                },
+                jsxFactory.createElement(
+                    Layout,
+                    {align = true, horizontal = true, expand = "none"},
+                    jsxFactory.createElement(
+                        Layout,
+                        {fixed = true, horizontal = true},
+                        jsxFactory.createElement(
+                            PanelOutline,
+                            {},
+                            jsxFactory.createElement(
+                                TagList,
+                                {
+                                    all = true,
+                                    screen = screen,
+                                    buttons = {
+                                        awful.button(
+                                            {},
+                                            1,
+                                            function(tag) return tag:view_only() end
+                                        ),
+                                        awful.button(
+                                            {},
+                                            4,
+                                            function(tag) return awful.tag.viewprev(tag.screen) end
+                                        ),
+                                        awful.button(
+                                            {},
+                                            5,
+                                            function(tag) return awful.tag.viewnext(tag.screen) end
+                                        )
+                                    },
+                                    tag = jsxFactory.createElement(
+                                        Clickable,
+                                        {},
+                                        jsxFactory.createElement(
+                                            Margin,
+                                            {
+                                                margins = dpi(6)
+                                            },
+                                            jsxFactory.createElement(Image, {id = "icon_role"})
+                                        )
+                                    )
+                                }
+                            )
+                        )
+                    ),
+                    jsxFactory.createElement(TaskList, {currenttags = true, screen = screen, buttons = {}}),
+                    jsxFactory.createElement(
+                        Layout,
+                        {
+                            fixed = true,
+                            horizontal = true,
+                            spacing = dpi(5)
+                        },
+                        jsxFactory.createElement(SystemTrayToggle, {}),
+                        jsxFactory.createElement(Bluetooth, {}),
+                        jsxFactory.createElement(Clock, {font = font, militaryTime = militaryTime, screen = screen}),
+                        jsxFactory.createElement(LayoutStatus, {screen = screen})
+                    )
+                )
+            )
+        )
+        screen.myPanel = panel
+    end
+)
 return ____exports
 end,
 ["configuration.client.buttons"] = function() require("lualib_bundle");
@@ -2312,8 +3523,10 @@ ____exports.default = gears.table.join(
     awful.key(
         {modkey, "Control"},
         "space",
-        function()
-            awful.client.floating = not awful.client.floating
+        function(client)
+            client.floating = not client.floating
+            client.ontop = false
+            client:raise()
         end,
         function()
         end,
@@ -2621,6 +3834,7 @@ end,
 local ____exports = {}
 local gears = require("gears")
 local awful = require("awful")
+local hotkeysPopup = require("awful.hotkeys_popup")
 local ____config = require("configuration.config")
 local config = ____config.default
 local modkey = config.modkey
@@ -2645,6 +3859,14 @@ local function move_focus_or_view_tag(original_focus, direction)
     end
 end
 local globalkeys = gears.table.join(
+    awful.key(
+        {modkey},
+        "s",
+        hotkeysPopup.widget.show_help,
+        function()
+        end,
+        {description = "show help", group = "awesome"}
+    ),
     awful.key(
         {modkey},
         "Up",
@@ -3040,446 +4262,6 @@ for ____, app in ipairs(config.apps.startUp) do
 end
 return ____exports
 end,
-["helper.jsx-factory"] = function() require("lualib_bundle");
-local ____exports = {}
-local function createMap(attributes, children)
-    if children == nil then
-        children = {}
-    end
-    local map = {}
-    for ____, ____value in ipairs(
-        __TS__ObjectEntries(attributes)
-    ) do
-        local key
-        key = ____value[1]
-        local value
-        value = ____value[2]
-        map[key] = value
-    end
-    for i = 0, #children do
-        map[i + 1] = children[i + 1]
-    end
-    return map
-end
-function ____exports.isArray(value)
-    if type(value) ~= "table" then
-        return false
-    end
-    local i = 0
-    local ____table = value
-    for ____, key in ipairs(
-        __TS__ObjectKeys(____table)
-    ) do
-        if ____table[i + 1] == nil then
-            return false
-        end
-        i = i + 1
-    end
-    return true
-end
-local function mapIntoArray(children, array, func)
-    local invokeCallback = false
-    if children == nil then
-        invokeCallback = true
-    else
-        local ____switch12 = type(children)
-        if ____switch12 == "string" then
-            goto ____switch12_case_0
-        elseif ____switch12 == "number" then
-            goto ____switch12_case_1
-        end
-        goto ____switch12_end
-        ::____switch12_case_0::
-        do
-        end
-        ::____switch12_case_1::
-        do
-            invokeCallback = true
-            goto ____switch12_end
-        end
-        ::____switch12_end::
-    end
-    if invokeCallback then
-        local child = children
-        local mappedChild = func(child)
-        if ____exports.isArray(mappedChild) then
-            mapIntoArray(mappedChild, array, func)
-        else
-            __TS__ArrayPush(array, mappedChild)
-        end
-        return 1
-    end
-    local subTreeCount = 0
-    if ____exports.isArray(children) then
-        for i = 0, #children do
-            subTreeCount = subTreeCount + mapIntoArray(children[i + 1], array, func)
-        end
-    else
-    end
-    return subTreeCount
-end
-local function mapChildren(children, func)
-    if children == nil then
-        return children
-    end
-    local result = {}
-    local count = 0
-    mapIntoArray(
-        children,
-        result,
-        function(child) return func(
-            child,
-            (function()
-                local ____tmp = count
-                count = ____tmp + 1
-                return ____tmp
-            end)()
-        ) end
-    )
-    return result
-end
-local function toArray(children)
-    return mapChildren(
-        children,
-        function(child) return child end
-    ) or ({})
-end
-function ____exports.nodeToString(node, level)
-    if level == nil then
-        level = 0
-    end
-    if node == nil then
-        return "undefined"
-    end
-    local tabs = ""
-    for i = 0, level do
-        tabs = tostring(tabs) .. "  "
-    end
-    local ____switch28 = type(node)
-    if ____switch28 == "string" then
-        goto ____switch28_case_0
-    elseif ____switch28 == "number" then
-        goto ____switch28_case_1
-    elseif ____switch28 == "boolean" then
-        goto ____switch28_case_2
-    elseif ____switch28 == "table" then
-        goto ____switch28_case_3
-    end
-    goto ____switch28_case_default
-    ::____switch28_case_0::
-    do
-        return tostring(node)
-    end
-    ::____switch28_case_1::
-    do
-        return tostring(
-            tostring(node)
-        )
-    end
-    ::____switch28_case_2::
-    do
-        return tostring((node and "true") or "false")
-    end
-    ::____switch28_case_3::
-    do
-        do
-            local ____table = node
-            local body = table.concat(
-                __TS__ArrayMap(
-                    __TS__ObjectEntries(____table),
-                    function(____, ____bindingPattern0)
-                        local key
-                        key = ____bindingPattern0[1]
-                        local value
-                        value = ____bindingPattern0[2]
-                        return (((tostring(tabs) .. "  ") .. tostring(key)) .. ": ") .. tostring(
-                            ____exports.nodeToString(value, level + 2)
-                        )
-                    end
-                ),
-                ",\n" or ","
-            )
-            return ((((tostring(tabs) .. "{\n") .. tostring(body)) .. "\n") .. tostring(tabs)) .. "}"
-        end
-    end
-    ::____switch28_case_default::
-    do
-        return "undefined"
-    end
-    ::____switch28_end::
-end
-function ____exports.flattenOneLevel(children)
-    local result = {}
-    for i = 0, #children do
-        local item = children[i + 1]
-        if ____exports.isArray(item) then
-            for j = 0, #item do
-                __TS__ArrayPush(result, item[j + 1])
-            end
-        else
-            __TS__ArrayPush(result, item)
-        end
-    end
-    return result
-end
-function ____exports.createElement(tagName, attributes, ...)
-    local children = {...}
-    if tagName == "base" then
-        return createMap(
-            attributes,
-            ____exports.flattenOneLevel(children)
-        )
-    elseif tagName == "fragment" then
-        return createMap(attributes, children)
-    elseif tagName ~= nil then
-        return tagName(
-            __TS__ObjectAssign(
-                {},
-                attributes,
-                {
-                    children = ____exports.flattenOneLevel(children)
-                }
-            )
-        )
-    end
-    return nil
-end
-return ____exports
-end,
-["helper.components.naughty"] = function() require("lualib_bundle");
-local ____exports = {}
-local jsxFactory = require("helper.jsx-factory")
-local naughty = require("naughty")
-____exports.NaughtyIcon = function(____bindingPattern0)
-    local children = ____bindingPattern0.children
-    local rest
-    rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
-    return jsxFactory.createElement(
-        "base",
-        __TS__ObjectAssign({}, rest, {widget = naughty.widget.icon})
-    )
-end
-____exports.NaughtyTitle = function(____bindingPattern0)
-    local children = ____bindingPattern0.children
-    local rest
-    rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
-    return jsxFactory.createElement(
-        "base",
-        __TS__ObjectAssign({}, rest, {widget = naughty.widget.title})
-    )
-end
-____exports.NaughtyMessage = function(____bindingPattern0)
-    local children = ____bindingPattern0.children
-    local rest
-    rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
-    return jsxFactory.createElement(
-        "base",
-        __TS__ObjectAssign({}, rest, {widget = naughty.widget.message})
-    )
-end
-return ____exports
-end,
-["helper.components.titlebar"] = function() require("lualib_bundle");
-local ____exports = {}
-local awful = require("awful")
-____exports.ClientIcon = function(____bindingPattern0)
-    local client
-    client = ____bindingPattern0.client
-    return awful.titlebar.widget.iconwidget(client)
-end
-____exports.OnTopButton = function(____bindingPattern0)
-    local client
-    client = ____bindingPattern0.client
-    return awful.titlebar.widget.ontopbutton(client)
-end
-____exports.FloatingButton = function(____bindingPattern0)
-    local client
-    client = ____bindingPattern0.client
-    return awful.titlebar.widget.floatingbutton(client)
-end
-____exports.MinimizeButton = function(____bindingPattern0)
-    local client
-    client = ____bindingPattern0.client
-    return awful.titlebar.widget.minimizebutton(client)
-end
-____exports.MaximizedButton = function(____bindingPattern0)
-    local client
-    client = ____bindingPattern0.client
-    return awful.titlebar.widget.maximizedbutton(client)
-end
-____exports.CloseButton = function(____bindingPattern0)
-    local client
-    client = ____bindingPattern0.client
-    return awful.titlebar.widget.closebutton(client)
-end
-return ____exports
-end,
-["helper.components.wibox"] = function() require("lualib_bundle");
-local ____exports = {}
-local jsxFactory = require("helper.jsx-factory")
-local wibox = require("wibox")
-____exports.Background = function(____bindingPattern0)
-    local bg
-    bg = ____bindingPattern0.bg
-    local children
-    children = ____bindingPattern0.children
-    local rest
-    rest = __TS__ObjectRest(____bindingPattern0, {bg = true, children = true, rest = true})
-    return jsxFactory.createElement(
-        "base",
-        __TS__ObjectAssign({}, rest, {widget = wibox.container.background, bg = bg}),
-        children
-    )
-end
-____exports.Constraint = function(____bindingPattern0)
-    local children
-    children = ____bindingPattern0.children
-    local rest
-    rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
-    return jsxFactory.createElement(
-        "base",
-        __TS__ObjectAssign({}, rest, {widget = wibox.container.constraint}),
-        children
-    )
-end
-return ____exports
-end,
-["helper.components.base"] = function() require("lualib_bundle");
-local ____exports = {}
-local jsxFactory = require("helper.jsx-factory")
-local wibox = require("wibox")
-____exports.Text = function(____bindingPattern0)
-    local markup
-    markup = ____bindingPattern0.markup
-    if markup == nil then
-        markup = false
-    end
-    local children
-    children = ____bindingPattern0.children
-    if children == nil then
-        children = ""
-    end
-    local rest
-    rest = __TS__ObjectRest(____bindingPattern0, {markup = true, children = true, rest = true})
-    if markup then
-        return jsxFactory.createElement(
-            "base",
-            __TS__ObjectAssign(
-                {},
-                rest,
-                {
-                    widget = wibox.widget.textbox,
-                    markup = table.concat(children, "" or ",")
-                }
-            )
-        )
-    end
-    return jsxFactory.createElement(
-        "base",
-        __TS__ObjectAssign(
-            {},
-            rest,
-            {
-                widget = wibox.widget.textbox,
-                text = table.concat(children, "" or ",")
-            }
-        )
-    )
-end
-____exports.Margin = function(____bindingPattern0)
-    local children
-    children = ____bindingPattern0.children
-    local rest
-    rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
-    return jsxFactory.createElement(
-        "base",
-        __TS__ObjectAssign({}, rest, {widget = wibox.container.margin}),
-        children
-    )
-end
-____exports.Layout = function(____bindingPattern0)
-    local fixed
-    fixed = ____bindingPattern0.fixed
-    if fixed == nil then
-        fixed = false
-    end
-    local flex
-    flex = ____bindingPattern0.flex
-    if flex == nil then
-        flex = false
-    end
-    local align
-    align = ____bindingPattern0.align
-    if align == nil then
-        align = false
-    end
-    local vertical
-    vertical = ____bindingPattern0.vertical
-    if vertical == nil then
-        vertical = false
-    end
-    local horizontal
-    horizontal = ____bindingPattern0.horizontal
-    if horizontal == nil then
-        horizontal = false
-    end
-    local children
-    children = ____bindingPattern0.children
-    local rest
-    rest = __TS__ObjectRest(____bindingPattern0, {fixed = true, flex = true, align = true, vertical = true, horizontal = true, children = true, rest = true})
-    local layout
-    if fixed then
-        if horizontal then
-            layout = wibox.layout.fixed.horizontal
-        elseif vertical then
-            layout = wibox.layout.fixed.vertical
-        end
-    elseif flex then
-        if horizontal then
-            layout = wibox.layout.flex.horizontal
-        elseif vertical then
-            layout = wibox.layout.flex.vertical
-        end
-    elseif align then
-        if horizontal then
-            layout = wibox.layout.align.horizontal
-        elseif vertical then
-            layout = wibox.layout.align.vertical
-        end
-    end
-    if layout == nil then
-        return jsxFactory.createElement(
-            "base",
-            __TS__ObjectAssign({}, rest),
-            children
-        )
-    end
-    return jsxFactory.createElement(
-        "base",
-        __TS__ObjectAssign({}, rest, {layout = layout}),
-        children
-    )
-end
-do
-    local ____export = require("helper.components.naughty")
-    for ____exportKey, ____exportValue in pairs(____export) do
-        ____exports[____exportKey] = ____exportValue
-    end
-end
-do
-    local ____export = require("helper.components.titlebar")
-    for ____exportKey, ____exportValue in pairs(____export) do
-        ____exports[____exportKey] = ____exportValue
-    end
-end
-do
-    local ____export = require("helper.components.wibox")
-    for ____exportKey, ____exportValue in pairs(____export) do
-        ____exports[____exportKey] = ____exportValue
-    end
-end
-return ____exports
-end,
 ["module.titlebar"] = function() require("lualib_bundle");
 local ____exports = {}
 local jsxFactory = require("helper.jsx-factory")
@@ -3606,62 +4388,6 @@ client.connect_signal(
         end
     end
 )
-return ____exports
-end,
-["widgets.clickable-container"] = function() require("lualib_bundle");
-local ____exports = {}
-local jsxFactory = require("helper.jsx-factory")
-local wibox = require("wibox")
-local beautiful = require("beautiful")
-local ____base = require("helper.components.base")
-local Background = ____base.Background
-local function createClickable(children)
-    local container = wibox.widget(
-        jsxFactory.createElement(Background, {})
-    )
-    local oldCursor = nil
-    local oldWibox = nil
-    container:connect_signal(
-        "mouse::enter",
-        function()
-            container.bg = beautiful.groups_bg
-            local currentWibox = mouse.current_wibox
-            if currentWibox then
-                oldCursor = currentWibox.cursor
-                oldWibox = currentWibox
-                currentWibox.cursor = "hand1"
-            end
-        end
-    )
-    container:connect_signal(
-        "mouse::leave",
-        function()
-            container.bg = beautiful.leave_event
-            if oldWibox then
-                oldWibox.cursor = oldCursor
-                oldWibox = nil
-            end
-        end
-    )
-    container:connect_signal(
-        "button::press",
-        function()
-            container.bg = beautiful.press_event
-        end
-    )
-    container:connect_signal(
-        "button::release",
-        function()
-            container.bg = beautiful.release_event
-        end
-    )
-    return container
-end
-____exports.Clickable = function(____bindingPattern0)
-    local children
-    children = ____bindingPattern0.children
-    return jsxFactory.createElement("base", {widget = createClickable}, children)
-end
 return ____exports
 end,
 ["module.notifications"] = function() require("lualib_bundle");
@@ -3920,6 +4646,7 @@ local awful = require("awful")
 local beautiful = require("beautiful")
 local ____index = require("theme.index")
 local theme = ____index.default
+require("layout.my-panel")
 require("configuration.client.index")
 require("configuration.tags.index")
 local ____global = require("configuration.keys.global")

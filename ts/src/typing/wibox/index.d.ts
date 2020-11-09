@@ -103,7 +103,7 @@ declare module 'wibox' {
 
   interface Widget {
     // TODO: ARGS
-    (this: void, args: any): WiboxWidget;
+    <R = WiboxWidget>(this: void, args: any): R;
     /**
      * @noSelf
      */

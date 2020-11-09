@@ -18,7 +18,7 @@ const widgetIconDir = `${filesystem.get_configuration_dir()}images/widgets/bluet
  * Shows bluetooth status.
  */
 export const Bluetooth: JSX.FunctionComponent = () => {
-  const icon = (
+  const icon = wibox.widget<wibox.ImageWidget>(
     <Image id="icon" image={`${widgetIconDir}bluetooth-off.svg`} resize />
   );
 

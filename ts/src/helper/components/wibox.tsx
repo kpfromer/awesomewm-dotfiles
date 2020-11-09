@@ -16,9 +16,9 @@ export const Background: JSX.FunctionComponent<
     border_width?: number;
     border_color?: string;
   }
-> = ({bg, children, ...rest}) => {
+> = ({children, ...rest}) => {
   return (
-    <base {...rest} bg={bg} widget={wibox.container.background}>
+    <base {...rest} widget={wibox.container.background}>
       {children}
     </base>
   );
