@@ -45,3 +45,15 @@ Whenever you are working on the config make sure you are running `tstl --watch` 
 The output of the transpiled lua code is found in `main.lua`.
 
 **Note:** everything is bundled to one file based on the tsconfig for TypeScriptToLua.
+
+### Issues
+
+- Be careful of the following code. The way TypeScriptToLua compiles it does not allow to access `Component` (take a look at `__exports` in the generated lua code). To fix this issue remove `export` for `Component`.
+
+```typescript
+export Component: JSX.FunctionComponent = () => <base />;
+
+export function doStuff() {
+  const a = <Component />;
+}
+```
