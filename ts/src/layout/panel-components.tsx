@@ -1,23 +1,23 @@
 import * as jsxFactory from '../helper/jsx-factory';
 import * as awful from 'awful';
-import * as beautiful from 'beautiful';
 import * as wibox from 'wibox';
-import {
-  Background,
-  Margin,
-  Image,
-  Layout,
-  Text,
-} from '../helper/components/base';
-const dpi = beautiful.xresources.apply_dpi;
 
 export const TagList: JSX.FunctionComponent<
   Omit<awful.TagListWidgetProps, 'filter'> & {
     all?: boolean;
     selected?: boolean;
     noempty?: boolean;
+    // Template for the tag
+    tag?: any;
   }
-> = ({screen, buttons, all = false, selected = false, noempty = false}) => {
+> = ({
+  screen,
+  buttons,
+  all = false,
+  selected = false,
+  noempty = false,
+  tag,
+}) => {
   let filter: (this: void, tag: awful.Tag) => void =
     awful.widget.taglist.filter.all;
 
@@ -29,35 +29,13 @@ export const TagList: JSX.FunctionComponent<
     filter = awful.widget.taglist.filter.noempty;
   }
 
-  return awful.widget.taglist({
-    screen,
-    filter,
-    buttons,
+  const options: awful.TagListWidgetProps = {screen, filter, buttons};
 
-    // update_function: (widget: any, buttons, label, data, objects) => {
-    //   for (const [index, object] of Object.entries(objects)) {
-    //     const {text, icon} = label(object);
+  if (tag) {
+    options.widget_template = tag;
+  }
 
-    //     widget.add(<Image image={icon} />);
-    //   }
-    // },
-
-    // widget_template: <Image id="icon_role" />,
-    // widget_template: (
-    //   <Background id="background_role">
-    //     <Margin left={5} right={5}>
-    //       <Layout fixed horizontal>
-    //         {{
-    //           id: 'index_role',
-    //           widget: wibox.widget.textbox,
-    //         }}
-    //       </Layout>
-    //     </Margin>
-    //   </Background>
-    // ),
-    // widget_template: children as any,
-    // ...(children === undefined ? {} : {widget_template: children as any}),
-  }) as any;
+  return awful.widget.taglist(options) as any;
 };
 
 export const TaskList: JSX.FunctionComponent<
@@ -67,6 +45,7 @@ export const TaskList: JSX.FunctionComponent<
     currenttags?: boolean;
     minimizedcurrenttags?: boolean;
     focused?: boolean;
+    task?: any;
   }
 > = ({
   screen,
@@ -76,6 +55,7 @@ export const TaskList: JSX.FunctionComponent<
   currenttags = false,
   minimizedcurrenttags = false,
   focused = false,
+  task,
 }) => {
   let filter: (this: void, client: awful.Client, screen: awful.Screen) => void =
     awful.widget.tasklist.filter.currenttags;
@@ -92,11 +72,17 @@ export const TaskList: JSX.FunctionComponent<
     filter = awful.widget.tasklist.filter.focused;
   }
 
-  return awful.widget.tasklist({
+  const options: awful.TaskListWidgetProps = {
     screen,
     filter,
     buttons,
-  }) as any;
+  };
+
+  if (task) {
+    options.widget_template = task;
+  }
+
+  return awful.widget.tasklist(options) as any;
 };
 
 export const SystemTray: JSX.FunctionComponent<wibox.SystrayWidgetProps> = props => {
