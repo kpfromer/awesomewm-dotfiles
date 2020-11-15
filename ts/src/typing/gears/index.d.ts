@@ -3,6 +3,8 @@
  * @noResolution
  */
 declare module 'gears' {
+  import {Screen} from 'awful';
+
   export type GearsShapeFunction = (
     this: void,
     cairoContent: any,
@@ -115,6 +117,21 @@ declare module 'gears' {
   }
 
   export const timer: {
+    /**
+     * @param timeout Timeout in seconds (e.g. 1.5).
+     * @param autostart Automatically start the timer. (default false)
+     * @param call_now Call the callback at timer creation. (default false)
+     * @param callback Callback function to connect to the "timeout" signal. (default nil)
+     * @param single_shot Run only once then stop. (default false)
+     */
+    (args: {
+      timeout: number;
+      autostart?: boolean;
+      call_now?: boolean;
+      callback?: () => void;
+      single_shot?: boolean;
+    }): Timer;
+
     start_new: (this: void, timeout: number, callback: () => void) => Timer;
 
     weak_start_new: (
@@ -131,6 +148,20 @@ declare module 'gears' {
   }
 
   export const surface: Surface;
+
+  interface Wallpaper {
+    /**
+     * https://awesomewm.org/apidoc/utility_libraries/gears.wallpaper.html#maximized
+     */
+    maximized: (
+      surf: string,
+      s?: Screen,
+      ignore_aspect?: boolean,
+      offset?: {x: number; y: number}
+    ) => void;
+  }
+
+  export const wallpaper: Wallpaper;
 }
 
 /**

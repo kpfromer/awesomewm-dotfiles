@@ -287,6 +287,11 @@ declare module 'awful' {
 
   export const client: Client;
 
+  // TODO:
+  export type ClientInstance = Omit<Client, 'connect_signal'> & {
+    connect_signal: (this: any, name: string, callback: Function) => void;
+  };
+
   interface MouseClientFunctions {
     resize: (this: void, client: Client, corner?: string, args?: Table) => void;
     move: (this: void, client: Client, snap?: any) => void;
@@ -454,6 +459,9 @@ declare module 'awful' {
      * https://awesomewm.org/apidoc/core_components/tag.html#view_only
      */
     view_only: (this: any) => void;
+
+    // there are two, one static one per instance TODO:
+    connect_signal: (this: any, name: string, func: Function) => void;
   }
 
   type Tag = TagProps & TagFunctions;

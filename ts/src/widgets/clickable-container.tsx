@@ -1,5 +1,6 @@
 import * as jsxFactory from '../helper/jsx-factory';
 import * as wibox from 'wibox';
+import * as awful from 'awful';
 import * as beautiful from 'beautiful';
 import {Background} from '../helper/components/base';
 import {Table} from 'gears';
@@ -54,6 +55,29 @@ function createClickable(this: void, onButtonPress?: ButtonPressHandler) {
 export const Clickable: JSX.FunctionComponent<{
   onButtonPress?: ButtonPressHandler;
   buttons?: Table;
+  // TODO: extract to instrinc props?
+  create_callback?: (
+    this: void,
+    self: {
+      connect_signal: (this: any, name: string, callback: Function) => void;
+      get_children_by_id: <T = wibox.WiboxWidget>(this: any, id: string) => T[];
+    },
+    // TODO:
+    item: any,
+    index: number,
+    objects: any
+  ) => void;
+  update_callback?: (
+    this: void,
+    self: {
+      connect_signal: (this: any, name: string, callback: Function) => void;
+      get_children_by_id: <T = wibox.WiboxWidget>(this: any, id: string) => T[];
+    },
+    // TODO:
+    item: any,
+    index: number,
+    objects: any
+  ) => void;
 }> = ({onButtonPress, children, ...rest}) => {
   return (
     <base {...rest} widget={() => createClickable(onButtonPress)}>

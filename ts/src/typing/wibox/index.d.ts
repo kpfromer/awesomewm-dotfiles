@@ -43,6 +43,14 @@ declare module 'wibox' {
 
   export type BaseWiboxWidget = WiboxWidget;
 
+  export type TextWidget = WiboxWidget & {
+    set_markup: (this: any, text: string) => void;
+  };
+
+  export type BackgroundWidget = WiboxWidget & {
+    set_bg: (this: any, background: string) => void;
+  };
+
   export interface ImageWidgetProps {
     /**
      * The image rendered by the imagebox.
