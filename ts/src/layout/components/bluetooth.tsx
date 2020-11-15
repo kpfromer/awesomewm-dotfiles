@@ -5,8 +5,7 @@ import * as gears from 'gears';
 import * as filesystem from 'gears.filesystem';
 import * as beautiful from 'beautiful';
 import {Image, Layout, Margin, Tooltip} from 'awesome/components/base';
-import {ButtonPressHandler, Clickable} from '../../widgets/clickable-container';
-import {TextClock} from '../panel-components';
+import {Clickable} from '../../widgets/clickable-container';
 import {PanelOutline} from '../panel-outline';
 import config from '../../configuration/config';
 

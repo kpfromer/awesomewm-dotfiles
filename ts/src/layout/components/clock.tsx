@@ -5,7 +5,7 @@ import * as gears from 'gears';
 import * as beautiful from 'beautiful';
 import {Margin, Tooltip} from 'awesome/components/base';
 import {ButtonPressHandler, Clickable} from '../../widgets/clickable-container';
-import {TextClock} from '../panel-components';
+import {TextClock} from 'awesome/components/panel';
 import {PanelOutline} from '../panel-outline';
 const dpi = beautiful.xresources.apply_dpi;
 

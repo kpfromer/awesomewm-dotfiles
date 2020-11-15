@@ -1,6 +1,6 @@
 import Awesome from 'awesome/jsx';
 import * as awful from 'awful';
-import {TagList as TagListPlain} from '../panel-components';
+import {TagList as TagListPlain} from 'awesome/components/panel';
 import {Background, Margin, Image} from 'awesome/components/base';
 import {Clickable} from '../../widgets/clickable-container';
 import * as wibox from 'wibox';

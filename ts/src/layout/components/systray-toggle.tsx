@@ -4,7 +4,7 @@ import * as gears from 'gears';
 import * as filesystem from 'gears.filesystem';
 import * as beautiful from 'beautiful';
 import {Image, Layout, Margin} from 'awesome/components/base';
-import {SystemTray} from '../panel-components';
+import {SystemTray} from 'awesome/components/panel';
 import {PanelOutline} from '../panel-outline';
 import {Clickable} from '../../widgets/clickable-container';
 
