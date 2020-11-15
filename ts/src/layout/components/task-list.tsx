@@ -25,7 +25,7 @@ export const TaskList: JSX.FunctionComponent<Props> = ({
     <TaskListPlain
       currenttags
       screen={screen}
-      buttons={{}}
+      onLeftClick={client => (client.minimized = !client.minimized)}
       task={
         <Clickable
           create_callback={(

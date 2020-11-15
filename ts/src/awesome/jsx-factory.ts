@@ -185,19 +185,12 @@ export function createElement(
   if (tagName === 'base') {
     // Code based from React.createElement
     // https://github.com/facebook/react/blob/master/packages/react/src/ReactElement.js#L526
-    // if (children.length === 1) {
-    //   return createMap(attributes, children[0] as any);
-    // }
-    // return createMap(attributes, children);
     return createMap(attributes, flattenOneLevel(children));
   } else if (tagName === 'fragment') {
     return createMap({}, children);
   } else if (tagName !== null) {
     // Code based from React.createElement
     // https://github.com/facebook/react/blob/master/packages/react/src/ReactElement.js#L526
-    // if (children.length === 1) {
-    //   return tagName({...attributes, children: children[0]});
-    // }
     return tagName({...attributes, children: flattenOneLevel(children)});
   }
 

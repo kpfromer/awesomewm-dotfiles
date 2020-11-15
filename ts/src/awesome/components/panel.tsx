@@ -1,22 +1,30 @@
 import Awesome from 'awesome/jsx';
 import * as awful from 'awful';
 import * as wibox from 'wibox';
+import {ButtonEvents, convertButtonEventsToAwesomeButtons} from './types';
 
 export const TagList: JSX.FunctionComponent<
-  Omit<awful.TagListWidgetProps, 'filter'> & {
-    all?: boolean;
-    selected?: boolean;
-    noempty?: boolean;
-    // Template for the tag
-    tag?: any;
-  }
+  Omit<awful.TagListWidgetProps, 'filter' | 'buttons'> &
+    ButtonEvents<awful.Tag> & {
+      all?: boolean;
+      selected?: boolean;
+      noempty?: boolean;
+      // Template for the tag
+      tag?: any;
+    }
 > = ({
   screen,
-  buttons,
   all = false,
   selected = false,
   noempty = false,
   tag,
+
+  // Events
+  onLeftClick,
+  onMiddleClick,
+  onRightClick,
+  onScrollDown,
+  onScrollUp,
 }) => {
   let filter: (this: void, tag: awful.Tag) => void =
     awful.widget.taglist.filter.all;
@@ -29,7 +37,17 @@ export const TagList: JSX.FunctionComponent<
     filter = awful.widget.taglist.filter.noempty;
   }
 
-  const options: awful.TagListWidgetProps = {screen, filter, buttons};
+  const options: awful.TagListWidgetProps = {
+    screen,
+    filter,
+    buttons: convertButtonEventsToAwesomeButtons({
+      onLeftClick,
+      onMiddleClick,
+      onRightClick,
+      onScrollDown,
+      onScrollUp,
+    }),
+  };
 
   if (tag) {
     options.widget_template = tag;
@@ -39,23 +57,30 @@ export const TagList: JSX.FunctionComponent<
 };
 
 export const TaskList: JSX.FunctionComponent<
-  Omit<awful.TaskListWidgetProps, 'filter'> & {
-    allscreen?: boolean;
-    alltags?: boolean;
-    currenttags?: boolean;
-    minimizedcurrenttags?: boolean;
-    focused?: boolean;
-    task?: any;
-  }
+  Omit<awful.TaskListWidgetProps, 'filter' | 'buttons'> &
+    ButtonEvents<awful.Client> & {
+      allscreen?: boolean;
+      alltags?: boolean;
+      currenttags?: boolean;
+      minimizedcurrenttags?: boolean;
+      focused?: boolean;
+      task?: any;
+    }
 > = ({
   screen,
-  buttons,
   allscreen = false,
   alltags = false,
   currenttags = false,
   minimizedcurrenttags = false,
   focused = false,
   task,
+
+  // Events
+  onLeftClick,
+  onMiddleClick,
+  onRightClick,
+  onScrollDown,
+  onScrollUp,
 }) => {
   let filter: (this: void, client: awful.Client, screen: awful.Screen) => void =
     awful.widget.tasklist.filter.currenttags;
@@ -75,7 +100,13 @@ export const TaskList: JSX.FunctionComponent<
   const options: awful.TaskListWidgetProps = {
     screen,
     filter,
-    buttons,
+    buttons: convertButtonEventsToAwesomeButtons({
+      onLeftClick,
+      onMiddleClick,
+      onRightClick,
+      onScrollDown,
+      onScrollUp,
+    }),
   };
 
   if (task) {
