@@ -2420,7 +2420,7 @@ end,
 local ____exports = {}
 local ____jsx_2Dfactory = require("awesome.jsx-factory")
 local createElement = ____jsx_2Dfactory.createElement
-____exports.default = createElement
+____exports.default = {createElement = createElement}
 return ____exports
 end,
 ["awesome.components.naughty"] = function() require("lualib_bundle");
