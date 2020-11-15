@@ -1,7 +1,7 @@
-import * as jsxFactory from '../helper/jsx-factory';
+import Awesome from 'awesome/jsx';
 import * as awful from 'awful';
 import * as beautiful from 'beautiful';
-import {Layout, Margin} from '../helper/components/base';
+import {Layout, Margin} from 'awesome/components/base';
 import config from '../configuration/config';
 import {Clock} from './components/clock';
 import {LayoutStatus} from './components/layout-status';

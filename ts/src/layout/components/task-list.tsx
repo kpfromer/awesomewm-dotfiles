@@ -1,7 +1,7 @@
-import * as jsxFactory from '../../helper/jsx-factory';
+import Awesome from 'awesome/jsx';
 import * as awful from 'awful';
 import {TaskList as TaskListPlain} from '../panel-components';
-import {Background, Margin, Image} from '../../helper/components/base';
+import {Background, Margin, Image} from 'awesome/components/base';
 import {Clickable} from '../../widgets/clickable-container';
 import * as wibox from 'wibox';
 import * as beautiful from 'beautiful';

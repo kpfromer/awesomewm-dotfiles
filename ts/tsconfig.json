@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "rootDir": "src",
+    "baseUrl": "src",
     // "outDir": "build",
     "target": "esnext",
     "lib": ["esnext"],
@@ -8,7 +9,11 @@
     "types": ["lua-types/5.3"],
     "strict": true,
     "jsx": "react",
-    "jsxFactory": "jsxFactory.createElement",
+    "jsxFactory": "Awesome.createElement",
+    "paths": {
+      "awesome": ["awesome/index"],
+      "helper": ["helper/*"]
+    }
   },
   "tstl": {
     "luaTarget": "5.3",

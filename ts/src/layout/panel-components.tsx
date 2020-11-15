@@ -1,4 +1,4 @@
-import * as jsxFactory from '../helper/jsx-factory';
+import Awesome from 'awesome/jsx';
 import * as awful from 'awful';
 import * as wibox from 'wibox';
 

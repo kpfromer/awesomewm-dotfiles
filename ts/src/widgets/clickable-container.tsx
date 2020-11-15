@@ -1,8 +1,7 @@
-import * as jsxFactory from '../helper/jsx-factory';
+import Awesome from 'awesome/jsx';
 import * as wibox from 'wibox';
-import * as awful from 'awful';
 import * as beautiful from 'beautiful';
-import {Background} from '../helper/components/base';
+import {Background} from 'awesome/components/base';
 import {Table} from 'gears';
 
 export type ButtonPressHandler = (this: void, button: number) => void;

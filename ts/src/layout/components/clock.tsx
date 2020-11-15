@@ -1,9 +1,9 @@
-import * as jsxFactory from '../../helper/jsx-factory';
+import Awesome from 'awesome/jsx';
 import * as awful from 'awful';
 import * as wibox from 'wibox';
 import * as gears from 'gears';
 import * as beautiful from 'beautiful';
-import {Margin, Tooltip} from '../../helper/components/base';
+import {Margin, Tooltip} from 'awesome/components/base';
 import {ButtonPressHandler, Clickable} from '../../widgets/clickable-container';
 import {TextClock} from '../panel-components';
 import {PanelOutline} from '../panel-outline';

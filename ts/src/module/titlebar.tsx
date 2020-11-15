@@ -2,7 +2,7 @@
 // Handle Titlebars (min/max/close bar on every window)
 // https://awesomewm.org/doc/api/classes/client.html#request::titlebars
 
-import * as jsxFactory from '../helper/jsx-factory';
+import Awesome from 'awesome/jsx';
 import * as awful from 'awful';
 import * as gears from 'gears';
 import * as beautiful from 'beautiful';
@@ -14,7 +14,7 @@ import {
   MaximizedButton,
   MinimizeButton,
   OnTopButton,
-} from '../helper/components/base';
+} from 'awesome/components/base';
 const dpi = beautiful.xresources.apply_dpi;
 
 let timer: gears.Timer | undefined;

@@ -1,4 +1,4 @@
-import * as jsxFactory from '../helper/jsx-factory';
+import Awesome from 'awesome/jsx';
 import * as gears from 'gears';
 import * as wibox from 'wibox';
 import * as awful from 'awful';
@@ -15,7 +15,7 @@ import {
   NaughtyMessage,
   NaughtyTitle,
   Text,
-} from '../helper/components/base';
+} from 'awesome/components/base';
 import {Clickable} from '../widgets/clickable-container';
 
 const dpi = beautiful.xresources.apply_dpi;

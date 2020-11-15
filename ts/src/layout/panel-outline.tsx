@@ -1,8 +1,8 @@
-import * as jsxFactory from '../helper/jsx-factory';
+import Awesome from 'awesome/jsx';
 import * as wibox from 'wibox';
 import * as gears from 'gears';
 import * as beautiful from 'beautiful';
-import {Background, Margin} from '../helper/components/base';
+import {Background, Margin} from 'awesome/components/base';
 
 const dpi = beautiful.xresources.apply_dpi;
 

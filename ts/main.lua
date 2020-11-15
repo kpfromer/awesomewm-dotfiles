@@ -2210,7 +2210,7 @@ theme.awesome_overrides(finalTheme)
 ____exports.default = finalTheme
 return ____exports
 end,
-["helper.jsx-factory"] = function() require("lualib_bundle");
+["awesome.jsx-factory"] = function() require("lualib_bundle");
 local ____exports = {}
 local function createMap(attributes, children)
     if children == nil then
@@ -2416,15 +2416,23 @@ function ____exports.createElement(tagName, attributes, ...)
 end
 return ____exports
 end,
-["helper.components.naughty"] = function() require("lualib_bundle");
+["awesome.jsx"] = function() require("lualib_bundle");
 local ____exports = {}
-local jsxFactory = require("helper.jsx-factory")
+local ____jsx_2Dfactory = require("awesome.jsx-factory")
+local createElement = ____jsx_2Dfactory.createElement
+____exports.default = createElement
+return ____exports
+end,
+["awesome.components.naughty"] = function() require("lualib_bundle");
+local ____exports = {}
+local ____jsx = require("awesome.jsx")
+local Awesome = ____jsx.default
 local naughty = require("naughty")
 ____exports.NaughtyIcon = function(____bindingPattern0)
     local children = ____bindingPattern0.children
     local rest
     rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
-    return jsxFactory.createElement(
+    return Awesome.createElement(
         "base",
         __TS__ObjectAssign({}, rest, {widget = naughty.widget.icon})
     )
@@ -2433,7 +2441,7 @@ ____exports.NaughtyTitle = function(____bindingPattern0)
     local children = ____bindingPattern0.children
     local rest
     rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
-    return jsxFactory.createElement(
+    return Awesome.createElement(
         "base",
         __TS__ObjectAssign({}, rest, {widget = naughty.widget.title})
     )
@@ -2442,14 +2450,14 @@ ____exports.NaughtyMessage = function(____bindingPattern0)
     local children = ____bindingPattern0.children
     local rest
     rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
-    return jsxFactory.createElement(
+    return Awesome.createElement(
         "base",
         __TS__ObjectAssign({}, rest, {widget = naughty.widget.message})
     )
 end
 return ____exports
 end,
-["helper.components.titlebar"] = function() require("lualib_bundle");
+["awesome.components.titlebar"] = function() require("lualib_bundle");
 local ____exports = {}
 local awful = require("awful")
 ____exports.ClientIcon = function(____bindingPattern0)
@@ -2484,16 +2492,17 @@ ____exports.CloseButton = function(____bindingPattern0)
 end
 return ____exports
 end,
-["helper.components.wibox"] = function() require("lualib_bundle");
+["awesome.components.wibox"] = function() require("lualib_bundle");
 local ____exports = {}
-local jsxFactory = require("helper.jsx-factory")
+local ____jsx = require("awesome.jsx")
+local Awesome = ____jsx.default
 local wibox = require("wibox")
 ____exports.Background = function(____bindingPattern0)
     local children
     children = ____bindingPattern0.children
     local rest
     rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
-    return jsxFactory.createElement(
+    return Awesome.createElement(
         "base",
         __TS__ObjectAssign({}, rest, {widget = wibox.container.background}),
         children
@@ -2504,7 +2513,7 @@ ____exports.Constraint = function(____bindingPattern0)
     children = ____bindingPattern0.children
     local rest
     rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
-    return jsxFactory.createElement(
+    return Awesome.createElement(
         "base",
         __TS__ObjectAssign({}, rest, {widget = wibox.container.constraint}),
         children
@@ -2512,9 +2521,10 @@ ____exports.Constraint = function(____bindingPattern0)
 end
 return ____exports
 end,
-["helper.components.base"] = function() require("lualib_bundle");
+["awesome.components.base"] = function() require("lualib_bundle");
 local ____exports = {}
-local jsxFactory = require("helper.jsx-factory")
+local ____jsx = require("awesome.jsx")
+local Awesome = ____jsx.default
 local wibox = require("wibox")
 local awful = require("awful")
 ____exports.Text = function(____bindingPattern0)
@@ -2525,16 +2535,13 @@ ____exports.Text = function(____bindingPattern0)
     end
     local children
     children = ____bindingPattern0.children
+    if children == nil then
+        children = ""
+    end
     local rest
     rest = __TS__ObjectRest(____bindingPattern0, {markup = true, children = true, rest = true})
-    if not children then
-        return jsxFactory.createElement(
-            "base",
-            __TS__ObjectAssign({}, rest, {widget = wibox.widget.textbox})
-        )
-    end
     if markup then
-        return jsxFactory.createElement(
+        return Awesome.createElement(
             "base",
             __TS__ObjectAssign(
                 {},
@@ -2546,7 +2553,7 @@ ____exports.Text = function(____bindingPattern0)
             )
         )
     end
-    return jsxFactory.createElement(
+    return Awesome.createElement(
         "base",
         __TS__ObjectAssign(
             {},
@@ -2559,7 +2566,7 @@ ____exports.Text = function(____bindingPattern0)
     )
 end
 ____exports.Image = function(props)
-    return jsxFactory.createElement(
+    return Awesome.createElement(
         "base",
         __TS__ObjectAssign({}, props, {widget = wibox.widget.imagebox})
     )
@@ -2569,7 +2576,7 @@ ____exports.Margin = function(____bindingPattern0)
     children = ____bindingPattern0.children
     local rest
     rest = __TS__ObjectRest(____bindingPattern0, {children = true, rest = true})
-    return jsxFactory.createElement(
+    return Awesome.createElement(
         "base",
         __TS__ObjectAssign({}, rest, {widget = wibox.container.margin}),
         children
@@ -2626,13 +2633,13 @@ ____exports.Layout = function(____bindingPattern0)
         end
     end
     if layout == nil then
-        return jsxFactory.createElement(
+        return Awesome.createElement(
             "base",
             __TS__ObjectAssign({}, rest),
             children
         )
     end
-    return jsxFactory.createElement(
+    return Awesome.createElement(
         "base",
         __TS__ObjectAssign({}, rest, {layout = layout}),
         children
@@ -2642,19 +2649,19 @@ ____exports.Tooltip = function(props)
     return awful.tooltip(props)
 end
 do
-    local ____export = require("helper.components.naughty")
+    local ____export = require("awesome.components.naughty")
     for ____exportKey, ____exportValue in pairs(____export) do
         ____exports[____exportKey] = ____exportValue
     end
 end
 do
-    local ____export = require("helper.components.titlebar")
+    local ____export = require("awesome.components.titlebar")
     for ____exportKey, ____exportValue in pairs(____export) do
         ____exports[____exportKey] = ____exportValue
     end
 end
 do
-    local ____export = require("helper.components.wibox")
+    local ____export = require("awesome.components.wibox")
     for ____exportKey, ____exportValue in pairs(____export) do
         ____exports[____exportKey] = ____exportValue
     end
@@ -2697,9 +2704,89 @@ local config = {debug = false, modkey = "Mod4", laptop = false, militaryTime = f
 ____exports.default = config
 return ____exports
 end,
+["widgets.clickable-container"] = function() require("lualib_bundle");
+local ____exports = {}
+local ____jsx = require("awesome.jsx")
+local Awesome = ____jsx.default
+local wibox = require("wibox")
+local beautiful = require("beautiful")
+local ____base = require("awesome.components.base")
+local Background = ____base.Background
+local function createClickable(onButtonPress)
+    local container = wibox.widget(
+        Awesome.createElement(Background, {})
+    )
+    local oldCursor = nil
+    local oldWibox = nil
+    container:connect_signal(
+        "mouse::enter",
+        function()
+            container.bg = beautiful.groups_bg
+            local currentWibox = mouse.current_wibox
+            if currentWibox then
+                oldCursor = currentWibox.cursor
+                oldWibox = currentWibox
+                currentWibox.cursor = "hand1"
+            end
+        end
+    )
+    container:connect_signal(
+        "mouse::leave",
+        function()
+            container.bg = beautiful.leave_event
+            if oldWibox then
+                oldWibox.cursor = oldCursor
+                oldWibox = nil
+            end
+        end
+    )
+    container:connect_signal(
+        "button::press",
+        function()
+            container.bg = beautiful.press_event
+        end
+    )
+    container:connect_signal(
+        "button::release",
+        function()
+            container.bg = beautiful.release_event
+        end
+    )
+    if onButtonPress then
+        container:connect_signal(
+            "button::press",
+            function(____self, lx, ly, button)
+                onButtonPress(button)
+            end
+        )
+    end
+    return container
+end
+____exports.Clickable = function(____bindingPattern0)
+    local onButtonPress
+    onButtonPress = ____bindingPattern0.onButtonPress
+    local children
+    children = ____bindingPattern0.children
+    local rest
+    rest = __TS__ObjectRest(____bindingPattern0, {onButtonPress = true, children = true, rest = true})
+    return Awesome.createElement(
+        "base",
+        __TS__ObjectAssign(
+            {},
+            rest,
+            {
+                widget = function() return createClickable(onButtonPress) end
+            }
+        ),
+        children
+    )
+end
+return ____exports
+end,
 ["layout.panel-components"] = function() require("lualib_bundle");
 local ____exports = {}
-local jsxFactory = require("helper.jsx-factory")
+local ____jsx = require("awesome.jsx")
+local Awesome = ____jsx.default
 local awful = require("awful")
 local wibox = require("wibox")
 ____exports.TagList = function(____bindingPattern0)
@@ -2768,6 +2855,8 @@ ____exports.TaskList = function(____bindingPattern0)
     if focused == nil then
         focused = false
     end
+    local task
+    task = ____bindingPattern0.task
     local filter = awful.widget.tasklist.filter.currenttags
     if allscreen then
         filter = awful.widget.tasklist.filter.allscreen
@@ -2780,17 +2869,21 @@ ____exports.TaskList = function(____bindingPattern0)
     elseif focused then
         filter = awful.widget.tasklist.filter.focused
     end
-    return awful.widget.tasklist({screen = screen, filter = filter, buttons = buttons})
+    local options = {screen = screen, filter = filter, buttons = buttons}
+    if task then
+        options.widget_template = task
+    end
+    return awful.widget.tasklist(options)
 end
 ____exports.SystemTray = function(props)
-    return jsxFactory.createElement(
+    return Awesome.createElement(
         "base",
         __TS__ObjectAssign({}, props, {widget = wibox.widget.systray})
     )
 end
 ____exports.TextClock = function(props)
     return wibox.widget(
-        jsxFactory.createElement(
+        Awesome.createElement(
             "base",
             __TS__ObjectAssign({}, props, {widget = wibox.widget.textclock})
         )
@@ -2798,91 +2891,14 @@ ____exports.TextClock = function(props)
 end
 return ____exports
 end,
-["widgets.clickable-container"] = function() require("lualib_bundle");
-local ____exports = {}
-local jsxFactory = require("helper.jsx-factory")
-local wibox = require("wibox")
-local beautiful = require("beautiful")
-local ____base = require("helper.components.base")
-local Background = ____base.Background
-local function createClickable(onButtonPress)
-    local container = wibox.widget(
-        jsxFactory.createElement(Background, {})
-    )
-    local oldCursor = nil
-    local oldWibox = nil
-    container:connect_signal(
-        "mouse::enter",
-        function()
-            container.bg = beautiful.groups_bg
-            local currentWibox = mouse.current_wibox
-            if currentWibox then
-                oldCursor = currentWibox.cursor
-                oldWibox = currentWibox
-                currentWibox.cursor = "hand1"
-            end
-        end
-    )
-    container:connect_signal(
-        "mouse::leave",
-        function()
-            container.bg = beautiful.leave_event
-            if oldWibox then
-                oldWibox.cursor = oldCursor
-                oldWibox = nil
-            end
-        end
-    )
-    container:connect_signal(
-        "button::press",
-        function()
-            container.bg = beautiful.press_event
-        end
-    )
-    container:connect_signal(
-        "button::release",
-        function()
-            container.bg = beautiful.release_event
-        end
-    )
-    if onButtonPress then
-        container:connect_signal(
-            "button::press",
-            function(____self, lx, ly, button)
-                onButtonPress(button)
-            end
-        )
-    end
-    return container
-end
-____exports.Clickable = function(____bindingPattern0)
-    local onButtonPress
-    onButtonPress = ____bindingPattern0.onButtonPress
-    local children
-    children = ____bindingPattern0.children
-    local rest
-    rest = __TS__ObjectRest(____bindingPattern0, {onButtonPress = true, children = true, rest = true})
-    return jsxFactory.createElement(
-        "base",
-        __TS__ObjectAssign(
-            {},
-            rest,
-            {
-                widget = function() return createClickable(onButtonPress) end
-            }
-        ),
-        children
-    )
-end
-return ____exports
-end,
 ["layout.panel-outline"] = function() require("lualib_bundle");
 local ____exports = {}
-local jsxFactory = require("helper.jsx-factory")
+local ____jsx = require("awesome.jsx")
+local Awesome = ____jsx.default
 local wibox = require("wibox")
 local gears = require("gears")
 local beautiful = require("beautiful")
-local ____base = require("helper.components.base")
+local ____base = require("awesome.components.base")
 local Background = ____base.Background
 local Margin = ____base.Margin
 local dpi = beautiful.xresources.apply_dpi
@@ -2890,13 +2906,13 @@ ____exports.PanelOutline = function(____bindingPattern0)
     local children
     children = ____bindingPattern0.children
     return wibox.widget(
-        jsxFactory.createElement(
+        Awesome.createElement(
             Margin,
             {
                 top = dpi(9),
                 bottom = dpi(9)
             },
-            jsxFactory.createElement(
+            Awesome.createElement(
                 Background,
                 {
                     bg = beautiful.transparent,
@@ -2920,11 +2936,12 @@ return ____exports
 end,
 ["layout.components.clock"] = function() require("lualib_bundle");
 local ____exports = {}
-local jsxFactory = require("helper.jsx-factory")
+local ____jsx = require("awesome.jsx")
+local Awesome = ____jsx.default
 local awful = require("awful")
 local gears = require("gears")
 local beautiful = require("beautiful")
-local ____base = require("helper.components.base")
+local ____base = require("awesome.components.base")
 local Margin = ____base.Margin
 local Tooltip = ____base.Tooltip
 local ____clickable_2Dcontainer = require("widgets.clickable-container")
@@ -2944,15 +2961,15 @@ local function PlainClock(____bindingPattern0)
     font = ____bindingPattern0.font
     local onButtonPress
     onButtonPress = ____bindingPattern0.onButtonPress
-    return jsxFactory.createElement(
+    return Awesome.createElement(
         Clickable,
         {onButtonPress = onButtonPress},
-        jsxFactory.createElement(
+        Awesome.createElement(
             Margin,
             {
                 margins = dpi(7)
             },
-            jsxFactory.createElement(
+            Awesome.createElement(
                 TextClock,
                 {
                     format = ((("<span font=\"" .. tostring(font)) .. "\">") .. tostring((militaryTime and "%H:%M") or "%I:%M %p")) .. "</span>"
@@ -3043,12 +3060,12 @@ ____exports.Clock = function(____bindingPattern0)
             end
         end
     end
-    local clock = jsxFactory.createElement(
+    local clock = Awesome.createElement(
         PanelOutline,
         {},
-        jsxFactory.createElement(PlainClock, {font = font, militaryTime = militaryTime, onButtonPress = openClockToolTip})
+        Awesome.createElement(PlainClock, {font = font, militaryTime = militaryTime, onButtonPress = openClockToolTip})
     )
-    local clockTooltip = jsxFactory.createElement(
+    local clockTooltip = Awesome.createElement(
         Tooltip,
         {
             objects = {clock},
@@ -3073,7 +3090,7 @@ ____exports.Clock = function(____bindingPattern0)
         }
     )
     screen.clockTooltip = clockTooltip
-    local calendar = jsxFactory.createElement(Calendar, {font = font, screen = screen})
+    local calendar = Awesome.createElement(Calendar, {font = font, screen = screen})
     calendar:attach(clock, calendarPosition, {on_hover = false, on_pressed = true})
     return clock
 end
@@ -3081,11 +3098,12 @@ return ____exports
 end,
 ["layout.components.layout-status"] = function() require("lualib_bundle");
 local ____exports = {}
-local jsxFactory = require("helper.jsx-factory")
+local ____jsx = require("awesome.jsx")
+local Awesome = ____jsx.default
 local awful = require("awful")
 local gears = require("gears")
 local beautiful = require("beautiful")
-local ____base = require("helper.components.base")
+local ____base = require("awesome.components.base")
 local Margin = ____base.Margin
 local ____clickable_2Dcontainer = require("widgets.clickable-container")
 local Clickable = ____clickable_2Dcontainer.Clickable
@@ -3125,13 +3143,13 @@ ____exports.LayoutStatus = function(____bindingPattern0)
             end
         )
     )
-    return jsxFactory.createElement(
+    return Awesome.createElement(
         PanelOutline,
         {},
-        jsxFactory.createElement(
+        Awesome.createElement(
             Clickable,
             {buttons = buttons},
-            jsxFactory.createElement(
+            Awesome.createElement(
                 Margin,
                 {
                     margins = dpi(7)
@@ -3145,13 +3163,14 @@ return ____exports
 end,
 ["layout.components.bluetooth"] = function() require("lualib_bundle");
 local ____exports = {}
-local jsxFactory = require("helper.jsx-factory")
+local ____jsx = require("awesome.jsx")
+local Awesome = ____jsx.default
 local awful = require("awful")
 local wibox = require("wibox")
 local gears = require("gears")
 local filesystem = require("gears.filesystem")
 local beautiful = require("beautiful")
-local ____base = require("helper.components.base")
+local ____base = require("awesome.components.base")
 local Image = ____base.Image
 local Layout = ____base.Layout
 local Margin = ____base.Margin
@@ -3170,7 +3189,7 @@ local widgetIconDir = tostring(
 ) .. "images/widgets/bluetooth/"
 ____exports.Bluetooth = function()
     local icon = wibox.widget(
-        jsxFactory.createElement(
+        Awesome.createElement(
             Image,
             {
                 id = "icon",
@@ -3179,7 +3198,7 @@ ____exports.Bluetooth = function()
             }
         )
     )
-    local image = jsxFactory.createElement(Layout, {align = true, horizontal = true}, icon)
+    local image = Awesome.createElement(Layout, {align = true, horizontal = true}, icon)
     local buttons = gears.table.join(
         awful.button(
             {},
@@ -3191,13 +3210,13 @@ ____exports.Bluetooth = function()
             end
         )
     )
-    local button = jsxFactory.createElement(
+    local button = Awesome.createElement(
         PanelOutline,
         {},
-        jsxFactory.createElement(
+        Awesome.createElement(
             Clickable,
             {buttons = buttons},
-            jsxFactory.createElement(
+            Awesome.createElement(
                 Margin,
                 {
                     margins = dpi(7)
@@ -3206,7 +3225,7 @@ ____exports.Bluetooth = function()
             )
         )
     )
-    local tooltip = jsxFactory.createElement(
+    local tooltip = Awesome.createElement(
         Tooltip,
         {
             objects = {button},
@@ -3242,12 +3261,13 @@ return ____exports
 end,
 ["layout.components.systray-toggle"] = function() require("lualib_bundle");
 local ____exports = {}
-local jsxFactory = require("helper.jsx-factory")
+local ____jsx = require("awesome.jsx")
+local Awesome = ____jsx.default
 local wibox = require("wibox")
 local gears = require("gears")
 local filesystem = require("gears.filesystem")
 local beautiful = require("beautiful")
-local ____base = require("helper.components.base")
+local ____base = require("awesome.components.base")
 local Image = ____base.Image
 local Layout = ____base.Layout
 local Margin = ____base.Margin
@@ -3262,7 +3282,7 @@ local configDir = filesystem.get_configuration_dir()
 local widgetIconDir = tostring(configDir) .. "images/widgets/systray/"
 ____exports.SystemTrayToggle = function()
     local tray = wibox.widget(
-        jsxFactory.createElement(
+        Awesome.createElement(
             SystemTray,
             {
                 screen = "primary",
@@ -3273,7 +3293,7 @@ ____exports.SystemTrayToggle = function()
     )
     tray.visible = false
     local icon = wibox.widget(
-        jsxFactory.createElement(
+        Awesome.createElement(
             Image,
             {
                 id = "icon",
@@ -3282,20 +3302,20 @@ ____exports.SystemTrayToggle = function()
             }
         )
     )
-    return jsxFactory.createElement(
+    return Awesome.createElement(
         "fragment",
         {},
-        jsxFactory.createElement(
+        Awesome.createElement(
             Margin,
             {
                 top = dpi(10)
             },
             tray
         ),
-        jsxFactory.createElement(
+        Awesome.createElement(
             PanelOutline,
             {},
-            jsxFactory.createElement(
+            Awesome.createElement(
                 Clickable,
                 {
                     onButtonPress = function(button)
@@ -3317,12 +3337,12 @@ ____exports.SystemTrayToggle = function()
                         end
                     end
                 },
-                jsxFactory.createElement(
+                Awesome.createElement(
                     Margin,
                     {
                         margins = dpi(7)
                     },
-                    jsxFactory.createElement(Layout, {align = true, horizontal = true}, icon)
+                    Awesome.createElement(Layout, {align = true, horizontal = true}, icon)
                 )
             )
         )
@@ -3330,20 +3350,200 @@ ____exports.SystemTrayToggle = function()
 end
 return ____exports
 end,
+["layout.components.task-list"] = function() require("lualib_bundle");
+local ____exports = {}
+local ____jsx = require("awesome.jsx")
+local Awesome = ____jsx.default
+local ____panel_2Dcomponents = require("layout.panel-components")
+local TaskListPlain = ____panel_2Dcomponents.TaskList
+local ____base = require("awesome.components.base")
+local Background = ____base.Background
+local Margin = ____base.Margin
+local Image = ____base.Image
+local ____clickable_2Dcontainer = require("widgets.clickable-container")
+local Clickable = ____clickable_2Dcontainer.Clickable
+local beautiful = require("beautiful")
+local dpi = beautiful.xresources.apply_dpi
+____exports.TaskList = function(____bindingPattern0)
+    local screen
+    screen = ____bindingPattern0.screen
+    local selectedColor
+    selectedColor = ____bindingPattern0.selectedColor
+    local focus
+    focus = ____bindingPattern0.focus
+    local regular
+    regular = ____bindingPattern0.regular
+    return Awesome.createElement(
+        TaskListPlain,
+        {
+            currenttags = true,
+            screen = screen,
+            buttons = {},
+            task = Awesome.createElement(
+                Clickable,
+                {
+                    create_callback = function(____self, client, index, objects)
+                        local background = table.unpack(
+                            ____self:get_children_by_id("tag-background")
+                        )
+                        if client.focus then
+                            background:set_bg(selectedColor)
+                        end
+                        ____self:connect_signal(
+                            "mouse::enter",
+                            function()
+                                if not client.focus then
+                                    background:set_bg(focus)
+                                end
+                            end
+                        )
+                        ____self:connect_signal(
+                            "mouse::leave",
+                            function()
+                                if not client.focus then
+                                    background:set_bg(regular)
+                                end
+                            end
+                        )
+                        client:connect_signal(
+                            "focus",
+                            function()
+                                background:set_bg(selectedColor)
+                            end
+                        )
+                        client:connect_signal(
+                            "unfocus",
+                            function()
+                                background:set_bg(regular)
+                            end
+                        )
+                    end
+                },
+                Awesome.createElement(
+                    Background,
+                    {id = "tag-background", bg = regular},
+                    Awesome.createElement(
+                        Margin,
+                        {
+                            margins = dpi(6)
+                        },
+                        Awesome.createElement(Image, {id = "icon_role"})
+                    )
+                )
+            )
+        }
+    )
+end
+return ____exports
+end,
+["layout.components.tag-list"] = function() require("lualib_bundle");
+local ____exports = {}
+local ____jsx = require("awesome.jsx")
+local Awesome = ____jsx.default
+local awful = require("awful")
+local ____panel_2Dcomponents = require("layout.panel-components")
+local TagListPlain = ____panel_2Dcomponents.TagList
+local ____base = require("awesome.components.base")
+local Background = ____base.Background
+local Margin = ____base.Margin
+local Image = ____base.Image
+local ____clickable_2Dcontainer = require("widgets.clickable-container")
+local Clickable = ____clickable_2Dcontainer.Clickable
+local beautiful = require("beautiful")
+local dpi = beautiful.xresources.apply_dpi
+____exports.TagList = function(____bindingPattern0)
+    local screen
+    screen = ____bindingPattern0.screen
+    local selectedColor
+    selectedColor = ____bindingPattern0.selectedColor
+    local focus
+    focus = ____bindingPattern0.focus
+    local regular
+    regular = ____bindingPattern0.regular
+    return Awesome.createElement(
+        TagListPlain,
+        {
+            all = true,
+            screen = screen,
+            buttons = {
+                awful.button(
+                    {},
+                    1,
+                    function(tag) return tag:view_only() end
+                ),
+                awful.button(
+                    {},
+                    4,
+                    function(tag) return awful.tag.viewprev(tag.screen) end
+                ),
+                awful.button(
+                    {},
+                    5,
+                    function(tag) return awful.tag.viewnext(tag.screen) end
+                )
+            },
+            tag = Awesome.createElement(
+                Clickable,
+                {
+                    create_callback = function(____self, tag, index, objects)
+                        local background = table.unpack(
+                            ____self:get_children_by_id("tag-background")
+                        )
+                        if tag.selected then
+                            background:set_bg(selectedColor)
+                        end
+                        ____self:connect_signal(
+                            "mouse::enter",
+                            function()
+                                if not tag.selected then
+                                    background:set_bg(focus)
+                                end
+                            end
+                        )
+                        ____self:connect_signal(
+                            "mouse::leave",
+                            function()
+                                if not tag.selected then
+                                    background:set_bg(regular)
+                                end
+                            end
+                        )
+                        tag:connect_signal(
+                            "property::selected",
+                            function(tag)
+                                background:set_bg((tag.selected and selectedColor) or regular)
+                            end
+                        )
+                    end
+                },
+                Awesome.createElement(
+                    Background,
+                    {id = "tag-background", bg = regular},
+                    Awesome.createElement(
+                        Margin,
+                        {
+                            margins = dpi(6)
+                        },
+                        Awesome.createElement(Image, {id = "icon_role"})
+                    )
+                )
+            )
+        }
+    )
+end
+return ____exports
+end,
 ["layout.my-panel"] = function() require("lualib_bundle");
 local ____exports = {}
-local jsxFactory = require("helper.jsx-factory")
+local ____jsx = require("awesome.jsx")
+local Awesome = ____jsx.default
 local awful = require("awful")
 local beautiful = require("beautiful")
-local ____base = require("helper.components.base")
-local Image = ____base.Image
+local ____base = require("awesome.components.base")
 local Layout = ____base.Layout
 local Margin = ____base.Margin
 local ____config = require("configuration.config")
 local config = ____config.default
-local ____panel_2Dcomponents = require("layout.panel-components")
-local TagList = ____panel_2Dcomponents.TagList
-local TaskList = ____panel_2Dcomponents.TaskList
 local ____clock = require("layout.components.clock")
 local Clock = ____clock.Clock
 local ____layout_2Dstatus = require("layout.components.layout-status")
@@ -3354,19 +3554,14 @@ local ____panel_2Doutline = require("layout.panel-outline")
 local PanelOutline = ____panel_2Doutline.PanelOutline
 local ____systray_2Dtoggle = require("layout.components.systray-toggle")
 local SystemTrayToggle = ____systray_2Dtoggle.SystemTrayToggle
-local ____clickable_2Dcontainer = require("widgets.clickable-container")
-local Clickable = ____clickable_2Dcontainer.Clickable
+local ____task_2Dlist = require("layout.components.task-list")
+local TaskList = ____task_2Dlist.TaskList
+local ____tag_2Dlist = require("layout.components.tag-list")
+local TagList = ____tag_2Dlist.TagList
 local dpi = beautiful.xresources.apply_dpi
 local militaryTime = config.militaryTime
-local function ____debug(...)
-    local values = {...}
-    awful.spawn.easy_async_with_shell(
-        ("echo \"\\\"" .. tostring(
-            table.concat(values, "," or ",")
-        )) .. "\\\"\" > /tmp/awesome-log.txt",
-        function()
-        end
-    )
+local function Empty()
+    return Awesome.createElement(Margin, {})
 end
 screen.connect_signal(
     "request::desktop_decoration",
@@ -3383,71 +3578,51 @@ screen.connect_signal(
             }
         )
         local font = "Inter Bold 11"
+        local regular = "#00000033"
+        local focus = "#ffffff66"
+        local selectedColor = "#1B9AAA"
         panel:setup(
-            jsxFactory.createElement(
+            Awesome.createElement(
                 Margin,
                 {
                     left = dpi(5),
                     right = dpi(5)
                 },
-                jsxFactory.createElement(
+                Awesome.createElement(
                     Layout,
                     {align = true, horizontal = true, expand = "none"},
-                    jsxFactory.createElement(
+                    Awesome.createElement(
                         Layout,
                         {fixed = true, horizontal = true},
-                        jsxFactory.createElement(
+                        Awesome.createElement(
                             PanelOutline,
                             {},
-                            jsxFactory.createElement(
-                                TagList,
-                                {
-                                    all = true,
-                                    screen = screen,
-                                    buttons = {
-                                        awful.button(
-                                            {},
-                                            1,
-                                            function(tag) return tag:view_only() end
-                                        ),
-                                        awful.button(
-                                            {},
-                                            4,
-                                            function(tag) return awful.tag.viewprev(tag.screen) end
-                                        ),
-                                        awful.button(
-                                            {},
-                                            5,
-                                            function(tag) return awful.tag.viewnext(tag.screen) end
-                                        )
-                                    },
-                                    tag = jsxFactory.createElement(
-                                        Clickable,
-                                        {},
-                                        jsxFactory.createElement(
-                                            Margin,
-                                            {
-                                                margins = dpi(6)
-                                            },
-                                            jsxFactory.createElement(Image, {id = "icon_role"})
-                                        )
-                                    )
-                                }
+                            Awesome.createElement(TagList, {screen = screen, regular = regular, focus = focus, selectedColor = selectedColor})
+                        ),
+                        Awesome.createElement(
+                            Margin,
+                            {
+                                left = dpi(5)
+                            },
+                            Awesome.createElement(
+                                PanelOutline,
+                                {},
+                                Awesome.createElement(TaskList, {screen = screen, regular = regular, focus = focus, selectedColor = selectedColor})
                             )
                         )
                     ),
-                    jsxFactory.createElement(TaskList, {currenttags = true, screen = screen, buttons = {}}),
-                    jsxFactory.createElement(
+                    Awesome.createElement(Empty, {}),
+                    Awesome.createElement(
                         Layout,
                         {
                             fixed = true,
                             horizontal = true,
                             spacing = dpi(5)
                         },
-                        jsxFactory.createElement(SystemTrayToggle, {}),
-                        jsxFactory.createElement(Bluetooth, {}),
-                        jsxFactory.createElement(Clock, {font = font, militaryTime = militaryTime, screen = screen}),
-                        jsxFactory.createElement(LayoutStatus, {screen = screen})
+                        Awesome.createElement(SystemTrayToggle, {}),
+                        Awesome.createElement(Bluetooth, {}),
+                        Awesome.createElement(Clock, {font = font, militaryTime = militaryTime, screen = screen}),
+                        Awesome.createElement(LayoutStatus, {screen = screen})
                     )
                 )
             )
@@ -4264,11 +4439,12 @@ return ____exports
 end,
 ["module.titlebar"] = function() require("lualib_bundle");
 local ____exports = {}
-local jsxFactory = require("helper.jsx-factory")
+local ____jsx = require("awesome.jsx")
+local Awesome = ____jsx.default
 local awful = require("awful")
 local gears = require("gears")
 local beautiful = require("beautiful")
-local ____base = require("helper.components.base")
+local ____base = require("awesome.components.base")
 local CloseButton = ____base.CloseButton
 local FloatingButton = ____base.FloatingButton
 local Layout = ____base.Layout
@@ -4294,41 +4470,41 @@ local function double_click_event_handler(handle)
 end
 local function create_horizontal_bar(client, buttons, pos, bg, size)
     awful.titlebar(client, {position = pos, bg = bg, size = size}):setup(
-        jsxFactory.createElement(
+        Awesome.createElement(
             Layout,
             {align = true, horizontal = true},
-            jsxFactory.createElement(
+            Awesome.createElement(
                 Margin,
                 {
                     margins = dpi(10)
                 },
-                jsxFactory.createElement(
+                Awesome.createElement(
                     Layout,
                     {
                         fixed = true,
                         horizontal = true,
                         spacing = dpi(7)
                     },
-                    jsxFactory.createElement(OnTopButton, {client = client}),
-                    jsxFactory.createElement(FloatingButton, {client = client})
+                    Awesome.createElement(OnTopButton, {client = client}),
+                    Awesome.createElement(FloatingButton, {client = client})
                 )
             ),
-            jsxFactory.createElement(Layout, {flex = true, horizontal = true, buttons = buttons}),
-            jsxFactory.createElement(
+            Awesome.createElement(Layout, {flex = true, horizontal = true, buttons = buttons}),
+            Awesome.createElement(
                 Margin,
                 {
                     margins = dpi(10)
                 },
-                jsxFactory.createElement(
+                Awesome.createElement(
                     Layout,
                     {
                         fixed = true,
                         horizontal = true,
                         spacing = dpi(7)
                     },
-                    jsxFactory.createElement(MinimizeButton, {client = client}),
-                    jsxFactory.createElement(MaximizedButton, {client = client}),
-                    jsxFactory.createElement(CloseButton, {client = client})
+                    Awesome.createElement(MinimizeButton, {client = client}),
+                    Awesome.createElement(MaximizedButton, {client = client}),
+                    Awesome.createElement(CloseButton, {client = client})
                 )
             )
         )
@@ -4392,14 +4568,15 @@ return ____exports
 end,
 ["module.notifications"] = function() require("lualib_bundle");
 local ____exports = {}
-local jsxFactory = require("helper.jsx-factory")
+local ____jsx = require("awesome.jsx")
+local Awesome = ____jsx.default
 local gears = require("gears")
 local wibox = require("wibox")
 local awful = require("awful")
 local ruled = require("ruled")
 local beautiful = require("beautiful")
 local naughty = require("naughty")
-local ____base = require("helper.components.base")
+local ____base = require("awesome.components.base")
 local Background = ____base.Background
 local Constraint = ____base.Constraint
 local Layout = ____base.Layout
@@ -4491,7 +4668,7 @@ naughty.connect_signal(
 local function Place(____bindingPattern0)
     local children
     children = ____bindingPattern0.children
-    return jsxFactory.createElement("base", {widget = wibox.container.place}, children)
+    return Awesome.createElement("base", {widget = wibox.container.place}, children)
 end
 naughty.connect_signal(
     "request::icon",
@@ -4510,7 +4687,7 @@ naughty.connect_signal(
                 style = {underline_normal = false, underline_selected = true},
                 widget = naughty.list.actions,
                 base_layout = wibox.widget(
-                    jsxFactory.createElement(
+                    Awesome.createElement(
                         Layout,
                         {
                             flex = true,
@@ -4519,25 +4696,25 @@ naughty.connect_signal(
                         }
                     )
                 ),
-                widget_template = jsxFactory.createElement(
+                widget_template = Awesome.createElement(
                     Margin,
                     {
                         margins = dpi(4)
                     },
-                    jsxFactory.createElement(
+                    Awesome.createElement(
                         Background,
                         {
                             bg = beautiful.groups_bg,
                             shape = gears.shape.rounded_rect,
                             forced_height = dpi(30)
                         },
-                        jsxFactory.createElement(
+                        Awesome.createElement(
                             Clickable,
                             {},
-                            jsxFactory.createElement(
+                            Awesome.createElement(
                                 Place,
                                 {},
-                                jsxFactory.createElement(Text, {id = "text_role", font = "Inter Regular 10"})
+                                Awesome.createElement(Text, {id = "text_role", font = "Inter Regular 10"})
                             )
                         )
                     )
@@ -4550,47 +4727,47 @@ naughty.connect_signal(
                 type = "notification",
                 screen = awful.screen.preferred(),
                 shape = gears.shape.rectangle,
-                widget_template = jsxFactory.createElement(
+                widget_template = Awesome.createElement(
                     Background,
                     {bg = beautiful.background, shape = gears.shape.rounded_rect},
-                    jsxFactory.createElement(
+                    Awesome.createElement(
                         Constraint,
                         {
                             strategy = "max",
                             height = dpi(250),
                             width = dpi(250)
                         },
-                        jsxFactory.createElement(
+                        Awesome.createElement(
                             Constraint,
                             {
                                 strategy = "min",
                                 width = dpi(250)
                             },
-                            jsxFactory.createElement(
+                            Awesome.createElement(
                                 Background,
                                 {id = "background_role", bg = beautiful.transparent},
-                                jsxFactory.createElement(
+                                Awesome.createElement(
                                     Layout,
                                     {
                                         fixed = true,
                                         vertical = true,
                                         spacing = dpi(4)
                                     },
-                                    jsxFactory.createElement(
+                                    Awesome.createElement(
                                         Margin,
                                         {
                                             margins = dpi(0)
                                         },
-                                        jsxFactory.createElement(
+                                        Awesome.createElement(
                                             Layout,
                                             {fixed = true, vertical = true, fill_space = true},
-                                            jsxFactory.createElement(
+                                            Awesome.createElement(
                                                 Background,
                                                 {bg = beautiful.background},
-                                                jsxFactory.createElement(
+                                                Awesome.createElement(
                                                     Margin,
                                                     {margins = beautiful.notification_margin},
-                                                    jsxFactory.createElement(
+                                                    Awesome.createElement(
                                                         Text,
                                                         {markup = true, font = "Inter Bold 10", align = "center", valign = "center"},
                                                         (function(____lhs)
@@ -4603,25 +4780,25 @@ naughty.connect_signal(
                                                     )
                                                 )
                                             ),
-                                            jsxFactory.createElement(
+                                            Awesome.createElement(
                                                 Layout,
                                                 {fixed = true, horizontal = true},
-                                                jsxFactory.createElement(
+                                                Awesome.createElement(
                                                     Margin,
                                                     {margins = beautiful.notification_margin},
-                                                    jsxFactory.createElement(NaughtyIcon, {resize_strategy = "center"})
+                                                    Awesome.createElement(NaughtyIcon, {resize_strategy = "center"})
                                                 ),
-                                                jsxFactory.createElement(
+                                                Awesome.createElement(
                                                     Margin,
                                                     {margins = beautiful.notification_margin},
-                                                    jsxFactory.createElement(
+                                                    Awesome.createElement(
                                                         Layout,
                                                         {align = true, vertical = true, expand = "none"},
-                                                        jsxFactory.createElement(
+                                                        Awesome.createElement(
                                                             Layout,
                                                             {fixed = true, vertical = true},
-                                                            jsxFactory.createElement(NaughtyTitle, {align = "left"}),
-                                                            jsxFactory.createElement(NaughtyMessage, {align = "left"})
+                                                            Awesome.createElement(NaughtyTitle, {align = "left"}),
+                                                            Awesome.createElement(NaughtyMessage, {align = "left"})
                                                         )
                                                     )
                                                 )

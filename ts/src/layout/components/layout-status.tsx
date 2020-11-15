@@ -1,8 +1,8 @@
-import * as jsxFactory from '../../helper/jsx-factory';
+import Awesome from 'awesome/jsx';
 import * as awful from 'awful';
 import * as gears from 'gears';
 import * as beautiful from 'beautiful';
-import {Margin} from '../../helper/components/base';
+import {Margin} from 'awesome/components/base';
 import {Clickable} from '../../widgets/clickable-container';
 import {PanelOutline} from '../panel-outline';
 const dpi = beautiful.xresources.apply_dpi;

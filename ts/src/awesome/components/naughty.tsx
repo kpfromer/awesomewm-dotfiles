@@ -1,4 +1,4 @@
-import * as jsxFactory from '../jsx-factory';
+import Awesome from 'awesome/jsx';
 import * as naughty from 'naughty';
 
 // Naughty

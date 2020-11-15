@@ -1,7 +1,7 @@
 import * as awful from 'awful';
 import * as beautiful from 'beautiful';
 import config from '../configuration/config';
-import {log} from '../helper/log';
+import {log} from 'helper/log';
 
 const run_once = function (this: void, command: string) {
   const firstSpace = command.indexOf(' ');

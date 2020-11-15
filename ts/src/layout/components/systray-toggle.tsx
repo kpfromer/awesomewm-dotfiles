@@ -1,9 +1,9 @@
-import * as jsxFactory from '../../helper/jsx-factory';
+import Awesome from 'awesome/jsx';
 import * as wibox from 'wibox';
 import * as gears from 'gears';
 import * as filesystem from 'gears.filesystem';
 import * as beautiful from 'beautiful';
-import {Image, Layout, Margin} from '../../helper/components/base';
+import {Image, Layout, Margin} from 'awesome/components/base';
 import {SystemTray} from '../panel-components';
 import {PanelOutline} from '../panel-outline';
 import {Clickable} from '../../widgets/clickable-container';
