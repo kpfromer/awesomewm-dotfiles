@@ -122,6 +122,13 @@ export default gears.table.join(
         c.ontop = true;
         c.sticky = true;
         c.floating = true;
+
+        const {height} = c.screen.geometry;
+        const newHeight = (1 / 3) * height;
+        const newWidth = (16 / 9) * ((1 / 3) * height);
+
+        c.geometry({height: newHeight, width: newWidth});
+        awful.placement.bottom_right(c, {margins: {bottom: 60}});
       }
     },
     () => {},

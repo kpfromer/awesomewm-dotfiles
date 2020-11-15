@@ -49,7 +49,14 @@ const rules: awful.Rule[] = [
     properties: {titlebars_enabled: true},
   },
   {
-    rule_any: {class: ['Caja', 'gcr-prompter']},
+    rule_any: {
+      class: [
+        'Caja',
+        'org.gnome.Nautilus',
+        'Org.gnome.Nautilus',
+        'gcr-prompter',
+      ],
+    },
     properties: {
       focus: true,
       floating: true,

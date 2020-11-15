@@ -2783,17 +2783,56 @@ ____exports.Clickable = function(____bindingPattern0)
 end
 return ____exports
 end,
+["awesome.components.types"] = function() require("lualib_bundle");
+local ____exports = {}
+local awful = require("awful")
+function ____exports.convertButtonEventsToAwesomeButtons(events)
+    local buttons = {}
+    if events.onLeftClick then
+        __TS__ArrayPush(
+            buttons,
+            awful.button({}, 1, events.onLeftClick)
+        )
+    end
+    if events.onMiddleClick then
+        __TS__ArrayPush(
+            buttons,
+            awful.button({}, 2, events.onMiddleClick)
+        )
+    end
+    if events.onRightClick then
+        __TS__ArrayPush(
+            buttons,
+            awful.button({}, 3, events.onRightClick)
+        )
+    end
+    if events.onScrollUp then
+        __TS__ArrayPush(
+            buttons,
+            awful.button({}, 4, events.onScrollUp)
+        )
+    end
+    if events.onScrollDown then
+        __TS__ArrayPush(
+            buttons,
+            awful.button({}, 5, events.onScrollDown)
+        )
+    end
+    return buttons
+end
+return ____exports
+end,
 ["awesome.components.panel"] = function() require("lualib_bundle");
 local ____exports = {}
 local ____jsx = require("awesome.jsx")
 local Awesome = ____jsx.default
 local awful = require("awful")
 local wibox = require("wibox")
+local ____types = require("awesome.components.types")
+local convertButtonEventsToAwesomeButtons = ____types.convertButtonEventsToAwesomeButtons
 ____exports.TagList = function(____bindingPattern0)
     local screen
     screen = ____bindingPattern0.screen
-    local buttons
-    buttons = ____bindingPattern0.buttons
     local all
     all = ____bindingPattern0.all
     if all == nil then
@@ -2811,6 +2850,16 @@ ____exports.TagList = function(____bindingPattern0)
     end
     local tag
     tag = ____bindingPattern0.tag
+    local onLeftClick
+    onLeftClick = ____bindingPattern0.onLeftClick
+    local onMiddleClick
+    onMiddleClick = ____bindingPattern0.onMiddleClick
+    local onRightClick
+    onRightClick = ____bindingPattern0.onRightClick
+    local onScrollDown
+    onScrollDown = ____bindingPattern0.onScrollDown
+    local onScrollUp
+    onScrollUp = ____bindingPattern0.onScrollUp
     local filter = awful.widget.taglist.filter.all
     if all then
         filter = awful.widget.taglist.filter.all
@@ -2819,7 +2868,11 @@ ____exports.TagList = function(____bindingPattern0)
     elseif noempty then
         filter = awful.widget.taglist.filter.noempty
     end
-    local options = {screen = screen, filter = filter, buttons = buttons}
+    local options = {
+        screen = screen,
+        filter = filter,
+        buttons = convertButtonEventsToAwesomeButtons({onLeftClick = onLeftClick, onMiddleClick = onMiddleClick, onRightClick = onRightClick, onScrollDown = onScrollDown, onScrollUp = onScrollUp})
+    }
     if tag then
         options.widget_template = tag
     end
@@ -2828,8 +2881,6 @@ end
 ____exports.TaskList = function(____bindingPattern0)
     local screen
     screen = ____bindingPattern0.screen
-    local buttons
-    buttons = ____bindingPattern0.buttons
     local allscreen
     allscreen = ____bindingPattern0.allscreen
     if allscreen == nil then
@@ -2857,6 +2908,16 @@ ____exports.TaskList = function(____bindingPattern0)
     end
     local task
     task = ____bindingPattern0.task
+    local onLeftClick
+    onLeftClick = ____bindingPattern0.onLeftClick
+    local onMiddleClick
+    onMiddleClick = ____bindingPattern0.onMiddleClick
+    local onRightClick
+    onRightClick = ____bindingPattern0.onRightClick
+    local onScrollDown
+    onScrollDown = ____bindingPattern0.onScrollDown
+    local onScrollUp
+    onScrollUp = ____bindingPattern0.onScrollUp
     local filter = awful.widget.tasklist.filter.currenttags
     if allscreen then
         filter = awful.widget.tasklist.filter.allscreen
@@ -2869,7 +2930,11 @@ ____exports.TaskList = function(____bindingPattern0)
     elseif focused then
         filter = awful.widget.tasklist.filter.focused
     end
-    local options = {screen = screen, filter = filter, buttons = buttons}
+    local options = {
+        screen = screen,
+        filter = filter,
+        buttons = convertButtonEventsToAwesomeButtons({onLeftClick = onLeftClick, onMiddleClick = onMiddleClick, onRightClick = onRightClick, onScrollDown = onScrollDown, onScrollUp = onScrollUp})
+    }
     if task then
         options.widget_template = task
     end
@@ -3378,7 +3443,10 @@ ____exports.TaskList = function(____bindingPattern0)
         {
             currenttags = true,
             screen = screen,
-            buttons = {},
+            onLeftClick = function(client) return (function(o, i, v)
+                o[i] = v
+                return v
+            end)(client, "minimized", not client.minimized) end,
             task = Awesome.createElement(
                 Clickable,
                 {
@@ -3446,7 +3514,7 @@ local TagListPlain = ____panel.TagList
 local ____base = require("awesome.components.base")
 local Background = ____base.Background
 local Margin = ____base.Margin
-local Image = ____base.Image
+local Text = ____base.Text
 local ____clickable_2Dcontainer = require("widgets.clickable-container")
 local Clickable = ____clickable_2Dcontainer.Clickable
 local beautiful = require("beautiful")
@@ -3465,23 +3533,9 @@ ____exports.TagList = function(____bindingPattern0)
         {
             all = true,
             screen = screen,
-            buttons = {
-                awful.button(
-                    {},
-                    1,
-                    function(tag) return tag:view_only() end
-                ),
-                awful.button(
-                    {},
-                    4,
-                    function(tag) return awful.tag.viewprev(tag.screen) end
-                ),
-                awful.button(
-                    {},
-                    5,
-                    function(tag) return awful.tag.viewnext(tag.screen) end
-                )
-            },
+            onLeftClick = function(tag) return tag:view_only() end,
+            onScrollDown = function(tag) return awful.tag.viewprev(tag.screen) end,
+            onScrollUp = function(tag) return awful.tag.viewnext(tag.screen) end,
             tag = Awesome.createElement(
                 Clickable,
                 {
@@ -3492,6 +3546,12 @@ ____exports.TagList = function(____bindingPattern0)
                         if tag.selected then
                             background:set_bg(selectedColor)
                         end
+                        local text = table.unpack(
+                            ____self:get_children_by_id("tag-index")
+                        )
+                        text:set_markup(
+                            __TS__NumberToString(index, 10)
+                        )
                         ____self:connect_signal(
                             "mouse::enter",
                             function()
@@ -3524,7 +3584,7 @@ ____exports.TagList = function(____bindingPattern0)
                         {
                             margins = dpi(6)
                         },
-                        Awesome.createElement(Image, {id = "icon_role"})
+                        Awesome.createElement(Text, {id = "tag-index"})
                     )
                 )
             )
@@ -3794,6 +3854,12 @@ ____exports.default = gears.table.join(
                 c.ontop = true
                 c.sticky = true
                 c.floating = true
+                local ____ = c.screen.geometry
+                local height = ____.height
+                local newHeight = (1 / 3) * height
+                local newWidth = (16 / 9) * ((1 / 3) * height)
+                c:geometry({height = newHeight, width = newWidth})
+                awful.placement.bottom_right(c, {margins = {bottom = 60}})
             end
         end,
         function()
@@ -3816,7 +3882,7 @@ local rules = {
     {id = "dialog", rule_any = {type = {"dialog"}, class = {"Wicd-client.py", "calendar.google.com"}}, properties = {titlebars_enabled = true, floating = true, above = true, draw_backdrop = true, skip_decoration = true, placement = awful.placement.centered}},
     {rule_any = {type = {"normal", "dialog"}}, properties = {titlebars_enabled = true}},
     {
-        rule_any = {class = {"Caja", "gcr-prompter"}},
+        rule_any = {class = {"Caja", "org.gnome.Nautilus", "Org.gnome.Nautilus", "gcr-prompter"}},
         properties = {
             focus = true,
             floating = true,
@@ -4022,17 +4088,6 @@ local function move_mouse_onto_focused_client()
         mouse:coords({x = x, y = y}, true)
     end
 end
-local function move_focus_or_view_tag(original_focus, direction)
-    if (original_focus == client.focus) or (not client.focus) then
-        if direction == "left" then
-            awful.tag.viewprev()
-        else
-            awful.tag.viewnext()
-        end
-    else
-        move_mouse_onto_focused_client()
-    end
-end
 local globalkeys = gears.table.join(
     awful.key(
         {modkey},
@@ -4046,7 +4101,6 @@ local globalkeys = gears.table.join(
         {modkey},
         "Up",
         function()
-            awful.client.focus.bydirection("up")
             move_mouse_onto_focused_client()
         end,
         function()
@@ -4057,7 +4111,6 @@ local globalkeys = gears.table.join(
         {modkey},
         "Down",
         function()
-            awful.client.focus.bydirection("down")
             move_mouse_onto_focused_client()
         end,
         function()
@@ -4068,9 +4121,7 @@ local globalkeys = gears.table.join(
         {modkey},
         "Left",
         function()
-            local original_focus = client.focus
-            awful.client.focus.bydirection("left")
-            move_focus_or_view_tag(original_focus, "left")
+            awful.tag.viewprev()
         end,
         function()
         end,
@@ -4080,9 +4131,7 @@ local globalkeys = gears.table.join(
         {modkey},
         "Right",
         function()
-            local original_focus = client.focus
-            awful.client.focus.bydirection("right")
-            move_focus_or_view_tag(original_focus, "right")
+            awful.tag.viewnext()
         end,
         function()
         end,
@@ -4835,6 +4884,8 @@ awful.util.shell = "sh"
 beautiful.init(theme)
 root.keys(globalKeys)
 return ____exports
+end,
+["awesome.components.test"] = function() require("lualib_bundle");
 end,
 ["configuration.keys.client"] = function() require("lualib_bundle");
 local ____exports = {}

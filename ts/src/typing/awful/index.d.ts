@@ -209,6 +209,11 @@ declare module 'awful' {
 
     // CUSTOM:
     round_corners: boolean;
+
+    geometry: {
+      // TODO:
+      (this: any, geo: {height: number; width: number}): Table;
+    };
   }
 
   interface ClientFunctions {
@@ -330,6 +335,8 @@ declare module 'awful' {
     geometry: {
       x: number;
       y: number;
+      width: number;
+      height: number;
     };
   }
   interface ScreenFunctions {
@@ -359,12 +366,24 @@ declare module 'awful' {
 
   type Drawable = any;
 
+  interface PlacementArgs {
+    margins?:
+      | number
+      | {
+          left?: number;
+          right?: number;
+          top?: number;
+          bottom?: number;
+        };
+  }
+
   /**
    * @noSelf
    */
   interface PlacementFunctions {
     centered: (drawable: Drawable, args?: Table) => Table;
     no_offscreen: (client: Client, args?: {screen: number}) => Table;
+    bottom_right: (this: void, client: Client, args?: PlacementArgs) => Table;
   }
 
   export type Placement = PlacementProps & PlacementFunctions;
@@ -647,7 +666,7 @@ declare module 'awful' {
   interface TagListWidgetProps {
     screen: Screen;
     filter: (this: void, tag: Tag) => void;
-    buttons: Table;
+    buttons: Table[];
     base_widget?: Widget;
     update_function?: WidgetCommon['list_update'];
     widget_template?: any;

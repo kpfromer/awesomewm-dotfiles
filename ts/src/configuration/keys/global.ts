@@ -1,11 +1,8 @@
-import {Client} from 'awful';
-
 import * as gears from 'gears';
 import * as awful from 'awful';
 import * as hotkeysPopup from 'awful.hotkeys_popup';
-// const hotkeys_popup = require('awful.hotkeys_popup');
 import config from '../config';
-const modkey = config.modkey;
+const {modkey} = config;
 
 function move_mouse_onto_focused_client(): void {
   if (client.focus) {
@@ -17,20 +14,20 @@ function move_mouse_onto_focused_client(): void {
   }
 }
 
-function move_focus_or_view_tag(
-  original_focus: Client,
-  direction: 'left' | 'right'
-): void {
-  if (original_focus === client.focus || !client.focus) {
-    if (direction === 'left') {
-      awful.tag.viewprev();
-    } else {
-      awful.tag.viewnext();
-    }
-  } else {
-    move_mouse_onto_focused_client();
-  }
-}
+// function move_focus_or_view_tag(
+//   original_focus: Client,
+//   direction: 'left' | 'right'
+// ): void {
+//   if (original_focus === client.focus || !client.focus) {
+//     if (direction === 'left') {
+//       awful.tag.viewprev();
+//     } else {
+//       awful.tag.viewnext();
+//     }
+//   } else {
+//     move_mouse_onto_focused_client();
+//   }
+// }
 
 let globalkeys = gears.table.join(
   awful.key([modkey], 's', hotkeysPopup.widget.show_help, () => {}, {
@@ -41,7 +38,6 @@ let globalkeys = gears.table.join(
     [modkey],
     'Up',
     () => {
-      awful.client.focus.bydirection('up');
       move_mouse_onto_focused_client();
     },
     () => {},
@@ -51,7 +47,6 @@ let globalkeys = gears.table.join(
     [modkey],
     'Down',
     () => {
-      awful.client.focus.bydirection('down');
       move_mouse_onto_focused_client();
     },
     () => {},
@@ -61,9 +56,7 @@ let globalkeys = gears.table.join(
     [modkey],
     'Left',
     () => {
-      const original_focus = client.focus;
-      awful.client.focus.bydirection('left');
-      move_focus_or_view_tag(original_focus, 'left');
+      awful.tag.viewprev();
     },
     () => {},
     {description: 'swap focus to left window', group: 'client'}
@@ -72,9 +65,7 @@ let globalkeys = gears.table.join(
     [modkey],
     'Right',
     () => {
-      const original_focus = client.focus;
-      awful.client.focus.bydirection('right');
-      move_focus_or_view_tag(original_focus, 'right');
+      awful.tag.viewnext();
     },
     () => {},
     {description: 'swap focus to right window', group: 'client'}
