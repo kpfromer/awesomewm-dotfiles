@@ -3,7 +3,7 @@
  * @noResolution
  */
 declare module 'gears' {
-  import {Screen} from 'awful';
+  import {ScreenInstance} from 'awful';
 
   export type GearsShapeFunction = (
     this: void,
@@ -155,7 +155,7 @@ declare module 'gears' {
      */
     maximized: (
       surf: string,
-      s?: Screen,
+      s?: ScreenInstance,
       ignore_aspect?: boolean,
       offset?: {x: number; y: number}
     ) => void;

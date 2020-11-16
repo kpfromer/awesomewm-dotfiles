@@ -10,9 +10,9 @@ const dpi = beautiful.xresources.apply_dpi;
 /**
  * Shows the current layout or more commonly known as tiling mode (like dwindle or maximize)
  */
-export const LayoutStatus: JSX.FunctionComponent<{screen: awful.Screen}> = ({
-  screen,
-}) => {
+export const LayoutStatus: JSX.FunctionComponent<{
+  screen: awful.ScreenInstance;
+}> = ({screen}) => {
   const buttons = gears.table.join(
     awful.button([], 1, () => {
       awful.layout.inc(1);

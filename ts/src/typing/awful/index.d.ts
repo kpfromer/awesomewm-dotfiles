@@ -84,10 +84,10 @@ declare module 'awful' {
     // icon: Table,
 
     /* The available sizes of client icons.*/
-    icon_sizes: Screen;
+    icon_sizes: ScreenInstance;
 
     /* Client screen.*/
-    screen: Screen;
+    screen: ScreenInstance;
 
     /* Define if the client must be hidden, i.e.*/
     hidden: boolean;
@@ -252,7 +252,7 @@ declare module 'awful' {
      * @param tagsTable A table with tags to set, or nil to get the current tags.
      * @returns A table with all tags.
      */
-    tags: (this: any, tagsTable?: Tag[]) => Tag[];
+    tags: (this: any, tagsTable?: TagInstance[]) => TagInstance[];
 
     /**
      * Raise a client on top of others which are on the same layer.
@@ -319,18 +319,18 @@ declare module 'awful' {
      * Move a client to a tag.
      * @param target The tag to move the client to.
      */
-    move_to_tag: (this: any, target: Tag) => void;
+    move_to_tag: (this: any, target: TagInstance) => void;
 
     /**
      * Toggle a tag on a client.
      * @param target The tag to move the client to.
      */
-    toggle_tag: (this: any, target: Tag) => void;
+    toggle_tag: (this: any, target: TagInstance) => void;
     /**
      * Move a client to a screen. Default is next screen, cycling.
      * @param screen The screen, default to current + 1. (default c.screen.index+1)
      */
-    move_to_screen: (this: any, screen?: Screen) => void;
+    move_to_screen: (this: any, screen?: ScreenInstance) => void;
     /**
      * Tag a client with the set of current tags.
      */
@@ -391,7 +391,11 @@ declare module 'awful' {
      * @param screen A screen number to filter clients on.
      * @param stacked Return clients in stacking order? (ordered from top to bottom).
      */
-    get: (this: void, screen?: Screen, stacked?: boolean) => ClientInstance[];
+    get: (
+      this: void,
+      screen?: ScreenInstance,
+      stacked?: boolean
+    ) => ClientInstance[];
     /**
      * Disconnect from a signal.
      */
@@ -462,7 +466,7 @@ declare module 'awful' {
     cycle: (
       this: void,
       clockwise: boolean,
-      screen?: Screen,
+      screen?: ScreenInstance,
       stacked?: boolean
     ) => void;
 
@@ -470,7 +474,7 @@ declare module 'awful' {
      * Restore (=unminimize) a random client.
      * @returns The restored client if some client was restored, otherwise nil.
      */
-    restore: (this: void, screen: Screen) => ClientInstance | undefined;
+    restore: (this: void, screen: ScreenInstance) => ClientInstance | undefined;
 
     property: {
       /**
@@ -487,34 +491,42 @@ declare module 'awful' {
      * Get the master window.
      * @param screen The screen. (default awful.screen.focused())
      */
-    getmaster: (this: void, screen?: Screen) => Screen;
+    getmaster: (this: void, screen?: ScreenInstance) => ScreenInstance;
     /**
      * Set the client as master: put it at the beginning of other windows.
      * @param client he window to set as master.
      */
-    setmaster: (this: void, client: ClientInstance) => Screen;
+    setmaster: (this: void, client: ClientInstance) => ScreenInstance;
     /**
      * Set the client as slave: put it at the end of other windows.
      * @param client The window to set as slave.
      */
-    setslave: (this: void, client: ClientInstance) => Screen;
+    setslave: (this: void, client: ClientInstance) => ScreenInstance;
     /**
      * Calculate a client’s column number, index in that column, and number of visible clients in this column.
      * @param client The client.
      */
-    idx: (this: void, client: ClientInstance) => Screen;
+    idx: (this: void, client: ClientInstance) => ScreenInstance;
     /**
      * Set the window factor of a client
      * @param wfact the window factor value
      * @param client The client.
      */
-    setwfact: (this: void, wfact: number, client: ClientInstance) => Screen;
+    setwfact: (
+      this: void,
+      wfact: number,
+      client: ClientInstance
+    ) => ScreenInstance;
     /**
      * Change window factor of a client.
      * @param add Amount to increase/decrease the client’s window factor. Should be between -current_window_factor and something close to infinite. The normalisation then ensures that the sum of all factors is 1.
      * @param client The client.
      */
-    incwfact: (this: void, add: number, client: ClientInstance) => Screen;
+    incwfact: (
+      this: void,
+      add: number,
+      client: ClientInstance
+    ) => ScreenInstance;
 
     // TODO:
     // iterate
@@ -574,15 +586,494 @@ declare module 'awful' {
   export type ClientInstance = ClientProps & ClientFunctions;
   export const client: ClientStatic;
 
-  // TODO: below
+  // Screen
+  export type ScreenStatic = {
+    /**
+     * Get the number of instances.
+     * @returns The number of screen objects alive.
+     */
+    instances: (this: void) => void;
+    screen: (this: void) => LuaIterable<ScreenInstance>;
+    /**
+     * Get the number of screens.
+     * @returns The screen count, at least 1.
+     */
+    count: (this: void) => number;
+    /**
+     * Disconnect from a signal.
+     */
+    disconnect_signal: (this: void, name: string, callback: Function) => void;
+    /**
+     * Emit a signal.
+     */
+    emit_signal: (this: void, name: string, ...args: any[]) => void;
+    /**
+     * Connect to a signal.
+     */
+    connect_signal: (
+      this: void,
+      name: string,
+      callback: (this: void, screen: ScreenInstance, ...args: any[]) => void
+    ) => void;
+    /**
+     * Return the screen index corresponding to the given (pixel) coordinates.
+     * The number returned can be used as an index into the global screen table/object.
+     * @returns The screen index
+     */
+    getbycoord: (this: void, x: number, y: number) => number;
+    /**
+     * Move the focus to a screen in a specific direction.
+     * This moves the mouse pointer to the last known position on the new screen, or keeps its position relative to the current focused screen.
+     * @param dir The direction.
+     */
+    focus_bydirection: (
+      this: void,
+      dir: Direction,
+      screen: ScreenInstance
+    ) => void;
+    /**
+     * Move the focus to a screen relative to the current one, This moves the mouse pointer to the last known position on the new screen, or keeps its position relative to the current focused screen.
+     * @param offset Value to add to the current focused screen index. 1 to focus the next one, -1 to focus the previous one.
+     */
+    focus_relative: (this: void, offset: number) => void;
+    /**
+     * Get the preferred screen in the context of a client.
+     * This is exactly the same as awful.screen.focused except that it avoids clients being moved when Awesome is restarted. This is used in the default rc.lua to ensure clients get assigned to the focused screen by default.
+     * @returns The preferred screen.
+     */
+    preferred: (this: void, client: ClientInstance) => ScreenInstance;
+    /**
+     * Get the focused screen.
+     * It is possible to set awful.screen.default_focused_args to override the default settings.
+     * @returns The focused screen object, or nil in case no screen is present currently.
+     */
+    focused: (
+      this: void,
+      args?: {client?: boolean; mouse?: boolean}
+    ) => ScreenInstance | undefined;
+    // get_bounding_geometry
+    /**
+     * Call a function for each existing and created-in-the-future screen.
+     */
+    connect_for_each_screen: (
+      this: void,
+      func: (this: void, screen: ScreenInstance) => void
+    ) => void;
+    /**
+     * Undo the effect of connect_for_each_screen.
+     * @param func The function that should no longer be called.
+     */
+    disconnect_for_each_screen: (this: void, func: Function) => void;
+    // set_auto_dpi_enabled
 
-  // type Client = {
-  //   /**
-  //    * @noSelf
-  //    */
-  //   restore: (screen?: Screen) => ClientInstance;
-  // } & ClientProps &
-  //   ClientFunctions;
+    // Static Fields
+    primary: ScreenInstance;
+  };
+
+  type ScreenProps = {
+    /**
+     * The screen coordinates.
+     */
+    geometry: Geometry;
+    /**
+     * The internal screen number.
+     * - The indices are a continuous sequence from 1 to `screen.count()`.
+     * - It is **NOT** related to the actual screen position relative to each other.
+     * - 1 is **NOT** necessarily the primary screen.
+     * - When screens are added and removed indices **CAN** change.
+     */
+    index: number;
+    // workarea
+    // tiling_area
+    // padding
+    // outputs
+    /**
+     * The list of visible clients for the screen.
+     * Minimized and unmanaged clients are not included in this list as they are technically not on the screen.
+     * The clients on tags that are currently not visible are not part of this list.
+     * Clients are returned using the stacking order (from top to bottom). See get_clients if you want them in the order used in the tasklist by default.
+     */
+    clients: ClientInstance[];
+    /**
+     * Get the list of clients assigned to the screen but not currently visible.
+     * This includes minimized clients and clients on hidden tags.
+     */
+    hidden_clients: ClientInstance[];
+    /**
+     * All clients assigned to the screen.
+     */
+    all_clients: ClientInstance[];
+    /**
+     * Tiled clients for the screen.
+     * Same as clients, but excluding:
+     * - fullscreen clients
+     * - maximized clients
+     * - floating clients
+     */
+    tiled_clients: ClientInstance[];
+    /**
+     * A list of all tags on the screen.
+     * This property is read only, use `tag.screen`, `awful.tag.add`, `awful.tag.new` or `t:delete()` to alter this list.
+     */
+    tags: TagInstance[];
+    /**
+     * A list of all selected tags on the screen.
+     */
+    selected_tags: TagInstance[];
+    /**
+     * The first selected tag.
+     */
+    selected_tag: TagInstance;
+    /**
+     * The number of pixels per inch of the screen.
+     * The default DPI comes from the X11 server. In most case, it will be 96. If autodpi is set to true on the screen, it will use the least dense dpi from the screen outputs. Most of the time, screens only have a single output, however it will have two (or more) when “clone mode” is used (eg, when a screen is duplicated on a projector).
+     */
+    dpi: number;
+    /**
+     * The lowest density DPI from all of the (physical) outputs.
+     */
+    minimum_dpi: number;
+    /**
+     * The highest density DPI from all of the (physical) outputs.
+     */
+    maximum_dpi: number;
+    /**
+     * The preferred DPI from all of the (physical) outputs.
+     * This is computed by normalizing all output to fill the area, then picking the lowest of the resulting virtual DPIs.
+     */
+    preferred_dpi: number;
+  };
+
+  type ScreenFunctions = {
+    // TODO:
+    /**
+     * Swap a screen with another one in global screen list.
+     * @param screen A screen to swap with.
+     */
+    swap: (this: any, screen: ScreenInstance) => void;
+    /**
+     * Get the square distance between a screen and a point.
+     * @returns The squared distance of the screen to the provided point.
+     */
+    get_square_distance: (this: any, x: number, y: number) => number;
+    /**
+     * Get the next screen in a specific direction.
+     * This gets the next screen relative to this one in the specified direction.
+     * @param self Screen.
+     * @param dir The direction, can be either “up”, “down”, “left” or “right”.
+     */
+    get_next_in_direction: (
+      this: any,
+      self: ScreenInstance,
+      dir: Direction
+    ) => void;
+    /**
+     * Get the list of visible clients for the screen.
+     * This is used by screen.clients internally (with stacked=true).
+     * @param stacked Use stacking order? (top to bottom) (default true)
+     */
+    get_clients: (this: any, stacked?: boolean) => ClientInstance[];
+    /**
+     * Get all clients assigned to the screen.
+     * This is used by all_clients internally (with stacked=true).
+     * @param stacked Use stacking order? (top to bottom) (default true)
+     */
+    get_all_clients: (this: any, stacked?: boolean) => ClientInstance[];
+    /**
+     * Get tiled clients for the screen.
+     * This is used by tiles_clients internally (with stacked=true).
+     * @param stacked Use stacking order? (top to bottom) (default true)
+     */
+    get_tiled_clients: (this: any, stacked?: boolean) => ClientInstance[];
+    /**
+     * Split the screen into multiple screens.
+     * This is useful to turn ultrawide monitors into something more useful without fancy client layouts.
+     *
+     * TODO: use!!!
+     *
+     * @param ratios The different ratios to split into. If none is provided, it is split in half. (optional)
+     * @param mode Either “vertical” or “horizontal”. If none is specified, it will split along the longest axis. (optional)
+     */
+    split: (
+      this: any,
+      ratios?: number[],
+      mode?: 'vertical' | 'horizontal'
+    ) => void;
+
+    /**
+     * Emit a signal.
+     */
+    emit_signal: (this: any, name: string, ...args: any[]) => void;
+    /**
+     * Connect to a signal.
+     */
+    connect_signal: (
+      this: any,
+      name: string,
+      callback: (this: void, screen: ScreenInstance, ...args: any[]) => void
+    ) => void;
+    // weak_connect_signal
+  };
+
+  type ScreenInstance = ScreenProps & ScreenFunctions;
+
+  export const screen: ScreenStatic;
+
+  type TagStatic = {
+    /**
+     * Add a tag.
+     * This function allow to create tags from a set of properties:
+     */
+    add: (this: void, name: string, props: Partial<TagProps>) => TagInstance;
+
+    /**
+     * Get the number of instances.
+     * @returns The number of tag objects alive.
+     */
+    instances: (this: void) => number;
+    /**
+     * Disconnect from a signal.
+     */
+    disconnect_signal: (this: void, name: string, callback: Function) => void;
+    /**
+     * Emit a signal.
+     */
+    emit_signal: (this: void, name: string, ...args: any[]) => void;
+    /**
+     * Connect to a signal.
+     */
+    connect_signal: (
+      this: void,
+      name: string,
+      callback: (this: void, tag: TagInstance, ...args: any[]) => void
+    ) => void;
+
+    /**
+     * Create a set of tags and attach it to a screen.
+     * @param names The tag name, in a table
+     * @param screen The tag screen (defaults to screen 1). (default 1)
+     * @param layout The layout or layout table to set for this tags by default.
+     * @returns A table with all created tags.
+     */
+    new: (
+      this: void,
+      names: string[],
+      screen: number | ScreenInstance,
+      layout: LayoutThingy[]
+    ) => TagInstance[];
+
+    /**
+     * Find a suitable fallback tag.
+     * @param screen The screen to look for a tag on. [awful.screen.focused()]
+     * @param invalids A table of tags we consider unacceptable. [selectedlist(scr)]
+     */
+    find_fallback: (
+      this: void,
+      screen: ScreenInstance,
+      invalids: TagInstance[]
+    ) => void;
+
+    // history
+
+    /**
+     * Find a tag by name.
+     * @param screen The screen of the tag.
+     * @param tag The name of the tag.
+     * @returns The tag found, or `nil`
+     */
+    find_by_name: (
+      this: void,
+      screen: ScreenInstance,
+      name: string
+    ) => TagInstance | undefined;
+
+    // incmwfact
+    // incgap
+    // togglemfpol
+    // incnmaster
+    // incncol
+    /**
+     * View no tag. Aka Deselect all tags.
+     * @param screen The screen.
+     */
+    viewnone: (this: void, screen?: ScreenInstance | number) => void;
+    /**
+     *
+     * Select a tag relative to the currently selected one.
+     * Note that this doesn’t work well with multiple selection.
+     * @param index The relative index to see.
+     */
+    viewidx: (this: void, index: number, screen?: ScreenInstance) => void;
+    /**
+     * View next tag. This is the same as `tag.viewidx(1)`.
+     * Note that this doesn’t work well with multiple selection.
+     */
+    viewnext: (this: void, screen?: ScreenInstance) => void;
+    /**
+     * View previous tag. This is the same a as `tag.viewidx(-1)`.
+     * Note that this doesn’t work well with multiple selection.
+     */
+    viewprev: (this: void, screen?: ScreenInstance) => void;
+    /**
+     * View only a set of tags.
+     * If `maximum` is set, there will be a limit on the number of new tag being selected. The tags already selected do not count. To do nothing if one or more of the tags are already selected, set `maximum` to zero.
+     * @param screen The screen of the tags. (optional)
+     * @param maximum The maximum number of tags to select. (default #tags)
+     */
+    viewmore: (this: void, screen?: ScreenInstance, maximum?: number) => void;
+    /**
+     * Toggle selection of a tag
+     * @param tag Tag to be toggled
+     */
+    viewtoggle: (this: void, tag: TagInstance) => void;
+    /**
+     * Add a signal to all attached tags and all tags that will be attached in the future. When a tag is detached from the screen, its signal is removed.
+     * @param screen The screen concerned, or all if nil.
+     * @param signal The signal name. (optional)
+     */
+    attached_connect_signal: (
+      this: void,
+      screen: ScreenInstance,
+      signal?: string,
+      callback?: (tag: TagInstance) => void
+    ) => void;
+  };
+
+  type TagProps = {
+    /**
+     * Tag name.
+     */
+    name: string;
+    /**
+     * True if the tag is selected to be viewed.
+     */
+    selected: boolean;
+    /**
+     * True if the tag is active and can be used.
+     */
+    activated: boolean;
+    /**
+     * The tag index.
+     */
+    index: number;
+    /**
+     * The tag screen.
+     */
+    screen: ScreenInstance;
+    // master_width_factor
+    /**
+     * The tag client layout.
+     *
+     * This property holds the layout. A layout can be either stateless or stateful. Stateless layouts are used by default by Awesome. They tile clients without any other overhead. They take an ordered list of clients and place them on the screen. Stateful layouts create an object instance for each tags and can store variables and metadata. Because of this, they are able to change over time and be serialized (saved).
+     *
+     * Both types of layouts have valid usage scenarios.
+     */
+    layout: Function | LayoutThingy;
+    /**
+     * The (proposed) list of available layouts for this tag.
+     *
+     * This property allows to define a subset (or superset) of layouts available in the “rotation table”. In the default configuration file, Mod4+Space and Mod4+Shift+Space are used to switch between tags. The awful.widget.layoutlist also uses this as its default layout filter.
+     *
+     * By default, it will be the same as awful.layout.layouts unless there the a layout not present is used. If that’s the case they will be added at the front of the list.
+     */
+    layouts: LayoutThingy[];
+    /**
+     * Define if the tag must be deleted when the last client is untagged.
+     * This is useful to create “throw-away” tags for operation like 50/50 (Windows “Aero Snap) side-by-side views. This keybinding code for this is:
+     */
+    volatile: boolean;
+    /**
+     * The gap (spacing, also called useless_gap) between clients.
+     *
+     * This property allow to waste space on the screen in the name of style, unicorns and readability.
+     */
+    gap: number;
+    /**
+     * Enable gaps for a single client.
+     */
+    gap_single_client: boolean;
+    /**
+     * Set size fill policy for the master client(s).
+     */
+    master_fill_policy: 'expand' | 'master_width_factor';
+    /**
+     * Set the number of master windows.
+     */
+    master_count: number;
+    /**
+     * Set the tag icon.
+     */
+    icon: string; //| Surface;
+    /**
+     * Set the number of columns.
+     */
+    column_count: number;
+  };
+
+  type TagFunctions = {
+    /**
+     * Get or set the clients attached to this tag.
+     * @param clientsTable None or a table of clients to set as being tagged with this tag. (default nil)
+     * @returns A table with the clients attached to this tags.
+     */
+    clients: (this: any, clientsTable?: ClientInstance[]) => ClientInstance[];
+
+    /**
+     * Swap 2 tags.
+     * @param tag2 The second tag.
+     */
+    swap: (this: any, tag2: TagInstance) => void;
+
+    /**
+     * Remove all tagged clients.
+     */
+    clear: (
+      this: any,
+      args?: {
+        fallback_tag: TagInstance;
+        allow_untagged?: boolean;
+      }
+    ) => void;
+
+    /**
+     * Delete a tag.
+     * @returns Returns true if the tag is successfully deleted. If there are no clients exclusively on this tag then delete it. Any stickied clients are assigned to the optional ‘fallback_tag’. If after deleting the tag there is no selected tag, try and restore from history or select the first tag on the screen.
+     */
+    delete: (
+      this: any,
+      args: {
+        fallback_tag?: TagInstance;
+        allow_untagged?: boolean;
+      }
+    ) => boolean;
+
+    /**
+     * View only a tag. (one tag that is.)
+     */
+    view_only: (this: any) => void;
+
+    /**
+     * Emit a signal.
+     */
+    emit_signal: (this: any, name: string, ...args: any[]) => void;
+    /**
+     * Connect to a signal.
+     */
+    connect_signal: (
+      this: any,
+      name: string,
+      callback: (this: void, tag: TagInstance, ...args: any[]) => void
+    ) => void;
+    // weak_connect_signal
+  };
+
+  type TagInstance = TagProps & TagFunctions;
+
+  export const tag: TagStatic;
+
+  type LayoutThingy = {};
+
+  // TODO: below
 
   interface MouseClientFunctions {
     resize: (
@@ -620,42 +1111,6 @@ declare module 'awful' {
     data: Table<any>
   ): Table;
 
-  interface ScreenProps {
-    selected_tag: Tag;
-
-    tags: Table;
-    dpi: number;
-
-    geometry: {
-      x: number;
-      y: number;
-      width: number;
-      height: number;
-    };
-  }
-  interface ScreenFunctions {
-    preferred: (this: void, client?: ClientInstance) => Screen;
-
-    getbycoord: (this: void, x: number, y: number) => unknown;
-
-    focus: (this: void, screen?: Screen) => unknown;
-
-    focus_bydirection: (this: void, dir: unknown, screen: unknown) => unknown;
-
-    focus_relative: (this: void, offset: number) => unknown;
-
-    focused: (this: void, args?: {client: boolean; mouse: boolean}) => Screen;
-
-    connect_for_each_screen: (
-      this: void,
-      func: (this: void, screen: Screen) => void
-    ) => unknown;
-  }
-
-  export type Screen = ScreenProps & ScreenFunctions;
-
-  export const screen: Screen;
-
   interface PlacementProps {}
 
   type Drawable = any;
@@ -691,100 +1146,6 @@ declare module 'awful' {
    */
   export const placement: Placement;
 
-  interface TagProps {
-    name: string;
-    selected: boolean;
-    activated: boolean;
-    index: number;
-    screen: Screen;
-    master_width_factor: number;
-
-    layout: string;
-    layouts: Table<string>;
-
-    volatile: boolean;
-    gap: number;
-    gap_single_client: boolean;
-    master_fill_policy: string;
-    master_count: number;
-    icon: string;
-    column_count: number;
-
-    // custom
-    icon_only: boolean;
-    default_app: string;
-    type: string;
-  }
-
-  interface TagFunctions {
-    clients: (this: any) => Table<ClientInstance>;
-
-    add: (this: void, name: string, props: Partial<TagProps>) => Tag;
-    /**
-     * Add a signal to all attached tags and all tags that will be attached in the future. When a tag is detached from the screen, its signal is removed.
-     * @param screen The screen concerned, or all if nil.
-     */
-    attached_connect_signal: (
-      this: void,
-      screen: Screen | null,
-      signal?: string,
-      callback?: (screen: Screen) => void
-    ) => void;
-
-    find_fallback: (this: void, screen: unknown, invalids: unknown) => unknown;
-
-    incmwfact: (this: void, add: unknown, t: unknown) => unknown;
-
-    incgap: (this: void, add: unknown, t: unknown) => unknown;
-
-    togglemfpol: (this: void, t: Tag) => unknown;
-
-    incnmaster: (
-      this: void,
-      add: unknown,
-      t: unknown,
-      sensible: boolean
-    ) => unknown;
-
-    incncol: (
-      this: void,
-      add: unknown,
-      t: unknown,
-      sensible: boolean
-    ) => unknown;
-
-    viewnone: (this: void, screen?: Screen | number) => unknown;
-
-    viewidx: (this: void, i: unknown, screen: unknown) => unknown;
-
-    viewnext: (this: void, screen?: Screen) => unknown;
-
-    viewprev: (this: void, screen?: Screen) => unknown;
-
-    viewmore: (
-      this: void,
-      tags: unknown,
-      screen: unknown,
-      maximum: number
-    ) => unknown;
-
-    viewtoggle: (this: void, t: Tag) => unknown;
-
-    /**
-     * View only a tag.
-     *
-     * https://awesomewm.org/apidoc/core_components/tag.html#view_only
-     */
-    view_only: (this: any) => void;
-
-    // there are two, one static one per instance TODO:
-    connect_signal: (this: any, name: string, func: Function) => void;
-  }
-
-  type Tag = TagProps & TagFunctions;
-
-  export const tag: Tag;
-
   export interface ClientLayouts<T = string> {
     corner: {
       nw: T;
@@ -816,7 +1177,7 @@ declare module 'awful' {
     inc: (
       this: void,
       relativeIndex: number,
-      screen?: Screen,
+      screen?: ScreenInstance,
       layouts?: unknown
     ) => void;
   }
@@ -962,8 +1323,8 @@ declare module 'awful' {
   };
 
   interface TagListWidgetProps {
-    screen: Screen;
-    filter: (this: void, tag: Tag) => void;
+    screen: ScreenInstance;
+    filter: (this: void, tag: TagInstance) => void;
     buttons: Table[];
     base_widget?: Widget;
     update_function?: WidgetCommon['list_update'];
@@ -973,15 +1334,15 @@ declare module 'awful' {
     (args: TagListWidgetProps): unknown;
     // (args: Table, filter: (tag: Tag) => void, buttons: Table<Button>): unknown;
     filter: {
-      noempty: (this: void, tag: Tag) => void;
-      selected: (this: void, tag: Tag) => void;
-      all: (this: void, tag: Tag) => void;
+      noempty: (this: void, tag: TagInstance) => void;
+      selected: (this: void, tag: TagInstance) => void;
+      all: (this: void, tag: TagInstance) => void;
     };
   }
 
   interface TaskListWidgetProps {
-    screen: Screen;
-    filter: (this: void, tag: ClientInstance, screen: Screen) => void;
+    screen: ScreenInstance;
+    filter: (this: void, tag: ClientInstance, screen: ScreenInstance) => void;
     buttons: Table;
     base_widget?: Widget;
     update_function?: WidgetCommon['list_update'];
@@ -991,15 +1352,31 @@ declare module 'awful' {
     (args: TaskListWidgetProps): unknown;
     // (args: Table, filter: (tag: Tag) => void, buttons: Table<Button>): unknown;
     filter: {
-      allscreen: (this: void, client: ClientInstance, screen: Screen) => void;
-      alltags: (this: void, client: ClientInstance, screen: Screen) => void;
-      currenttags: (this: void, client: ClientInstance, screen: Screen) => void;
+      allscreen: (
+        this: void,
+        client: ClientInstance,
+        screen: ScreenInstance
+      ) => void;
+      alltags: (
+        this: void,
+        client: ClientInstance,
+        screen: ScreenInstance
+      ) => void;
+      currenttags: (
+        this: void,
+        client: ClientInstance,
+        screen: ScreenInstance
+      ) => void;
       minimizedcurrenttags: (
         this: void,
         client: ClientInstance,
-        screen: Screen
+        screen: ScreenInstance
       ) => void;
-      focused: (this: void, client: ClientInstance, screen: Screen) => void;
+      focused: (
+        this: void,
+        client: ClientInstance,
+        screen: ScreenInstance
+      ) => void;
     };
   }
 
@@ -1008,7 +1385,7 @@ declare module 'awful' {
       this: any,
       offset: number,
       position: string,
-      screen: Screen
+      screen: ScreenInstance
     ) => unknown;
 
     attach: (
@@ -1026,7 +1403,7 @@ declare module 'awful' {
     month: (
       this: void,
       args: {
-        screen: Screen;
+        screen: ScreenInstance;
         font: string;
         bg?: string;
         opacity?: number;
@@ -1049,7 +1426,7 @@ declare module 'awful' {
       this: void,
       args: {
         position: string;
-        screen: Screen;
+        screen: ScreenInstance;
         opacity: number;
         bg: string;
         font: string;
@@ -1096,7 +1473,7 @@ declare module 'awful' {
     taglist: TagListWidget;
     tasklist: TaskListWidget;
     calendar_popup: CalendarPopup;
-    layoutbox: (this: void, screen: Screen) => void;
+    layoutbox: (this: void, screen: ScreenInstance) => void;
   }
 
   export const widget: AwfulWidget;
@@ -1133,9 +1510,13 @@ declare module 'awful' {
 
 /** @noResolution */
 declare module 'awful.hotkeys_popup' {
-  import {ClientInstance, Screen} from 'awful';
+  import {ClientInstance, ScreenInstance} from 'awful';
   interface Widget {
-    show_help: (this: void, client?: ClientInstance, screen?: Screen) => void;
+    show_help: (
+      this: void,
+      client?: ClientInstance,
+      screen?: ScreenInstance
+    ) => void;
   }
 
   export const widget: Widget;

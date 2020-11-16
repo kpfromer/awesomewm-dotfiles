@@ -199,18 +199,18 @@ let globalkeys = gears.table.join(
     () => {},
     {description: 'select previous', group: 'layout'}
   ),
-  awful.key(
-    [modkey, 'Control'],
-    'n',
-    () => {
-      const c = awful.client.restore(awful.screen);
-      if (c) {
-        c.emit_signal('request::activate', 'key.unminimize', {raise: true});
-      }
-    },
-    () => {},
-    {description: 'restore minimized', group: 'client'}
-  ),
+  // awful.key(
+  //   [modkey, 'Control'],
+  //   'n',
+  //   () => {
+  //     const c = awful.client.restore(awful.screen);
+  //     if (c) {
+  //       c.emit_signal('request::activate', 'key.unminimize', {raise: true});
+  //     }
+  //   },
+  //   () => {},
+  //   {description: 'restore minimized', group: 'client'}
+  // ),
   // TODO:
   // awful.key(
   //   [modkey],
@@ -307,14 +307,14 @@ let globalkeys = gears.table.join(
 // Bind all key numbers to tags.
 // Be careful: we use keycodes to make it work on any keyboard layout.
 // This should map on the top row of your keyboard, usually 1 to 9.
-for (const i of forRange(1, 9)) {
+for (const i of forRange(0, 8)) {
   globalkeys = gears.table.join(
     globalkeys,
     awful.key(
       [modkey],
-      `#${i + 9}`,
+      `#${i + 10}`,
       () => {
-        const screen = awful.screen.focused();
+        const screen = awful.screen.focused()!;
         const tag = screen.tags[i];
         if (tag) {
           tag.view_only();
@@ -325,9 +325,9 @@ for (const i of forRange(1, 9)) {
     ),
     awful.key(
       [modkey, 'Control'],
-      `#${i + 9}`,
+      `#${i + 10}`,
       () => {
-        const screen = awful.screen.focused();
+        const screen = awful.screen.focused()!;
         const tag = screen.tags[i];
         if (tag) {
           awful.tag.viewtoggle(tag);
@@ -338,7 +338,7 @@ for (const i of forRange(1, 9)) {
     ),
     awful.key(
       [modkey, 'Shift'],
-      `#${i + 9}`,
+      `#${i + 10}`,
       () => {
         if (client.focus) {
           const tag = client.focus.screen.tags[i];
@@ -352,7 +352,7 @@ for (const i of forRange(1, 9)) {
     ),
     awful.key(
       [modkey, 'Control', 'Shift'],
-      `#${i + 9}`,
+      `#${i + 10}`,
       () => {
         if (client.focus) {
           // TODO:

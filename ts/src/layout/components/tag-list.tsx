@@ -9,7 +9,7 @@ import * as beautiful from 'beautiful';
 const dpi = beautiful.xresources.apply_dpi;
 
 interface Props {
-  screen: awful.Screen;
+  screen: awful.ScreenInstance;
   selectedColor: string;
   focus: string;
   regular: string;
@@ -30,7 +30,7 @@ export const TagList: JSX.FunctionComponent<Props> = ({
       onScrollUp={tag => awful.tag.viewnext(tag.screen)}
       tag={
         <Clickable
-          create_callback={(self, tag: awful.Tag, index, objects) => {
+          create_callback={(self, tag: awful.TagInstance, index, objects) => {
             const [background] = self.get_children_by_id<
               wibox.BackgroundWidget
             >('tag-background');
@@ -54,9 +54,12 @@ export const TagList: JSX.FunctionComponent<Props> = ({
 
             // https://www.reddit.com/r/awesomewm/comments/dq6cld/problem_with_urgent_signal_in_tag_list/
             // https://www.reddit.com/r/awesomewm/comments/apj6mv/is_it_possible_to_change_the_tag_icons_depending/
-            tag.connect_signal('property::selected', (tag: awful.Tag) => {
-              background.set_bg(tag.selected ? selectedColor : regular);
-            });
+            tag.connect_signal(
+              'property::selected',
+              (tag: awful.TagInstance) => {
+                background.set_bg(tag.selected ? selectedColor : regular);
+              }
+            );
           }}
         >
           <Background id="tag-background" bg={regular}>

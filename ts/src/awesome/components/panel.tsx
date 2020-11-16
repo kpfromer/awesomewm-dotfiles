@@ -5,7 +5,7 @@ import {ButtonEvents, convertButtonEventsToAwesomeButtons} from './types';
 
 export const TagList: JSX.FunctionComponent<
   Omit<awful.TagListWidgetProps, 'filter' | 'buttons'> &
-    ButtonEvents<awful.Tag> & {
+    ButtonEvents<awful.TagInstance> & {
       all?: boolean;
       selected?: boolean;
       noempty?: boolean;
@@ -26,7 +26,7 @@ export const TagList: JSX.FunctionComponent<
   onScrollDown,
   onScrollUp,
 }) => {
-  let filter: (this: void, tag: awful.Tag) => void =
+  let filter: (this: void, tag: awful.TagInstance) => void =
     awful.widget.taglist.filter.all;
 
   if (all) {
@@ -85,7 +85,7 @@ export const TaskList: JSX.FunctionComponent<
   let filter: (
     this: void,
     client: awful.ClientInstance,
-    screen: awful.Screen
+    screen: awful.ScreenInstance
   ) => void = awful.widget.tasklist.filter.currenttags;
 
   if (allscreen) {

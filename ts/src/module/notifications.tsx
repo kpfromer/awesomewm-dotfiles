@@ -155,7 +155,8 @@ naughty.connect_signal('request::display', n => {
   naughty.layout.box({
     notification: n,
     type: 'notification',
-    screen: awful.screen.preferred(),
+    // TODO: todo: fix
+    screen: (awful.screen.preferred as any)(),
     shape: gears.shape.rectangle,
     widget_template: (
       <Background bg={beautiful.background} shape={gears.shape.rounded_rect}>

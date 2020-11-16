@@ -3,7 +3,7 @@
 
 declare module 'naughty' {
   import {GearsShape, Table} from 'gears';
-  import {Screen} from 'awful';
+  import {ScreenInstance} from 'awful';
 
   // todo:
   interface NotificationProps {
@@ -49,7 +49,7 @@ declare module 'naughty' {
   type BoxProps = {
     notification: any;
     type: string;
-    screen: Screen;
+    screen: ScreenInstance;
     shape: unknown;
     // shape: GearsShape;
     widget_template: Widget;

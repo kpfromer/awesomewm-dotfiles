@@ -9,7 +9,7 @@ import * as beautiful from 'beautiful';
 const dpi = beautiful.xresources.apply_dpi;
 
 interface Props {
-  screen: awful.Screen;
+  screen: awful.ScreenInstance;
   selectedColor: string;
   focus: string;
   regular: string;

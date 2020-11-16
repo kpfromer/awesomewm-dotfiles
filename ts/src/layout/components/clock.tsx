@@ -27,10 +27,10 @@ const PlainClock: JSX.FunctionComponent<{
   );
 };
 
-const Calendar: JSX.FunctionComponent<{font: string; screen: awful.Screen}> = ({
-  font,
-  screen,
-}) => {
+const Calendar: JSX.FunctionComponent<{
+  font: string;
+  screen: awful.ScreenInstance;
+}> = ({font, screen}) => {
   // TODO: Extract out to component
   return awful.widget.calendar_popup.month({
     screen,
@@ -107,7 +107,7 @@ function getOridinal(this: void, day = os.date('%d')): string {
 export const Clock: JSX.FunctionComponent<{
   militaryTime?: boolean;
   font: string;
-  screen: awful.Screen;
+  screen: awful.ScreenInstance;
   calendarPosition?: string;
 }> = ({militaryTime = false, font, screen, calendarPosition = 'tr'}) => {
   const openClockToolTip: ButtonPressHandler = button => {

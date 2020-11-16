@@ -4,60 +4,58 @@ import config from '../config';
 import * as beautiful from 'beautiful';
 import * as gears from 'gears';
 
-const {apps} = config;
-
-const tags: Partial<awful.Tag>[] = [
+const tags: Partial<awful.TagInstance>[] = [
   {
     icon: icons.web_browser,
-    type: 'internet',
-    default_app: apps.default.browser,
+    // type: 'internet',
+    // default_app: apps.default.browser,
     gap: beautiful.useless_gap,
   },
   {
     icon: icons.development,
-    type: 'code',
-    default_app: apps.default.editor,
+    // type: 'code',
+    // default_app: apps.default.editor,
     gap: beautiful.useless_gap,
   },
   {
     icon: icons.file_manager,
-    type: 'files',
+    // type: 'files',
     // defaultApp: apps.default.files,
     gap: beautiful.useless_gap,
   },
   {
     icon: icons.terminal,
-    type: 'console',
-    default_app: apps.default.terminal,
+    // type: 'console',
+    // default_app: apps.default.terminal,
     gap: beautiful.useless_gap,
   },
   {
     icon: icons.social,
-    type: 'social',
+    // type: 'social',
     // default_app: apps.default.social,
     gap: beautiful.useless_gap,
   },
   {
     icon: icons.sandbox,
-    type: 'any',
+    // type: 'any',
     // default_app: apps.default.rofi,
     gap: beautiful.useless_gap,
   },
   {
     icon: icons.sandbox,
-    type: 'any',
+    // type: 'any',
     // default_app: apps.default.rofi,
     gap: beautiful.useless_gap,
   },
   {
     icon: icons.sandbox,
-    type: 'any',
+    // type: 'any',
     // default_app: apps.default.rofi,
     gap: beautiful.useless_gap,
   },
   {
     icon: icons.sandbox,
-    type: 'any',
+    // type: 'any',
     // default_app: apps.default.rofi,
     gap: beautiful.useless_gap,
   },
@@ -71,7 +69,7 @@ screen.connect_signal('request::desktop_decoration', s => {
   tags.forEach((tag, index) => {
     awful.tag.add(index.toString(), {
       icon: tag.icon,
-      icon_only: true,
+      // icon_only: true,
       layout: tag.layout ?? config.layouts[0],
       gap_single_client: true,
       gap: tag.gap,
@@ -117,7 +115,7 @@ tag.connect_signal('property::layout', tag => {
 //   let urgent_clients = function (c) {
 //     return awful.rules.match(c, {urgent: true});
 //   };
-//   for (const [c] of awful.client.iterate(urgent_clients)) {
+//   for (const [c] of awful.ClientInstance .iterate(urgent_clients)) {
 //     if (c.first_tag === mouse.screen.selected_tag) {
 //       client.focus = c;
 //       c.raise();
