@@ -29,16 +29,6 @@ declare module 'awful' {
 
   export let rules: Rules;
 
-  /**
-   * https://awesomewm.org/doc/api/classes/awful.button.html
-   */
-  export function button<R = ClientInstance>(
-    mod: string[],
-    button: number,
-    press: (value: R) => void,
-    release?: (value: R) => void
-  ): Table;
-
   type Geometry = {
     x: number;
     y: number;
@@ -1071,9 +1061,89 @@ declare module 'awful' {
 
   export const tag: TagStatic;
 
-  type LayoutThingy = {};
+  // See awful.button documentation
+  export type Modifier =
+    | 'Any'
+    | 'Mod1'
+    | 'Mod2'
+    | 'Mod3'
+    | 'Mod4'
+    | 'Mod5'
+    | 'Shift'
+    | 'Lock'
+    | 'Control';
+
+  type ButtonProps<R> = {
+    /**
+     * The table of modifier keys.
+     * A modifier, such as `Control` are a predetermined set of keys that can be used to implement keybindings. Note that this list is fix and cannot be extended using random key names, code or characters.
+     * Please note that Awesome ignores the status of “Lock” and “Mod2” (Num Lock).
+     * https://awesomewm.org/apidoc/input_handling/awful.button.html#modifiers
+     */
+    modifiers: Modifier[];
+    /**
+     * The mouse button identifier.
+     */
+    button: number;
+    /**
+     * The button description.
+     */
+    description: string;
+    /**
+     * The button name.
+     */
+    name: string;
+    /**
+     * The button group.
+     */
+    group: string;
+    /**
+     * The callback when this button is pressed.
+     */
+    on_press: (this: void, value: R) => void;
+    /**
+     * The callback when this button is released.
+     */
+    on_release: (this: void, value: R) => void;
+  };
+
+  type ButtonFunctions = {
+    /**
+     * Execute this mousebinding.
+     */
+    trigger: (this: void) => void;
+  };
+
+  export type ButtonInstance<R> = ButtonProps<R> & ButtonFunctions;
+
+  /**
+   * Create a new button to use as binding.
+   * https://awesomewm.org/doc/api/classes/awful.button.html
+   * @param mod A list of modifier keys. Valid modifiers are: Any, Mod1, Mod2, Mod3, Mod4, Mod5, Shift, Lock and Control`. This argument is (mandatory).
+   * @param button The mouse button (it is recommended to use the awful.button.names constants.
+   * @param press Callback for when the button is pressed.
+   * @param release Callback for when the button is released.
+   */
+  export function button<R = ClientInstance>(
+    mod: Modifier[],
+    button: number,
+    press: (this: void, value: R) => void,
+    release?: (this: void, value: R) => void
+  ): ButtonInstance<R>;
+  /**
+   * Create a new button to use as binding.
+   * https://awesomewm.org/doc/api/classes/awful.button.html
+   */
+  export function button<R = ClientInstance>(args: {
+    modifiers: Modifier[];
+    button: number;
+    on_press: (this: void, value: R) => void;
+    on_release: (this: void, value: R) => void;
+  }): ButtonInstance<R>;
 
   // TODO: below
+  type LayoutThingy = {};
+  // TODO: NEXT MOUSE
 
   interface MouseClientFunctions {
     resize: (
