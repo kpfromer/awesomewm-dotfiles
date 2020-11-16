@@ -70,7 +70,7 @@ const double_click_event_handler = (handle: (this: void) => void): void => {
 // end
 
 const create_horizontal_bar = (
-  client: awful.Client,
+  client: awful.ClientInstance,
   buttons: unknown,
   pos: string,
   bg: string,

@@ -61,7 +61,7 @@ const rules: awful.Rule[] = [
       focus: true,
       floating: true,
       above: true,
-      callback: function (this: void, window: awful.Client) {
+      callback: function (this: void, window: awful.ClientInstance) {
         awful.placement.centered(window);
       },
     },
@@ -72,7 +72,7 @@ const rules: awful.Rule[] = [
       focus: true,
       floating: true,
       above: true,
-      callback: function (this: void, window: awful.Client) {
+      callback: function (this: void, window: awful.ClientInstance) {
         awful.placement.centered(window);
       },
     },
@@ -94,7 +94,7 @@ awful.rules.rules = rules;
 //   {
 //       rule = {},
 //       properties = {
-//           focus = awful.client.focus.filter,
+//           focus = awful.ClientInstance .focus.filter,
 //           raise = true,
 //           keys = client_keys,
 //           buttons = client_buttons,
@@ -197,7 +197,7 @@ awful.rules.rules = rules;
 // 			id         = 'global',
 // 			rule       = { },
 // 			properties = {
-// 				focus     = awful.client.focus.filter,
+// 				focus     = awful.ClientInstance .focus.filter,
 // 				raise     = true,
 // 				floating = false,
 // 				maximized = false,
@@ -509,7 +509,7 @@ awful.rules.rules = rules;
 // 				skip_decoration = true,
 // 				ontop = true,
 // 				floating = true,
-// 				focus = awful.client.focus.filter,
+// 				focus = awful.ClientInstance .focus.filter,
 // 				raise = true,
 // 				keys = client_keys,
 // 				buttons = client_buttons,
@@ -547,7 +547,7 @@ awful.rules.rules = rules;
 // 			end
 
 // 			local stk_count = 0
-// 			for c in awful.client.iterate(stk) do
+// 			for c in awful.ClientInstance .iterate(stk) do
 // 				stk_count = stk_count + 1
 // 			end
 
@@ -555,7 +555,7 @@ awful.rules.rules = rules;
 // 			if stk_count > 1 then
 // 				c:kill()
 // 				// Switch to previous instance
-// 				for c in awful.client.iterate(stk) do
+// 				for c in awful.ClientInstance .iterate(stk) do
 // 					c:jump_to(false)
 // 				end
 // 			else

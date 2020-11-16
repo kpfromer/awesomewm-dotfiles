@@ -40,8 +40,8 @@ const clientkeys = gears.table.join(
   awful.key(
     [modkey, 'Control'],
     'space',
-    () => {
-      awful.client.floating = !awful.client.floating;
+    client => {
+      client.floating = !client.floating;
     },
     () => {},
     {
@@ -49,15 +49,16 @@ const clientkeys = gears.table.join(
       group: 'client',
     }
   ),
-  awful.key(
-    [modkey, 'Control'],
-    'Return',
-    c => {
-      c.swap(awful.client.getmaster());
-    },
-    () => {},
-    {description: 'move to master', group: 'client'}
-  ),
+  // awful.key(
+  //   [modkey, 'Control'],
+  //   'Return',
+  //   c => {
+  //     // is this depercated
+  //     c.swap(awful.ClientInstance .getmaster());
+  //   },
+  //   () => {},
+  //   {description: 'move to master', group: 'client'}
+  // ),
   awful.key(
     [modkey],
     'o',

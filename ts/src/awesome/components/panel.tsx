@@ -58,7 +58,7 @@ export const TagList: JSX.FunctionComponent<
 
 export const TaskList: JSX.FunctionComponent<
   Omit<awful.TaskListWidgetProps, 'filter' | 'buttons'> &
-    ButtonEvents<awful.Client> & {
+    ButtonEvents<awful.ClientInstance> & {
       allscreen?: boolean;
       alltags?: boolean;
       currenttags?: boolean;
@@ -82,8 +82,11 @@ export const TaskList: JSX.FunctionComponent<
   onScrollDown,
   onScrollUp,
 }) => {
-  let filter: (this: void, client: awful.Client, screen: awful.Screen) => void =
-    awful.widget.tasklist.filter.currenttags;
+  let filter: (
+    this: void,
+    client: awful.ClientInstance,
+    screen: awful.Screen
+  ) => void = awful.widget.tasklist.filter.currenttags;
 
   if (allscreen) {
     filter = awful.widget.tasklist.filter.allscreen;

@@ -3,7 +3,7 @@ import * as awful from 'awful';
 
 // Titlebar stuff
 
-type TitlebarProps = {client: awful.Client};
+type TitlebarProps = {client: awful.ClientInstance};
 
 export const ClientIcon: JSX.FunctionComponent<TitlebarProps> = ({client}) => {
   return awful.titlebar.widget.iconwidget(client) as any;

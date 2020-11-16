@@ -1,11 +1,11 @@
 /** @noResolution */
 
-import {Client, Screen, Tag} from 'awful';
+import {ClientStatic, Screen, Tag} from 'awful';
 import {Table} from 'gears';
 
 declare global {
   export const awesome: any;
-  export const client: Client;
+  export const client: ClientStatic;
   // TODO:
   export const mouse: any;
   export const root: {
