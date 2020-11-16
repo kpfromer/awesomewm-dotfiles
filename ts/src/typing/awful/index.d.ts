@@ -29,6 +29,100 @@ declare module 'awful' {
 
   export let rules: Rules;
 
+  // Awesome
+  type AwesomeFields = {
+    /**
+     * The AwesomeWM version.
+     */
+    version: string;
+    /**
+     * The AwesomeWM release name.
+     */
+    release: string;
+    /**
+     * The AwesomeWM API level.
+     * By default, this matches the major version (first component of the version).
+     *
+     * API levels are used to allow newer version of AwesomeWM to alter the behavior and subset deprecated APIs. Using an older API level than the current major version allows to use legacy rc.lua with little porting. However, they wont be able to use all the new features. Attempting to use a newer feature along with an older API level is not and will not be supported, even if it almost works. Keeping up to date with the newer API levels is highly recommended.
+     *
+     * Going the other direction, setting an higher API level allows to take advantage of experimental feature. It will also be much harsher when it comes to deprecation. Setting the API level value beyond current+3 will treat using APIs currently pending deprecation as fatal errors. All new code submitted to the upstream AwesomeWM codebase is forbidden to use deprecated APIs. Testing your patches with mode and the default config is recommended before submitting a patch.
+     *
+     * You can use the -l command line option or api-level modeline key to set the API level for your rc.lua. This setting is global and read only, individual modules cannot set their own API level.
+     */
+    api_level: string;
+    /**
+     * The configuration file which has been loaded.
+     */
+    conffile: string;
+    /**
+     * True if we are still in startup, false otherwise.
+     */
+    startup: boolean;
+    /**
+     *
+     */
+    startup_errors: boolean;
+    /**
+     * True if a composite manager is running.
+     */
+    composite_manager_running: boolean;
+    /**
+     * Table mapping between signal numbers and signal identifiers.
+     */
+    unix_signal: Table<any>;
+    /**
+     * The hostname of the computer on which we are running.
+     */
+    hostname: string;
+    /**
+     * The path where themes were installed to.
+     */
+    themes_path: string;
+    /**
+     * The path where icons were installed to.
+     */
+    icon_path: string;
+  };
+
+  export type AwesomeStatic = AwesomeFields & {
+    /**
+     * Register a new xproperty.
+     * @param name The name of the X11 property.
+     * @param type One of “string”, “number” or “boolean”.
+     */
+    register_xproperty: (
+      this: void,
+      name: string,
+      type: 'string' | 'number' | 'boolean'
+    ) => void;
+    /**
+     * Quit awesome.
+     * @param code The exit code to use when exiting. (default 0)
+     */
+    quit: (this: void, code?: number) => void;
+    /**
+     * Execute another application, probably a window manager, to replace awesome.
+     * @param command The command line to execute.
+     */
+    exec: (this: void, command: string) => void;
+    /**
+     * Restart awesome.
+     */
+    restart: (this: void) => void;
+    /**
+     * Send a signal to a process.
+     * @param pid Process identifier. 0 and negative values have special meaning. See man 3 kill.
+     * @param signal Signal number. See [awesome.unix_signal](https://awesomewm.org/apidoc/core_components/awesome.html#unix_signal) for a list of signals.
+     * @returns True if the signal was successfully sent, else false
+     */
+    kill: (this: void, pid: number, signal: number) => boolean;
+
+    // sync
+
+    // load_image
+    // TODO: rest
+  };
+
   type Geometry = {
     x: number;
     y: number;

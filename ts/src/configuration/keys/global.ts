@@ -168,10 +168,16 @@ let globalkeys = gears.table.join(
     description: 'reload awesome',
     group: 'awesome',
   }),
-  awful.key([modkey, 'Shift'], 'q', awesome.quit, () => {}, {
-    description: 'quit awesome',
-    group: 'awesome',
-  }),
+  awful.key(
+    [modkey, 'Shift'],
+    'q',
+    () => awesome.quit(),
+    () => {},
+    {
+      description: 'quit awesome',
+      group: 'awesome',
+    }
+  ),
   awful.key(
     [modkey],
     'l',
