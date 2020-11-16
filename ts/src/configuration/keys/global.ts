@@ -130,7 +130,7 @@ let globalkeys = gears.table.join(
     {description: 'focus the previous screen', group: 'screen'}
   ),
   // TODO:
-  // awful.key([modkey], 'u', awful.client.urgent.jumpto, () => {}, {
+  // awful.key([modkey], 'u', awful.client .urgent.jumpto, () => {}, {
   //   description: 'jump to urgent client',
   //   group: 'client',
   // }),
@@ -203,7 +203,7 @@ let globalkeys = gears.table.join(
     [modkey, 'Control'],
     'n',
     () => {
-      const c = awful.client.restore();
+      const c = awful.client.restore(awful.screen);
       if (c) {
         c.emit_signal('request::activate', 'key.unminimize', {raise: true});
       }

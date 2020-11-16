@@ -3,7 +3,7 @@
 
 declare module 'awful' {
   import {BaseWiboxWidget} from 'wibox';
-  import {GearsShape, GearsShapeFunction, Table} from 'gears';
+  import {GearsShape, GearsShapeFunction, Surface, Table} from 'gears';
 
   interface Util {
     shell: string;
@@ -32,13 +32,23 @@ declare module 'awful' {
   /**
    * https://awesomewm.org/doc/api/classes/awful.button.html
    */
-  export function button<R = Client>(
+  export function button<R = ClientInstance>(
     mod: string[],
     button: number,
     press: (value: R) => void,
     release?: (value: R) => void
   ): Table;
 
+  type Geometry = {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
+
+  type Direction = 'up' | 'down' | 'left' | 'right';
+
+  // Client
   interface ClientProps {
     /* The X window id.*/
     window: string;
@@ -203,103 +213,385 @@ declare module 'awful' {
     // /* Set the client shape.*/
     shape: GearsShapeFunction;
 
-    focus: Client & {
-      filter: (client: Client) => Client | undefined;
+    focus: ClientInstance & {
+      filter: (client: ClientInstance) => ClientInstance | undefined;
     };
 
     // CUSTOM:
     round_corners: boolean;
 
-    geometry: {
-      // TODO:
-      (this: any, geo: {height: number; width: number}): Table;
+    geometry: Geometry & {
+      (this: any, geo?: Partial<Geometry>): Geometry;
     };
   }
 
   interface ClientFunctions {
-    emit_signal: (this: any, name: string, ...args: any[]) => void;
-    kill: (this: any) => void;
-    raise: (this: any) => void;
-    swap: (this: any, client: Client) => void;
-    move_to_screen: (this: any, screen?: Screen) => void;
+    // TODO: struts
+
     /**
-     * Connect to a signal.
-     *
-     * https://awesomewm.org/doc/api/classes/client.html#client:connect_signal
+     * Check if a client is visible on its screen.
+     * @returns A boolean value, true if the client is visible, false otherwise.
      */
-    connect_signal: (
-      this: void,
-      // this: any,
-      name: string,
-      cb: (client: Client) => void
+    isvisible: (this: any) => boolean;
+
+    /**
+     * Kill a client.
+     * This method can be used to close (kill) a client using the X11 protocol. To use the POSIX way to kill a process, use awesome.kill.
+     */
+    kill: (this: any) => void;
+
+    /**
+     * Swap a client with another one in global client list.
+     * @param client The to swap with.
+     */
+    swap: (this: any, client: ClientInstance) => void;
+
+    /**
+     * Access or set the client tags.
+     * Use the first_tag field to access the first tag of a client directly.
+     * @param tagsTable A table with tags to set, or nil to get the current tags.
+     * @returns A table with all tags.
+     */
+    tags: (this: any, tagsTable?: Tag[]) => Tag[];
+
+    /**
+     * Raise a client on top of others which are on the same layer.
+     */
+    raise: (this: any) => void;
+
+    /**
+     * Lower a client on bottom of others which are on the same layer.
+     */
+    lower: (this: any) => void;
+
+    /**
+     * Stop managing a client.
+     */
+    unmanage: (this: any) => void;
+
+    // TODO: partial?
+    /**
+     * Return or set client geometry.
+     */
+    geometry: (this: any, geo: Geometry) => Geometry;
+
+    /**
+     * Apply size hints to a size.
+     * This method applies the client size hints. The client will be resized according to the size hints as long as size_hints_honor is true. Regardless of the status of size_hints_honor, this method will return the size with the size hints applied.
+     * @param width Desired width of client
+     * @param height Desired height of client
+     * @returns [Actual width of client, Actual height of client]
+     */
+    apply_size_hints: (
+      this: any,
+      width: number,
+      height: number
+    ) => [width: number, height: number];
+
+    /**
+     * Get the client’s n-th icon.
+     * @param index The index in the list of icons to get.
+     * @returns A lightuserdata for a cairo surface. This reference must be destroyed!
+     */
+    get_icon: (this: any, index: number) => Surface;
+
+    // TODO: append_keybinding
+    // TODO: remove_keybinding
+    // TODO: append_mousebinding
+    // TODO: remove_mousebinding
+
+    /**
+     * Move/resize a client relative to current coordinates.
+     * @param x The relative x coordinate. (default c.x)
+     * @param y The relative y coordinate. (default c.y)
+     * @param w The relative width. (default c.width)
+     * @param h The relative height. (default c.height)
+     */
+    relative_move: (
+      this: any,
+      x: number,
+      y: number,
+      w: number,
+      h: number
     ) => void;
-    geometry: (this: any, geo?: Table) => Table;
+
+    /**
+     * Move a client to a tag.
+     * @param target The tag to move the client to.
+     */
     move_to_tag: (this: any, target: Tag) => void;
-
-    getmaster: () => Client;
-  }
-
-  interface Swap {
-    bydirection: (
-      this: void,
-      dir: string,
-      client?: Client,
-      stacked?: boolean
-    ) => unknown;
-
-    global_bydirection: (this: void, dir: unknown, sel: Client) => unknown;
-
-    byidx: (this: void, i: unknown, client?: Client) => unknown;
-  }
-
-  interface Focus {
-    // history: History;
-
-    byidx: (this: void, index: number, client?: Client) => unknown;
-
-    filter: (this: void, c: Client) => unknown;
-
-    bydirection: (
-      this: void,
-      dir: string,
-      client?: Client,
-      stacked?: boolean
-    ) => unknown;
-
-    global_bydirection: (
-      this: void,
-      dir: unknown,
-      client?: Client,
-      stacked?: boolean
-    ) => unknown;
 
     /**
      * Toggle a tag on a client.
-     * @param tag The tag to move the client to.
+     * @param target The tag to move the client to.
      */
-    toggle_tag: (this: any, tag: Tag) => void;
+    toggle_tag: (this: any, target: Tag) => void;
+    /**
+     * Move a client to a screen. Default is next screen, cycling.
+     * @param screen The screen, default to current + 1. (default c.screen.index+1)
+     */
+    move_to_screen: (this: any, screen?: Screen) => void;
+    /**
+     * Tag a client with the set of current tags.
+     */
+    to_selected_tags: (this: any) => void;
+    // TODO: get_transient_for_matching;
+    // TODO: is_transient_for;
+    /**
+     * Activate (focus) a client.
+     * This method is the correct way to focus a client. While client.focus = my_client works and is commonly used in older code, it has some drawbacks. The most obvious one is that it bypasses the activate filters. It also doesn’t handle minimized clients well and requires a lot of boilerplate code to make work properly.
+     */
+    activate: (
+      this: any,
+      args: {
+        context?: string;
+        raise?: boolean;
+        force?: boolean;
+        switch_to_tags?: boolean;
+        switch_to_tag?: boolean;
+        action?: boolean;
+        toggle_minimization?: boolean;
+      }
+    ) => void;
+    // TODO: grant;
+    // TODO: deny;
+    /**
+     * Emit a signal.
+     * @param name The name of the signal.
+     * @param args Extra arguments for the callback functions. Each connected function receives the object as first argument and then any extra arguments that are given to emit_signal().
+     */
+    emit_signal: (this: any, name: string, ...args: any[]) => void;
+    /**
+     * Connect to a signal.
+     * @param name The name of the signal.
+     * @param func The callback to call when the signal is emitted.
+     */
+    connect_signal: (
+      this: any,
+      name: string,
+      func: (client: ClientInstance, ...args: any[]) => void
+    ) => void;
+    /**
+     * Connect to a signal weakly.
+     * This allows the callback function to be garbage collected and automatically disconnects the signal when that happens.
+     * **Warning:** Only use this function if you really, really, really know what you are doing.
+     * @param name The name of the signal.
+     * @param func The callback to call when the signal is emitted.
+     */
+    weak_connect_signal: (this: any, name: string, func: Function) => void;
   }
 
-  type Client = {
-    swap: Swap;
-    focus: Focus;
+  export type ClientStatic = {
     /**
-     * @noSelf
+     * Get the number of instances.
      */
-    restore: (screen?: Screen) => Client;
-  } & ClientProps &
-    ClientFunctions;
+    instances: (this: void) => number;
+    /**
+     * Get all clients into a table.
+     * @param screen A screen number to filter clients on.
+     * @param stacked Return clients in stacking order? (ordered from top to bottom).
+     */
+    get: (this: void, screen?: Screen, stacked?: boolean) => ClientInstance[];
+    /**
+     * Disconnect from a signal.
+     */
+    disconnect_signal: (this: void, name: string, callback: Function) => void;
+    /**
+     * Emit a signal.
+     */
+    emit_signal: (this: void, name: string, ...args: any[]) => void;
+    /**
+     * Connect to a signal.
+     */
+    connect_signal: (
+      this: void,
+      name: string,
+      callback: (this: void, client: ClientInstance, ...args: any[]) => void
+    ) => void;
+    /**
+     * Get a client by its relative index to another client. If no client is passed, the focused client will be used.
+     * @param index The index. Use 1 to get the next, -1 to get the previous.
+     * @param sel The client. (optional)
+     * @param stacked Use stacking order? (top to bottom) (default false)
+     * @returns A client, or nil if no client is available.
+     */
+    next: (
+      this: void,
+      index: number,
+      sel?: ClientInstance,
+      stacked?: boolean
+    ) => ClientInstance | undefined;
 
-  export const client: Client;
+    swap: {
+      /**
+       * Swap a client with another client in the given direction.
+       * @param dir The direction, can be either "up", "down", "left" or "right".
+       * @param client The client. (default focused)
+       * @param stacked Use stacking order? (top to bottom) (default false)
+       */
+      bydirection: (
+        this: void,
+        dir: Direction,
+        client?: ClientInstance,
+        stacked?: boolean
+      ) => void;
+      /**
+       * Swap a client with another client in the given direction.
+       * Swaps across screens.
+       * @param dir The direction, can be either "up", "down", "left" or "right".
+       * @param sel The client. (optional)
+       */
+      global_bydirection: (
+        this: void,
+        dir: Direction,
+        sel: ClientInstance
+      ) => void;
+      /**
+       * Swap a client by its relative index.
+       */
+      byidx: (this: void, index: number, client?: ClientInstance) => void;
+    };
 
-  // TODO:
-  export type ClientInstance = Omit<Client, 'connect_signal'> & {
-    connect_signal: (this: any, name: string, callback: Function) => void;
+    /**
+     * Cycle through the clients to change the focus.
+     * This will swap the client from one position to the next in the layout.
+     * @param clockwise True to cycle clients clockwise.
+     * @param screen The screen.
+     * @param stacked Use stacking order? (top to bottom) (default false)
+     */
+    cycle: (
+      this: void,
+      clockwise: boolean,
+      screen?: Screen,
+      stacked?: boolean
+    ) => void;
+
+    /**
+     * Restore (=unminimize) a random client.
+     * @returns The restored client if some client was restored, otherwise nil.
+     */
+    restore: (this: void, screen: Screen) => ClientInstance | undefined;
+
+    property: {
+      /**
+       * Set a client property to be persistent across restarts (via X properties).
+       * @param prop The property name.
+       * @param kind The type (used for register_xproperty). One of "string", "number" or "boolean".
+       */
+      persist: (this: void, prop: string, kind: string) => void;
+    };
+
+    // Layout related functions
+
+    /**
+     * Get the master window.
+     * @param screen The screen. (default awful.screen.focused())
+     */
+    getmaster: (this: void, screen?: Screen) => Screen;
+    /**
+     * Set the client as master: put it at the beginning of other windows.
+     * @param client he window to set as master.
+     */
+    setmaster: (this: void, client: ClientInstance) => Screen;
+    /**
+     * Set the client as slave: put it at the end of other windows.
+     * @param client The window to set as slave.
+     */
+    setslave: (this: void, client: ClientInstance) => Screen;
+    /**
+     * Calculate a client’s column number, index in that column, and number of visible clients in this column.
+     * @param client The client.
+     */
+    idx: (this: void, client: ClientInstance) => Screen;
+    /**
+     * Set the window factor of a client
+     * @param wfact the window factor value
+     * @param client The client.
+     */
+    setwfact: (this: void, wfact: number, client: ClientInstance) => Screen;
+    /**
+     * Change window factor of a client.
+     * @param add Amount to increase/decrease the client’s window factor. Should be between -current_window_factor and something close to infinite. The normalisation then ensures that the sum of all factors is 1.
+     * @param client The client.
+     */
+    incwfact: (this: void, add: number, client: ClientInstance) => Screen;
+
+    // TODO:
+    // iterate
+    // .focus.history.disable_tracking
+    // .focus.history.enable_tracking
+    // .focus.history.is_enabled
+
+    // See docs for setting focused client
+    readonly focus: ClientInstance & {
+      /**
+       * Filter out window that we do not want handled by focus. This usually means that desktop, dock and splash windows are not registered and cannot get focus.
+       * @param client The client.
+       * @returns The same client if it’s ok, nil otherwise.
+       */
+      filter: (
+        this: void,
+        client: ClientInstance
+      ) => ClientInstance | undefined;
+
+      /**
+       * Focus a client by its relative index.
+       * @param index The index.
+       * @param client The client.
+       */
+      byidx: (this: void, index: number, client?: ClientInstance) => void;
+
+      // filter: (this: void, c: Client) => unknown;
+
+      /**
+       * Focus a client by the given direction.
+       * @param dir The direction, can be either "up", "down", "left" or "right".
+       * @param client The client.
+       * @param stacked Use stacking order? (top to bottom) (default false)
+       */
+      bydirection: (
+        this: void,
+        dir: Direction,
+        client?: ClientInstance,
+        stacked?: boolean
+      ) => void;
+
+      /**
+       * Focus a client by the given direction. Moves across screens.
+       * @param dir The direction, can be either “up”, “down”, “left” or “right”.
+       * @param client The client. (optional)
+       * @param stacked Use stacking order? (top to bottom) (default false)
+       */
+      global_bydirection: (
+        this: void,
+        dir: Direction,
+        client?: ClientInstance,
+        stacked?: boolean
+      ) => void;
+    };
   };
 
+  export type ClientInstance = ClientProps & ClientFunctions;
+  export const client: ClientStatic;
+
+  // TODO: below
+
+  // type Client = {
+  //   /**
+  //    * @noSelf
+  //    */
+  //   restore: (screen?: Screen) => ClientInstance;
+  // } & ClientProps &
+  //   ClientFunctions;
+
   interface MouseClientFunctions {
-    resize: (this: void, client: Client, corner?: string, args?: Table) => void;
-    move: (this: void, client: Client, snap?: any) => void;
+    resize: (
+      this: void,
+      client: ClientInstance,
+      corner?: string,
+      args?: Table
+    ) => void;
+    move: (this: void, client: ClientInstance, snap?: any) => void;
   }
 
   type MouseClient = MouseClientFunctions;
@@ -322,13 +614,15 @@ declare module 'awful' {
   export function key(
     mod: string[],
     key: string,
-    press: (client: Client) => void,
-    release: (client: Client) => void,
+    press: (client: ClientInstance) => void,
+    release: (client: ClientInstance) => void,
     /** This is required! */
     data: Table<any>
   ): Table;
 
   interface ScreenProps {
+    selected_tag: Tag;
+
     tags: Table;
     dpi: number;
 
@@ -340,7 +634,7 @@ declare module 'awful' {
     };
   }
   interface ScreenFunctions {
-    preferred: (this: void, client?: Client) => Screen;
+    preferred: (this: void, client?: ClientInstance) => Screen;
 
     getbycoord: (this: void, x: number, y: number) => unknown;
 
@@ -382,8 +676,12 @@ declare module 'awful' {
    */
   interface PlacementFunctions {
     centered: (drawable: Drawable, args?: Table) => Table;
-    no_offscreen: (client: Client, args?: {screen: number}) => Table;
-    bottom_right: (this: void, client: Client, args?: PlacementArgs) => Table;
+    no_offscreen: (client: ClientInstance, args?: {screen: number}) => Table;
+    bottom_right: (
+      this: void,
+      client: ClientInstance,
+      args?: PlacementArgs
+    ) => Table;
   }
 
   export type Placement = PlacementProps & PlacementFunctions;
@@ -419,7 +717,7 @@ declare module 'awful' {
   }
 
   interface TagFunctions {
-    clients: (this: any) => Table<Client>;
+    clients: (this: any) => Table<ClientInstance>;
 
     add: (this: void, name: string, props: Partial<TagProps>) => Tag;
     /**
@@ -559,16 +857,16 @@ declare module 'awful' {
     /**
      * @noSelf
      */
-    titlewidget: (c: Client) => unknown;
+    titlewidget: (c: ClientInstance) => unknown;
     /**
      * @noSelf
      */
-    iconwidget: (c: Client) => unknown;
+    iconwidget: (c: ClientInstance) => unknown;
     /**
      * @noSelf
      */
     button: (
-      c: Client,
+      c: ClientInstance,
       name: string,
       selector: unknown,
       action: unknown
@@ -576,35 +874,35 @@ declare module 'awful' {
     /**
      * @noSelf
      */
-    floatingbutton: (c: Client) => unknown;
+    floatingbutton: (c: ClientInstance) => unknown;
     /**
      * @noSelf
      */
-    maximizedbutton: (c: Client) => unknown;
+    maximizedbutton: (c: ClientInstance) => unknown;
     /**
      * @noSelf
      */
-    minimizebutton: (c: Client) => unknown;
+    minimizebutton: (c: ClientInstance) => unknown;
     /**
      * @noSelf
      */
-    closebutton: (c: Client) => unknown;
+    closebutton: (c: ClientInstance) => unknown;
     /**
      * @noSelf
      */
-    ontopbutton: (c: Client) => unknown;
+    ontopbutton: (c: ClientInstance) => unknown;
     /**
      * @noSelf
      */
-    stickybutton: (c: Client) => unknown;
+    stickybutton: (c: ClientInstance) => unknown;
   }
 
   export interface Titlebar {
     // widget: Widget;
     setup: (this: any, args: unknown) => unknown;
-    show: (this: any, client: Client, position?: string) => unknown;
-    hide: (this: any, client: Client, position?: string) => unknown;
-    toggle: (this: any, client: Client, position?: string) => unknown;
+    show: (this: any, client: ClientInstance, position?: string) => unknown;
+    hide: (this: any, client: ClientInstance, position?: string) => unknown;
+    toggle: (this: any, client: ClientInstance, position?: string) => unknown;
   }
 
   /**
@@ -612,7 +910,7 @@ declare module 'awful' {
    */
   export const titlebar: {
     (
-      c: Client,
+      c: ClientInstance,
       args: Partial<{
         size: number;
         position: string;
@@ -683,7 +981,7 @@ declare module 'awful' {
 
   interface TaskListWidgetProps {
     screen: Screen;
-    filter: (this: void, tag: Client, screen: Screen) => void;
+    filter: (this: void, tag: ClientInstance, screen: Screen) => void;
     buttons: Table;
     base_widget?: Widget;
     update_function?: WidgetCommon['list_update'];
@@ -693,15 +991,15 @@ declare module 'awful' {
     (args: TaskListWidgetProps): unknown;
     // (args: Table, filter: (tag: Tag) => void, buttons: Table<Button>): unknown;
     filter: {
-      allscreen: (this: void, client: Client, screen: Screen) => void;
-      alltags: (this: void, client: Client, screen: Screen) => void;
-      currenttags: (this: void, client: Client, screen: Screen) => void;
+      allscreen: (this: void, client: ClientInstance, screen: Screen) => void;
+      alltags: (this: void, client: ClientInstance, screen: Screen) => void;
+      currenttags: (this: void, client: ClientInstance, screen: Screen) => void;
       minimizedcurrenttags: (
         this: void,
-        client: Client,
+        client: ClientInstance,
         screen: Screen
       ) => void;
-      focused: (this: void, client: Client, screen: Screen) => void;
+      focused: (this: void, client: ClientInstance, screen: Screen) => void;
     };
   }
 
@@ -835,9 +1133,9 @@ declare module 'awful' {
 
 /** @noResolution */
 declare module 'awful.hotkeys_popup' {
-  import {Client, Screen} from 'awful';
+  import {ClientInstance, Screen} from 'awful';
   interface Widget {
-    show_help: (this: void, client?: Client, screen?: Screen) => void;
+    show_help: (this: void, client?: ClientInstance, screen?: Screen) => void;
   }
 
   export const widget: Widget;
