@@ -1141,6 +1141,79 @@ declare module 'awful' {
     on_release: (this: void, value: R) => void;
   }): ButtonInstance<R>;
 
+  export type KeyInstance<R> = {
+    /**
+     * The keyboard key used to trigger this keybinding.
+     * It can be the key symbol, such as `space`, the character, such as ` ` or the keycode such as `#65`.
+     */
+    key: string;
+    /**
+     * A group of keys.
+     * - numrow: The row above the letters in the US PC-105/PC-104 keyboards and its derivative. This is usually the number 1-9 followed by 0.
+     * - arrows: The Left/Right/Top/Bottom keys usually located right of the spacebar.
+     * - fkeys: The keys F1 through F12 located at the topmost row of any keyboard, plus F13 through F35 on specialist keyboards.
+     * - numpad: The number keys on the keypad to the right of the letters and the arrow keys. Not present in every keyboard.
+     */
+    keygroup: 'numrow' | 'arrows' | 'fkeys' | 'numpad';
+    /**
+     * The table of modifier keys.
+     * A modifier, such as `Control` are a predetermined set of keys that can be used to implement keybindings. Note that this list is fix and cannot be extended using random key names, code or characters.
+     * Please note that Awesome ignores the status of “Lock” and “Mod2” (Num Lock).
+     * https://awesomewm.org/apidoc/input_handling/awful.button.html#modifiers
+     */
+    modifiers: Modifier[];
+    /**
+     * The button description.
+     */
+    description: string;
+    /**
+     * The button name.
+     */
+    name: string;
+    /**
+     * The button group.
+     */
+    group: string;
+    /**
+     * The callback when this button is pressed.
+     */
+    on_press: (this: void, value: R) => void;
+    /**
+     * The callback when this button is released.
+     */
+    on_release: (this: void, value: R) => void;
+  };
+
+  /**
+   * Create a new key binding (alternate constructor).
+   * https://awesomewm.org/doc/api/libraries/awful.key.html
+   *
+   * @param mod A list of modifier keys. Valid modifiers are: Any, Mod1, Mod2, Mod3, Mod4, Mod5, Shift, Lock and Control.
+   * @param key The key to trigger an event. It can be the character itself of #+keycode.
+   * @param press Callback for when the key is pressed.
+   * @param release Callback for when the key is released. (optional)
+   * @param data  User data for key, for example {description=“select next tag”, group=“tag”}. (optional)
+   */
+  export function key<R = ClientInstance>(
+    mod: Modifier[],
+    key: string,
+    press: (client: ClientInstance) => void,
+    release?: (client: ClientInstance) => void,
+    /** This is required! */
+    data?: Table
+  ): KeyInstance<R>[];
+
+  /**
+   * Create a new key binding.
+   * https://awesomewm.org/doc/api/libraries/awful.key.html
+   */
+  export function key<R = ClientInstance>(args: {
+    modifiers: Modifier[];
+    key: string;
+    on_press: (client: ClientInstance) => void;
+    on_release?: (client: ClientInstance) => void;
+  }): KeyInstance<R>[];
+
   // TODO: below
   type LayoutThingy = {};
   // TODO: NEXT MOUSE
@@ -1168,18 +1241,6 @@ declare module 'awful' {
    * https://awesomewm.org/doc/api/libraries/mouse.html
    */
   export const mouse: Mouse;
-
-  /**
-   * https://awesomewm.org/doc/api/libraries/awful.key.html
-   */
-  export function key(
-    mod: string[],
-    key: string,
-    press: (client: ClientInstance) => void,
-    release: (client: ClientInstance) => void,
-    /** This is required! */
-    data: Table<any>
-  ): Table;
 
   interface PlacementProps {}
 
