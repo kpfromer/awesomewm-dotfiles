@@ -82,7 +82,7 @@ const apps = {
     // Start audio
     'start-pulseaudio-x11',
     // Start blue light filter
-    'redshift -l 40.014984:-105.270546',
+    'redshift',
     'blueberry-tray', // Bluetooth tray icon
 
     // 'xfce4-power-manager', // Power manager
@@ -113,8 +113,8 @@ const apps = {
 };
 
 const config = {
-  debug: false,
-  modkey: 'Mod4',
+  debug: false as const,
+  modkey: 'Mod4' as const,
 
   // TODO: actually setup
   // Shows laptop related stuff like battery level
