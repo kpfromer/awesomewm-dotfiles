@@ -1,8 +1,10 @@
+import {Theme} from 'beautiful';
 import * as filesystem from 'gears.filesystem';
+import {CustomTheme} from 'theme/index';
 const theme_dir = `${filesystem.get_configuration_dir()}/theme`;
 
 // todo: typing
-const theme: any = {};
+const theme: Partial<CustomTheme> = {};
 
 theme.icons = `${theme_dir}/icons/`;
 theme.font = 'Inter Regular 10';
@@ -48,7 +50,10 @@ theme.transparent = '#00000000';
 // Awesome icon
 theme.awesome_icon = `${theme.icons}awesome.svg`;
 
-export const awesome_overrides = (theme: unknown) => {};
+export const awesome_overrides = function (
+  this: void,
+  theme: Partial<CustomTheme>
+) {};
 
 export default {
   theme,

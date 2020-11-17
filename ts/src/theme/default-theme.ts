@@ -4,6 +4,7 @@
 import * as filesystem from 'gears.filesystem';
 import * as beautiful from 'beautiful';
 import * as gears from 'gears';
+import {CustomTheme} from 'theme/index';
 
 const dpi = beautiful.xresources.apply_dpi;
 const gtk_variable = beautiful.gtk.get_theme_variables;
@@ -13,7 +14,7 @@ const titlebar_theme = 'stoplight';
 const titlebar_icon_path = `${theme_dir}/icons/titlebar/${titlebar_theme}/`;
 const tip = titlebar_icon_path;
 
-const theme: any = {};
+const theme: Partial<CustomTheme> = {};
 
 // Font
 theme.font = 'Inter Regular 10';
@@ -22,7 +23,7 @@ theme.font_bold = 'Inter Bold 10';
 // Menu icon theme
 theme.icon_theme = 'Tela-blue-dark';
 
-const awesome_overrides = function (theme: any) {
+const awesome_overrides = function (this: void, theme: Partial<CustomTheme>) {
   theme.dir = theme_dir;
   theme.icons = `${theme.dir}/icons/`;
   theme.wallpaper = `${theme.dir}/wallpapers/morning-wallpaper.jpg`;
@@ -60,12 +61,12 @@ const awesome_overrides = function (theme: any) {
   theme.layout_tile = `${theme.icons}layouts/view-quilt.png`;
   theme.layout_floating = `${theme.icons}layouts/floating.png`;
 
-  // // UI Groups
+  // UI Groups
   theme.groups_title_bg = '#ffffff15';
   theme.groups_bg = '#ffffff10';
   theme.groups_radius = dpi(16);
 
-  // // UI events
+  // UI events
   theme.leave_event = theme.transparent;
   theme.enter_event = '#ffffff10';
   theme.press_event = '#ffffff15';
