@@ -75,7 +75,7 @@ screen.connect_signal('request::desktop_decoration', s => {
       gap: tag.gap,
       screen: s,
       // default_app: tag.default_app,
-      selected: index === 1,
+      selected: index === 0,
     });
   });
 });
