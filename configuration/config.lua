@@ -136,6 +136,9 @@ local config = {
         ['00:00:00'] = 'midnight-wallpaper.png',
         ['06:22:00'] = 'morning-wallpaper.jpg',
         ['12:00:00'] = 'noon-wallpaper.jpg',
+        ['14:00:00'] = 'mt-washington-13.jpg',
+        ['15:00:00'] = 'mt-washington-16.jpg',
+        ['16:00:00'] = 'mt-washington-17.jpg',
         ['17:58:00'] = 'night-wallpaper.jpg'
         -- Example of just using auto-scheduling with keywords
         --[[

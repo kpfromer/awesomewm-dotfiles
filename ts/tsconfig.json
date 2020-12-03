@@ -9,11 +9,7 @@
     "types": ["lua-types/5.3"],
     "strict": true,
     "jsx": "react",
-    "jsxFactory": "Awesome.createElement",
-    "paths": {
-      "awesome": ["awesome/index"],
-      "helper": ["helper/*"]
-    }
+    "jsxFactory": "Awesome.createElement"
   },
   "tstl": {
     "luaTarget": "5.3",
