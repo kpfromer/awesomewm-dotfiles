@@ -28,17 +28,12 @@ screen.connect_signal(
       type: 'dock',
       height: dpi(48),
       bg: theme.background!,
-      // TODO: fix beautiful variables not found (they are undefined!!)
-      // bg: beautiful.background,
       fg: beautiful.fg_normal,
     });
 
-    // logToFile(beautiful);
-    // logToFile(theme, '/tmp/awesome-3.txt');
-
     const font = theme.font!;
 
-    const focus = '#ffffff66';
+    const focus = '#ffffffbb';
 
     panel.setup(
       <Margin left={dpi(5)} right={dpi(5)}>
