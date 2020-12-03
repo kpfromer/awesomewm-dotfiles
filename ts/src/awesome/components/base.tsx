@@ -1,6 +1,7 @@
 import Awesome from 'awesome/jsx';
 import * as wibox from 'wibox';
 import * as awful from 'awful';
+import theme from '../../theme/index';
 
 export type WiboxTextBox = {
   markup: string;
@@ -48,13 +49,18 @@ export const Image: JSX.FunctionComponent<
   return <base {...props} widget={wibox.widget.imagebox} />;
 };
 
-export const Margin: JSX.FunctionComponent<{
+export interface MarginProps {
   margins?: number;
   left?: number;
   right?: number;
   top?: number;
   bottom?: number;
-}> = ({children, ...rest}) => {
+}
+
+export const Margin: JSX.FunctionComponent<MarginProps> = ({
+  children,
+  ...rest
+}) => {
   return (
     <base {...rest} widget={wibox.container.margin}>
       {children}
@@ -121,7 +127,16 @@ export const Layout: JSX.FunctionComponent<{
 };
 
 export const Tooltip: JSX.FunctionComponent<awful.Tooltip> = props => {
-  return awful.tooltip(props);
+  return awful.tooltip({
+    bg: theme.tooltip_bg!,
+    fg: theme.tooltip_fg!,
+    font: theme.tooltip_font!,
+    opacity: theme.tooltip_opacity!,
+    border_color: theme.tooltip_border_color!,
+    border_width: theme.tooltip_border_width!,
+    shape: theme.tooltip_shape! as any,
+    ...props,
+  });
 };
 
 export * from './naughty';
