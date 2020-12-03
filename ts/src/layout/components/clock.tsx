@@ -7,6 +7,7 @@ import {Margin, Tooltip} from 'awesome/components/base';
 import {ButtonPressHandler, Clickable} from '../../widgets/clickable-container';
 import {TextClock} from 'awesome/components/panel';
 import {PanelOutline} from '../panel-outline';
+import theme from '../../theme/index';
 const dpi = beautiful.xresources.apply_dpi;
 
 const PlainClock: JSX.FunctionComponent<{
@@ -41,7 +42,7 @@ const Calendar: JSX.FunctionComponent<{
     margin: dpi(5),
     style_month: {
       border_width: dpi(0),
-      bg_color: beautiful.background,
+      bg_color: theme.background!,
       padding: dpi(20),
       shape: function (this: void, cr: any, width: number, height: number) {
         gears.shape.partially_rounded_rect(
@@ -52,26 +53,26 @@ const Calendar: JSX.FunctionComponent<{
           true,
           true,
           true,
-          beautiful.groups_radius
+          theme.groups_radius!
         );
       },
     },
     style_header: {
       border_width: 0,
-      bg_color: beautiful.transparent,
+      bg_color: theme.transparent!,
     },
     style_weekday: {
       border_width: 0,
-      bg_color: beautiful.transparent,
+      bg_color: theme.transparent!,
     },
     style_normal: {
       border_width: 0,
-      bg_color: beautiful.transparent,
+      bg_color: theme.transparent!,
     },
     style_focus: {
       border_width: dpi(0),
-      border_color: beautiful.fg_normal,
-      bg_color: beautiful.accent,
+      border_color: theme.fg_normal!,
+      bg_color: theme.accent!,
       shape: function (this: void, cr: any, width: number, height: number) {
         gears.shape.partially_rounded_rect(
           cr,
