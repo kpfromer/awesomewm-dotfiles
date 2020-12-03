@@ -2,7 +2,6 @@ import { Margin } from 'awesome/components/base';
 import Awesome from 'awesome/jsx';
 import * as awful from 'awful';
 import * as beautiful from 'beautiful';
-import * as gears from 'gears';
 import { Clickable } from '../../widgets/clickable-container';
 import { PanelOutline } from '../panel-outline';
 const dpi = beautiful.xresources.apply_dpi;
@@ -13,24 +12,14 @@ const dpi = beautiful.xresources.apply_dpi;
 export const LayoutStatus: JSX.FunctionComponent<{
   screen: awful.ScreenInstance;
 }> = ({ screen }) => {
-  const buttons = gears.table.join(
-    awful.button([], 1, () => {
-      awful.layout.inc(1);
-    }),
-    awful.button([], 3, () => {
-      awful.layout.inc(-1);
-    }),
-    awful.button([], 4, () => {
-      awful.layout.inc(1);
-    }),
-    awful.button([], 5, () => {
-      awful.layout.inc(-1);
-    }),
-  );
-
   return (
     <PanelOutline>
-      <Clickable buttons={buttons}>
+      <Clickable
+        onLeftClick={() => awful.layout.inc(1)}
+        onScrollUp={() => awful.layout.inc(1)}
+        onRightClick={() => awful.layout.inc(-1)}
+        onScrollDown={() => awful.layout.inc(-1)}
+      >
         <Margin margins={dpi(7)}>{awful.widget.layoutbox(screen)}</Margin>
       </Clickable>
     </PanelOutline>

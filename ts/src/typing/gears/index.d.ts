@@ -76,7 +76,7 @@ declare module 'gears' {
    * https://awesomewm.org/doc/api/libraries/gears.table.html
    */
   interface NoSelfGearsTable {
-    join: (...tables: Table[]) => Table;
+    join: (...tables: Table[]) => Table[];
   }
 
   export type GearsTable = NoSelfGearsTable;

@@ -1,4 +1,5 @@
 import { Background } from 'awesome/components/base';
+import { wrapEvents } from 'awesome/helper/wrap-events';
 import Awesome from 'awesome/jsx';
 import * as beautiful from 'beautiful';
 import { Table } from 'gears';
@@ -51,9 +52,9 @@ function createClickable(this: void, onButtonPress?: ButtonPressHandler) {
   return container;
 }
 
-export const Clickable: JSX.FunctionComponent<{
+interface ClickableProps {
   onButtonPress?: ButtonPressHandler;
-  buttons?: Table;
+  buttons?: Table[];
   // TODO: extract to instrinc props?
   create_callback?: (
     this: void,
@@ -77,10 +78,17 @@ export const Clickable: JSX.FunctionComponent<{
     index: number,
     objects: any,
   ) => void;
-}> = ({ onButtonPress, children, ...rest }) => {
+}
+
+const UnwrappedClickable: JSX.FunctionComponent<ClickableProps> = ({
+  onButtonPress,
+  children,
+  ...rest
+}) => {
   return (
     <base {...rest} widget={() => createClickable(onButtonPress)}>
       {children}
     </base>
   );
 };
+export const Clickable = wrapEvents<unknown, ClickableProps>(UnwrappedClickable);

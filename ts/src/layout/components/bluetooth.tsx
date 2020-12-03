@@ -3,7 +3,6 @@ import { Image, Layout, Margin, Tooltip } from 'awesome/components/base';
 import Awesome from 'awesome/jsx';
 import * as awful from 'awful';
 import * as beautiful from 'beautiful';
-import * as gears from 'gears';
 import * as filesystem from 'gears.filesystem';
 import * as wibox from 'wibox';
 import config from '../../configuration/config';
@@ -28,20 +27,9 @@ export const Bluetooth: JSX.FunctionComponent = () => {
     </Layout>
   );
 
-  const buttons = gears.table.join(
-    awful.button(
-      [],
-      1,
-      () => {},
-      () => {
-        awful.spawn(bluetoothManager, false);
-      },
-    ),
-  );
-
   const button = (
     <PanelOutline>
-      <Clickable buttons={buttons}>
+      <Clickable onLeftClick={() => awful.spawn(bluetoothManager, false)}>
         <Margin margins={dpi(7)}>{image}</Margin>
       </Clickable>
     </PanelOutline>

@@ -9,10 +9,6 @@ import { Clickable } from '../../widgets/clickable-container';
 const dpi = beautiful.xresources.apply_dpi;
 const widgetIconDir = `${filesystem.get_configuration_dir()}images/widgets/wifi/`;
 
-// acpi sample outputs
-// Battery 0: Discharging, 75%, 01:51:38 remaining
-// Battery 0: Charging, 53%, 00:57:43 until charged
-
 interface Props {
   wifiInterface?: string;
 }
@@ -26,20 +22,7 @@ export const Wifi: JSX.FunctionComponent<Props> = ({ wifiInterface = 'wlp40s0' }
   imageWidget.set_image(`${widgetIconDir}wifi-strength-off.svg`);
 
   const widgetButton = wibox.widget(
-    // TODO: REFACTOR BUTTON USAGE FOR ONCLICK
-    <Clickable
-      buttons={[
-        awful.button(
-          [],
-          1,
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          () => {},
-          () => {
-            awful.spawn('nm-connection-editor', false);
-          },
-        ),
-      ]}
-    >
+    <Clickable onLeftClick={() => awful.spawn('nm-connection-editor', false)}>
       <Margin margins={dpi(7)}>{imageWidget}</Margin>
     </Clickable>,
   );
@@ -51,9 +34,9 @@ export const Wifi: JSX.FunctionComponent<Props> = ({ wifiInterface = 'wlp40s0' }
       align="right"
       timer_function={() => {
         if (connected) {
-          return `Connected to "${essid}"`;
+          return `Connected to: <b>${essid}</b>`;
         }
-        return 'Wireless network is disconnected';
+        return 'Wireless network is disconnected.';
       }}
       preferred_positions={['right', 'left', 'top', 'bottom']}
       margin_leftright={dpi(8)}
