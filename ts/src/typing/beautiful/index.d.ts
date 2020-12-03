@@ -579,7 +579,7 @@ declare module 'beautiful' {
     /**
      * The default tooltip shape
      */
-    tooltip_shape: (...args: any[]) => any;
+    tooltip_shape: (this: void, ...args: any[]) => any;
     /**
      * The default tooltip alignment
      */
