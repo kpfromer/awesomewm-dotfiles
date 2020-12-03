@@ -2,19 +2,19 @@
 // Handle Titlebars (min/max/close bar on every window)
 // https://awesomewm.org/doc/api/classes/client.html#request::titlebars
 
-import Awesome from 'awesome/jsx';
-import * as awful from 'awful';
-import * as gears from 'gears';
-import * as beautiful from 'beautiful';
 import {
   CloseButton,
   FloatingButton,
-  Layout,
-  Margin,
+  // Layout,
   MaximizedButton,
   MinimizeButton,
   OnTopButton,
 } from 'awesome/components/base';
+import {Layout} from 'awesome/components/wrapped';
+import Awesome from 'awesome/jsx';
+import * as awful from 'awful';
+import * as beautiful from 'beautiful';
+import * as gears from 'gears';
 const dpi = beautiful.xresources.apply_dpi;
 
 let timer: gears.Timer | undefined;
@@ -83,22 +83,18 @@ const create_horizontal_bar = (
 
   awful.titlebar(client, {position: pos, bg, size}).setup(
     <Layout align horizontal>
-      <Margin margins={dpi(10)}>
-        <Layout fixed horizontal spacing={dpi(7)}>
-          <OnTopButton client={client} />
-          <FloatingButton client={client} />
-        </Layout>
-      </Margin>
+      <Layout margins={dpi(10)} fixed horizontal spacing={dpi(7)}>
+        <OnTopButton client={client} />
+        <FloatingButton client={client} />
+      </Layout>
 
       <Layout flex horizontal buttons={buttons} />
 
-      <Margin margins={dpi(10)}>
-        <Layout fixed horizontal spacing={dpi(7)}>
-          <MinimizeButton client={client} />
-          <MaximizedButton client={client} />
-          <CloseButton client={client} />
-        </Layout>
-      </Margin>
+      <Layout margins={dpi(10)} fixed horizontal spacing={dpi(7)}>
+        <MinimizeButton client={client} />
+        <MaximizedButton client={client} />
+        <CloseButton client={client} />
+      </Layout>
     </Layout>
   );
 };
