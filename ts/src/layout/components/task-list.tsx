@@ -5,21 +5,22 @@ import {Background, Margin, Image} from 'awesome/components/base';
 import {Clickable} from '../../widgets/clickable-container';
 import * as wibox from 'wibox';
 import * as beautiful from 'beautiful';
+import theme from '../../theme/index';
 
 const dpi = beautiful.xresources.apply_dpi;
 
 interface Props {
   screen: awful.ScreenInstance;
-  selectedColor: string;
+  selectedColor?: string;
   focus: string;
-  regular: string;
+  backgroundColor?: string;
 }
 
 export const TaskList: JSX.FunctionComponent<Props> = ({
   screen,
-  selectedColor,
+  selectedColor = theme.accent!,
   focus,
-  regular,
+  backgroundColor = theme.transparent!,
 }) => {
   return (
     <TaskListPlain
@@ -47,7 +48,7 @@ export const TaskList: JSX.FunctionComponent<Props> = ({
               if (!client.focus) background.set_bg(focus);
             });
             self.connect_signal('mouse::leave', () => {
-              if (!client.focus) background.set_bg(regular);
+              if (!client.focus) background.set_bg(backgroundColor);
             });
 
             // https://www.reddit.com/r/awesomewm/comments/dq6cld/problem_with_urgent_signal_in_tag_list/
@@ -56,11 +57,11 @@ export const TaskList: JSX.FunctionComponent<Props> = ({
               background.set_bg(selectedColor);
             });
             client.connect_signal('unfocus', () => {
-              background.set_bg(regular);
+              background.set_bg(backgroundColor);
             });
           }}
         >
-          <Background id="tag-background" bg={regular}>
+          <Background id="tag-background" bg={backgroundColor}>
             <Margin margins={dpi(6)}>
               <Image id="icon_role" />
             </Margin>
