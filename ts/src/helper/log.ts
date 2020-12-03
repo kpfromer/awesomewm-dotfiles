@@ -1,11 +1,8 @@
-import {NotificationProps, notification} from 'naughty';
+import * as awful from 'awful';
 import * as beautiful from 'beautiful';
+import { notification, NotificationProps } from 'naughty';
 
-export const log = function (
-  this: void,
-  message: string,
-  opts?: Partial<NotificationProps>
-) {
+export const log = function (this: void, message: string, opts?: Partial<NotificationProps>): void {
   const {
     app_name = 'AwesomeWM Log',
     title = '<b>Log from AwesomeWM</b>',
@@ -22,7 +19,7 @@ export const log = function (
   });
 };
 
-function dump(this: void, table: object, indent = 0): string {
+function dump(this: void, table: Record<string, unknown>, indent = 0): string {
   const spacing = string.rep('  ', indent);
   let result = '';
   for (const [key, value] of Object.entries(table)) {
@@ -30,7 +27,7 @@ function dump(this: void, table: object, indent = 0): string {
 
     if (type(value) === 'table') {
       result += `${key}:\n`;
-      result += dump(value, indent + 1);
+      result += dump(value as Record<string, unknown>, indent + 1);
     } else {
       result += `${key}: ${value}\n`;
     }
@@ -41,15 +38,9 @@ function dump(this: void, table: object, indent = 0): string {
 
 export const dumpData = dump;
 
-export function logToFile(
-  this: void,
-  value: any,
-  location = '/tmp/awesome.txt'
-): void {
+export function logToFile(this: void, value: any, location = '/tmp/awesome.txt'): void {
   const text = type(value) === 'table' ? dump(value) : value;
 
-  awful.spawn.easy_async_with_shell(
-    `echo "${text.replace('"', '\\"')}" > ${location}`,
-    () => {}
-  );
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  awful.spawn.easy_async_with_shell(`echo "${text.replace('"', '\\"')}" > ${location}`, () => {});
 }

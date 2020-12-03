@@ -1,8 +1,8 @@
-import icons from '../../theme/icons/index';
 import * as awful from 'awful';
-import config from '../config';
 import * as beautiful from 'beautiful';
 import * as gears from 'gears';
+import icons from '../../theme/icons/index';
+import config from '../config';
 
 const tags: Partial<awful.TagInstance>[] = [
   {
@@ -65,12 +65,12 @@ tag.connect_signal('request::default_layouts', () => {
   awful.layout.append_default_layouts(config.layouts);
 });
 
-screen.connect_signal('request::desktop_decoration', s => {
+screen.connect_signal('request::desktop_decoration', (s) => {
   tags.forEach((tag, index) => {
     awful.tag.add(index.toString(), {
       icon: tag.icon,
       // icon_only: true,
-      layout: tag.layout ?? config.layouts[0],
+      layout: tag.layout ?? (config.layouts[0] as any),
       gap_single_client: true,
       gap: tag.gap,
       screen: s,
@@ -80,8 +80,11 @@ screen.connect_signal('request::desktop_decoration', s => {
   });
 });
 
-tag.connect_signal('property::layout', tag => {
+tag.connect_signal('property::layout', (tag) => {
   const current_layout = tag.layout;
+  // TODO: fixing typing for awful.layout stuffs
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  //@ts-ignore
   if (current_layout === awful.layout.suit.max) {
     tag.gap = 0;
     for (const c of Object.values(tag.clients())) {

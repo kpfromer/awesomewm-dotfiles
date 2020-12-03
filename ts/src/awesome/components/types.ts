@@ -1,5 +1,5 @@
 import * as awful from 'awful';
-import {Table} from 'gears';
+import { Table } from 'gears';
 
 export type ButtonEvents<V> = {
   onLeftClick?: (this: void, value: V) => void;
@@ -19,7 +19,7 @@ export type ButtonEvents<V> = {
  */
 export function convertButtonEventsToAwesomeButtons<V>(
   this: void,
-  events: ButtonEvents<V>
+  events: ButtonEvents<V>,
 ): Table[] {
   const buttons: Table[] = [];
 

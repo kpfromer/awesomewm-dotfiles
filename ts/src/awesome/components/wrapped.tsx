@@ -1,25 +1,14 @@
 import Awesome from 'awesome/jsx';
-import {
-  Layout as UnwrappedLayout,
-  Margin,
-  MarginProps,
-  Text as UnwrappedText,
-} from './base';
-import {Background as UnwrappedBackground, BackgroundProps} from './wibox';
+import { Layout as UnwrappedLayout, Margin, MarginProps, Text as UnwrappedText } from './base';
+import { Background as UnwrappedBackground, BackgroundProps } from './wibox';
 
 function wrapMargin<T>(
   this: void,
-  Component: JSX.FunctionComponent<T>
+  Component: JSX.FunctionComponent<T>,
 ): JSX.FunctionComponent<T & MarginProps> {
-  return ({margins, left, right, top, bottom, children, ...rest}) => {
+  return ({ margins, left, right, top, bottom, children, ...rest }) => {
     return (
-      <Margin
-        margins={margins}
-        left={left}
-        right={right}
-        top={top}
-        bottom={bottom}
-      >
+      <Margin margins={margins} left={left} right={right} top={top} bottom={bottom}>
         <Component {...(rest as T)}>{children}</Component>
       </Margin>
     );
@@ -28,7 +17,7 @@ function wrapMargin<T>(
 
 function wrapBackground<T>(
   this: void,
-  Component: JSX.FunctionComponent<T>
+  Component: JSX.FunctionComponent<T>,
 ): JSX.FunctionComponent<T & BackgroundProps> {
   return ({
     shape,
@@ -58,7 +47,7 @@ function wrapBackground<T>(
 }
 
 function wrap<T>(
-  component: JSX.FunctionComponent<T>
+  component: JSX.FunctionComponent<T>,
 ): JSX.FunctionComponent<T & BackgroundProps & MarginProps> {
   return wrapMargin(wrapBackground(component));
 }

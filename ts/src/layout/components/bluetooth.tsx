@@ -1,16 +1,17 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+import { Image, Layout, Margin, Tooltip } from 'awesome/components/base';
 import Awesome from 'awesome/jsx';
 import * as awful from 'awful';
-import * as wibox from 'wibox';
+import * as beautiful from 'beautiful';
 import * as gears from 'gears';
 import * as filesystem from 'gears.filesystem';
-import * as beautiful from 'beautiful';
-import {Image, Layout, Margin, Tooltip} from 'awesome/components/base';
-import {Clickable} from '../../widgets/clickable-container';
-import {PanelOutline} from '../panel-outline';
+import * as wibox from 'wibox';
 import config from '../../configuration/config';
+import { Clickable } from '../../widgets/clickable-container';
+import { PanelOutline } from '../panel-outline';
 
 const dpi = beautiful.xresources.apply_dpi;
-const {bluetoothManager} = config.apps.default;
+const { bluetoothManager } = config.apps.default;
 const widgetIconDir = `${filesystem.get_configuration_dir()}images/widgets/bluetooth/`;
 
 /**
@@ -18,7 +19,7 @@ const widgetIconDir = `${filesystem.get_configuration_dir()}images/widgets/bluet
  */
 export const Bluetooth: JSX.FunctionComponent = () => {
   const icon = wibox.widget<wibox.ImageWidget>(
-    <Image id="icon" image={`${widgetIconDir}bluetooth-off.svg`} resize />
+    <Image id="icon" image={`${widgetIconDir}bluetooth-off.svg`} resize />,
   );
 
   const image = (
@@ -34,8 +35,8 @@ export const Bluetooth: JSX.FunctionComponent = () => {
       () => {},
       () => {
         awful.spawn(bluetoothManager, false);
-      }
-    )
+      },
+    ),
   );
 
   const button = (
@@ -74,7 +75,7 @@ export const Bluetooth: JSX.FunctionComponent = () => {
       icon.set_image(`${widgetIconDir}${widgetIconName}.svg`);
       collectgarbage('collect');
     },
-    image
+    image,
   );
 
   return button;

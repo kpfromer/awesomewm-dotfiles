@@ -9,7 +9,7 @@ import client_buttons from './buttons';
 import client_keys from './keys';
 
 const rules: awful.Rule[] = [
-  {rule_any: {name: ['kitty']}, properties: {skip_decoration: true}},
+  { rule_any: { name: ['kitty'] }, properties: { skip_decoration: true } },
   {
     rule: {},
     properties: {
@@ -45,17 +45,12 @@ const rules: awful.Rule[] = [
     },
   },
   {
-    rule_any: {type: ['normal', 'dialog']},
-    properties: {titlebars_enabled: true},
+    rule_any: { type: ['normal', 'dialog'] },
+    properties: { titlebars_enabled: true },
   },
   {
     rule_any: {
-      class: [
-        'Caja',
-        'org.gnome.Nautilus',
-        'Org.gnome.Nautilus',
-        'gcr-prompter',
-      ],
+      class: ['Caja', 'org.gnome.Nautilus', 'Org.gnome.Nautilus', 'gcr-prompter'],
     },
     properties: {
       focus: true,
@@ -67,7 +62,7 @@ const rules: awful.Rule[] = [
     },
   },
   {
-    rule_any: {class: ['Zoom'], name: ['Chat']},
+    rule_any: { class: ['Zoom'], name: ['Chat'] },
     properties: {
       focus: true,
       floating: true,

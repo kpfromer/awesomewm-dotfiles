@@ -10,7 +10,7 @@ import {
   MinimizeButton,
   OnTopButton,
 } from 'awesome/components/base';
-import {Layout} from 'awesome/components/wrapped';
+import { Layout } from 'awesome/components/wrapped';
 import Awesome from 'awesome/jsx';
 import * as awful from 'awful';
 import * as beautiful from 'beautiful';
@@ -74,14 +74,14 @@ const create_horizontal_bar = (
   buttons: unknown,
   pos: string,
   bg: string,
-  size: number
+  size: number,
 ) => {
   // if (pos === 'top' || pos === 'right') {
   //   pos = 'top';
   //   bg = '#FF00FF';
   // }
 
-  awful.titlebar(client, {position: pos, bg, size}).setup(
+  awful.titlebar(client, { position: pos, bg, size }).setup(
     <Layout align horizontal>
       <Layout margins={dpi(10)} fixed horizontal spacing={dpi(7)}>
         <OnTopButton client={client} />
@@ -95,11 +95,11 @@ const create_horizontal_bar = (
         <MaximizedButton client={client} />
         <CloseButton client={client} />
       </Layout>
-    </Layout>
+    </Layout>,
   );
 };
 
-client.connect_signal('request::titlebars', client => {
+client.connect_signal('request::titlebars', (client) => {
   const buttons = gears.table.join(
     awful.button([], 1, () => {
       double_click_event_handler(() => {
@@ -118,7 +118,7 @@ client.connect_signal('request::titlebars', client => {
       client.emit_signal('request::activate', 'titlebar', {
         action: 'mouse_resize',
       });
-    })
+    }),
   );
 
   if (client.class === 'XTerm' || client.class === 'UXTerm') {
@@ -127,7 +127,7 @@ client.connect_signal('request::titlebars', client => {
       buttons,
       'top',
       beautiful.xresources.get_current_theme().background,
-      beautiful.titlebar_size
+      beautiful.titlebar_size,
     );
   } else if (client.class === 'Nemo') {
     create_horizontal_bar(
@@ -135,31 +135,13 @@ client.connect_signal('request::titlebars', client => {
       buttons,
       'top',
       beautiful.gtk.get_theme_variables().bg_color,
-      beautiful.titlebar_size
+      beautiful.titlebar_size,
     );
   } else if (client.type === 'normal') {
-    create_horizontal_bar(
-      client,
-      buttons,
-      'top',
-      '#000000AA',
-      beautiful.titlebar_size
-    );
+    create_horizontal_bar(client, buttons, 'top', '#000000AA', beautiful.titlebar_size);
   } else if (client.type === 'dialog' || client.type === 'modal') {
-    create_horizontal_bar(
-      client,
-      buttons,
-      'top',
-      '#000000AA',
-      beautiful.titlebar_size
-    );
+    create_horizontal_bar(client, buttons, 'top', '#000000AA', beautiful.titlebar_size);
   } else {
-    create_horizontal_bar(
-      client,
-      buttons,
-      'top',
-      '#000000AA',
-      beautiful.titlebar_size
-    );
+    create_horizontal_bar(client, buttons, 'top', '#000000AA', beautiful.titlebar_size);
   }
 });

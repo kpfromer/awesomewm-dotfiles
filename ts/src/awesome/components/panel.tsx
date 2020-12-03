@@ -1,7 +1,7 @@
 import Awesome from 'awesome/jsx';
 import * as awful from 'awful';
 import * as wibox from 'wibox';
-import {ButtonEvents, convertButtonEventsToAwesomeButtons} from './types';
+import { ButtonEvents, convertButtonEventsToAwesomeButtons } from './types';
 
 export const TagList: JSX.FunctionComponent<
   Omit<awful.TagListWidgetProps, 'filter' | 'buttons'> &
@@ -26,8 +26,7 @@ export const TagList: JSX.FunctionComponent<
   onScrollDown,
   onScrollUp,
 }) => {
-  let filter: (this: void, tag: awful.TagInstance) => void =
-    awful.widget.taglist.filter.all;
+  let filter: (this: void, tag: awful.TagInstance) => void = awful.widget.taglist.filter.all;
 
   if (all) {
     filter = awful.widget.taglist.filter.all;
@@ -82,11 +81,8 @@ export const TaskList: JSX.FunctionComponent<
   onScrollDown,
   onScrollUp,
 }) => {
-  let filter: (
-    this: void,
-    client: awful.ClientInstance,
-    screen: awful.ScreenInstance
-  ) => void = awful.widget.tasklist.filter.currenttags;
+  let filter: (this: void, client: awful.ClientInstance, screen: awful.ScreenInstance) => void =
+    awful.widget.tasklist.filter.currenttags;
 
   if (allscreen) {
     filter = awful.widget.tasklist.filter.allscreen;
@@ -119,10 +115,10 @@ export const TaskList: JSX.FunctionComponent<
   return awful.widget.tasklist(options) as any;
 };
 
-export const SystemTray: JSX.FunctionComponent<wibox.SystrayWidgetProps> = props => {
+export const SystemTray: JSX.FunctionComponent<wibox.SystrayWidgetProps> = (props) => {
   return <base {...props} widget={wibox.widget.systray} />;
 };
 
-export const TextClock: JSX.FunctionComponent<wibox.TextClockWidgetProps> = props => {
+export const TextClock: JSX.FunctionComponent<wibox.TextClockWidgetProps> = (props) => {
   return wibox.widget(<base {...props} widget={wibox.widget.textclock} />);
 };

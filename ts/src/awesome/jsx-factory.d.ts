@@ -1,11 +1,11 @@
 declare namespace JSX {
-  type Table = object;
+  type Table = Record<string, unknown>;
   // TODO: remove duplicate
   type BaseWiboxWidget = {
     connect_signal: (
       this: any,
       name: string,
-      callback: (this: void, ...args: any[]) => void
+      callback: (this: void, ...args: any[]) => void,
     ) => void;
 
     bg: string;
@@ -55,10 +55,10 @@ declare namespace JSX {
 
   // type ReactNode = ReactChild | ReactFragment | ReactPortal | boolean | null | undefined;
 
-  type PropsWithChildren<P> = P & {children?: AwesomeNodeArray | AwesomeNode};
+  type PropsWithChildren<P> = P & { children?: AwesomeNodeArray | AwesomeNode };
 
   interface FunctionComponent<
-    P = {},
+    P = Record<string, unknown>,
     R extends AwesomeElement = AwesomeElement
   > {
     (this: void, props: PropsWithChildren<P>, context?: any): R;
@@ -67,7 +67,7 @@ declare namespace JSX {
   // type AwesomeComponent<P = {}> =
 
   type ElementProps<P> = P;
-  type ElementWithChildren<P> = P & {children?: AwesomeNode};
+  type ElementWithChildren<P> = P & { children?: AwesomeNode };
 
   // Elements
 
@@ -124,6 +124,6 @@ declare namespace JSX {
   interface IntrinsicElements {
     base: ElementProps<any>;
 
-    fragment: ElementProps<{}>;
+    fragment: ElementProps<Record<string, unknown>>;
   }
 }

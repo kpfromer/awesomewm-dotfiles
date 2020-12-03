@@ -167,7 +167,7 @@ declare module 'beautiful' {
     /**
      * The snap outline shape
      */
-    snap_shape: Function;
+    snap_shape: (this: void, ...args: any[]) => any;
     /**
      * The gap between snapped contents
      */
@@ -579,7 +579,7 @@ declare module 'beautiful' {
     /**
      * The default tooltip shape
      */
-    tooltip_shape: Function;
+    tooltip_shape: (...args: any[]) => any;
     /**
      * The default tooltip alignment
      */
@@ -1726,7 +1726,7 @@ declare module 'beautiful' {
     opacity_fullscreen_new: string;
   }
 
-  export type Theme<R = {}> = R & ThemeBase;
+  export type Theme<R = Record<string, unknown>> = R & ThemeBase;
 
   // function log(): string;
 
@@ -1744,7 +1744,7 @@ declare module 'beautiful' {
      * TODO: better typing
      * https://awesomewm.org/doc/api/libraries/beautiful.gtk.html
      */
-    get_theme_variables: () => {[key: string]: string};
+    get_theme_variables: () => { [key: string]: string };
   }
   export const gtk: GTK;
 
@@ -1753,7 +1753,7 @@ declare module 'beautiful' {
    */
   interface XResources {
     apply_dpi: (dpi: number) => number;
-    get_current_theme: () => {[key: string]: string};
+    get_current_theme: () => { [key: string]: string };
   }
   export const xresources: XResources;
 

@@ -9,25 +9,25 @@ import * as awful from 'awful';
 import * as gears from 'gears';
 import config from '../config';
 
-const {modkey} = config;
+const { modkey } = config;
 
 export default gears.table.join(
-  awful.button([modkey], 1, client => {
-    client.emit_signal('request::activate', 'mouse_click', {raise: true});
+  awful.button([modkey], 1, (client) => {
+    client.emit_signal('request::activate', 'mouse_click', { raise: true });
   }),
-  awful.button([modkey], 1, client => {
-    client.emit_signal('request::activate', 'mouse_click', {raise: true});
+  awful.button([modkey], 1, (client) => {
+    client.emit_signal('request::activate', 'mouse_click', { raise: true });
     awful.mouse.client.move(client);
   }),
   awful.button(
     [config.modkey],
     // Right click
     3,
-    client => {
-      client.emit_signal('request::activate', 'mouse_click', {raise: true});
+    (client) => {
+      client.emit_signal('request::activate', 'mouse_click', { raise: true });
       awful.mouse.client.resize(client);
-    }
-  )
+    },
+  ),
 );
 
 // TODO:

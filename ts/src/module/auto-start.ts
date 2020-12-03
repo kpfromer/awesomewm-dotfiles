@@ -1,7 +1,7 @@
 import * as awful from 'awful';
 import * as beautiful from 'beautiful';
 import config from '../configuration/config';
-import {log} from 'helper/log';
+import { log } from 'helper/log';
 
 const run_once = function (this: void, command: string) {
   const firstSpace = command.indexOf(' ');
@@ -23,7 +23,7 @@ const run_once = function (this: void, command: string) {
         timeout: 20,
         icon: beautiful.awesome_icon,
       });
-    }
+    },
   );
 };
 for (const app of config.apps.startUp) {

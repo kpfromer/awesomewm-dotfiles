@@ -3,7 +3,7 @@ import * as wibox from 'wibox';
 
 // Wibox Container
 
-type BaseWibox = {id?: string};
+type BaseWibox = { id?: string };
 
 export interface BackgroundProps {
   shape?: (this: void, cr: any, width: number, height: number) => void;
@@ -42,7 +42,7 @@ export const Constraint: JSX.FunctionComponent<
      */
     height?: number;
   }
-> = ({children, ...rest}) => {
+> = ({ children, ...rest }) => {
   return (
     <base {...rest} widget={wibox.container.constraint}>
       {children}

@@ -1,4 +1,4 @@
-import {Theme} from 'beautiful';
+import { Theme } from 'beautiful';
 import * as gtable from 'gears.table';
 import defaultTheme from './default-theme';
 import theme from './werewolf/index';

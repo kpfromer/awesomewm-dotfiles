@@ -1,6 +1,7 @@
 /// <reference types="./jsx-factory" />
 
 /** @luaTable */
+// eslint-disable-next-line @typescript-eslint/ban-types
 declare class Table<K extends {} = {}, V = any> {
   readonly length: number;
   set(key: K, value: V | undefined): void;
@@ -9,8 +10,8 @@ declare class Table<K extends {} = {}, V = any> {
 
 function createMap(
   this: void,
-  attributes: object,
-  children: JSX.AwesomeNode[] = []
+  attributes: Record<string, unknown>,
+  children: JSX.AwesomeNode[] = [],
 ): Table {
   const map = new Table();
 
@@ -48,7 +49,7 @@ function mapIntoArray<T>(
   this: void,
   children: JSX.AwesomeNode | JSX.AwesomeNode[],
   array: T[],
-  func: (node: JSX.AwesomeNode) => T
+  func: (node: JSX.AwesomeNode) => T,
 ): number {
   let invokeCallback = false;
 
@@ -94,7 +95,7 @@ function mapIntoArray<T>(
 function mapChildren(
   this: void,
   children: JSX.AwesomeNode[] | null,
-  func: (node: JSX.AwesomeNode, index: number) => JSX.AwesomeNode
+  func: (node: JSX.AwesomeNode, index: number) => JSX.AwesomeNode,
 ): JSX.AwesomeNode[] | null {
   if (children === null) {
     return children;
@@ -102,7 +103,7 @@ function mapChildren(
   const result: JSX.AwesomeNode[] = [];
   let count = 0;
 
-  mapIntoArray(children, result, child => func(child, count++));
+  mapIntoArray(children, result, (child) => func(child, count++));
 
   return result;
 }
@@ -114,14 +115,10 @@ function mapChildren(
  * See https://reactjs.org/docs/react-api.html#reactchildrentoarray
  */
 function toArray(children: JSX.AwesomeNode[]): JSX.AwesomeNode[] {
-  return mapChildren(children, child => child) ?? [];
+  return mapChildren(children, (child) => child) ?? [];
 }
 
-export function nodeToString(
-  this: void,
-  node: JSX.AwesomeNode,
-  level = 0
-): string {
+export function nodeToString(this: void, node: JSX.AwesomeNode, level = 0): string {
   if (node === undefined) {
     return 'undefined';
   }
@@ -141,9 +138,7 @@ export function nodeToString(
       const table = (node as any) as Table;
 
       const body = Object.entries(table)
-        .map(
-          ([key, value]) => `${tabs}  ${key}: ${nodeToString(value, level + 2)}`
-        )
+        .map(([key, value]) => `${tabs}  ${key}: ${nodeToString(value, level + 2)}`)
         .join(',\n');
 
       return `${tabs}{\n${body}\n${tabs}}`;
@@ -157,10 +152,7 @@ export function nodeToString(
  * Flattens an array one level. IE [[[1]], [2], 3] => [[1], 2, 3]
  * @param children Children to the createElement.
  */
-export function flattenOneLevel(
-  this: void,
-  children: JSX.AwesomeNode[]
-): JSX.AwesomeNode[] {
+export function flattenOneLevel(this: void, children: JSX.AwesomeNode[]): JSX.AwesomeNode[] {
   const result: JSX.AwesomeNode[] = [];
   for (const i of forRange(0, children.length)) {
     const item = children[i];
@@ -191,7 +183,7 @@ export function createElement(
   } else if (type(tagName) === 'function') {
     // Code based from React.createElement
     // https://github.com/facebook/react/blob/master/packages/react/src/ReactElement.js#L526
-    return tagName({...attributes, children: flattenOneLevel(children)});
+    return tagName({ ...attributes, children: flattenOneLevel(children) });
   }
 
   return null;

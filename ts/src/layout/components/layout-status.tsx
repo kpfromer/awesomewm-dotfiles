@@ -2,9 +2,9 @@ import Awesome from 'awesome/jsx';
 import * as awful from 'awful';
 import * as gears from 'gears';
 import * as beautiful from 'beautiful';
-import {Margin} from 'awesome/components/base';
-import {Clickable} from '../../widgets/clickable-container';
-import {PanelOutline} from '../panel-outline';
+import { Margin } from 'awesome/components/base';
+import { Clickable } from '../../widgets/clickable-container';
+import { PanelOutline } from '../panel-outline';
 const dpi = beautiful.xresources.apply_dpi;
 
 /**
@@ -12,7 +12,7 @@ const dpi = beautiful.xresources.apply_dpi;
  */
 export const LayoutStatus: JSX.FunctionComponent<{
   screen: awful.ScreenInstance;
-}> = ({screen}) => {
+}> = ({ screen }) => {
   const buttons = gears.table.join(
     awful.button([], 1, () => {
       awful.layout.inc(1);
@@ -25,7 +25,7 @@ export const LayoutStatus: JSX.FunctionComponent<{
     }),
     awful.button([], 5, () => {
       awful.layout.inc(-1);
-    })
+    }),
   );
 
   return (

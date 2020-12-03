@@ -2,8 +2,8 @@
 /** @noResolution */
 
 declare module 'naughty' {
-  import {GearsShape, Table} from 'gears';
-  import {ScreenInstance} from 'awful';
+  import { ScreenInstance } from 'awful';
+  import { GearsShape, Table } from 'gears';
 
   // todo:
   interface NotificationProps {
@@ -26,18 +26,13 @@ declare module 'naughty' {
     icon: string;
   }
 
-  interface NotificationFunctions {}
-
-  type Notification = NotificationProps & NotificationFunctions;
+  type Notification = NotificationProps;
 
   /**
    *
    * https://elv13.github.io/core_components/naughty.notification.html#naughty.notification
    */
-  export const notification: (
-    args: NotificationProps,
-    opt?: string
-  ) => Notification | undefined;
+  export const notification: (args: NotificationProps, opt?: string) => Notification | undefined;
 
   export const notify: (args: NotificationProps) => Notification | undefined;
 
@@ -76,7 +71,7 @@ declare module 'naughty' {
     (
       this: void,
       name: 'request::display_error',
-      callback: (message: string, startup: boolean) => void
+      callback: (message: string, startup: boolean) => void,
     ): void;
     (
       this: void,
@@ -84,13 +79,13 @@ declare module 'naughty' {
       callback: (
         n: Notification,
         context: string,
-        hits: {app_icon: string; path: string; image: string}
-      ) => void
+        hits: { app_icon: string; path: string; image: string },
+      ) => void,
     ): void;
     (
       this: void,
       name: 'request::display',
-      callback: (notification: Table, context: string) => void
+      callback: (notification: Table, context: string) => void,
     ): void;
   };
 

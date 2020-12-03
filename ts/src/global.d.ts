@@ -1,12 +1,6 @@
 /** @noResolution */
 
-import {
-  AwesomeStatic,
-  ClientStatic,
-  Root,
-  ScreenStatic,
-  TagStatic,
-} from 'awful';
+import { AwesomeStatic, ClientStatic, Root, ScreenStatic, TagStatic } from 'awful';
 
 declare global {
   export const awesome: AwesomeStatic;

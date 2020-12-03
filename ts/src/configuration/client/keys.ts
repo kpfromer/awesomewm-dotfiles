@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 /**
  * @noSelfInFile
  */
@@ -8,32 +9,32 @@
 import * as awful from 'awful';
 import * as gears from 'gears';
 import config from '../config';
-const {modkey} = config;
+const { modkey } = config;
 
 export default gears.table.join(
   awful.key(
     [modkey],
     'f',
-    c => {
+    (c) => {
       c.fullscreen = !c.fullscreen;
       c.raise();
     },
     () => {},
-    {description: 'toggle fullscreen', group: 'client'}
+    { description: 'toggle fullscreen', group: 'client' },
   ),
   awful.key(
     [modkey],
     'q',
-    c => {
+    (c) => {
       c.kill();
     },
     () => {},
-    {description: 'kill window', group: 'client'}
+    { description: 'kill window', group: 'client' },
   ),
   awful.key(
     [modkey, 'Control'],
     'space',
-    client => {
+    (client) => {
       client.floating = !client.floating;
       client.ontop = false;
       client.raise();
@@ -42,7 +43,7 @@ export default gears.table.join(
     {
       description: 'toggle floating',
       group: 'client',
-    }
+    },
   ),
   // awful.key(
   //   [modkey, 'Control'],
@@ -57,64 +58,64 @@ export default gears.table.join(
   awful.key(
     [modkey],
     'o',
-    c => {
+    (c) => {
       c.move_to_screen();
     },
     () => {},
-    {description: 'move to screen', group: 'client'}
+    { description: 'move to screen', group: 'client' },
   ),
   awful.key(
     [modkey],
     't',
-    c => {
+    (c) => {
       c.ontop = !c.ontop;
     },
     () => {},
-    {description: 'toggle keep on top', group: 'client'}
+    { description: 'toggle keep on top', group: 'client' },
   ),
   awful.key(
     [modkey],
     'n',
-    c => {
+    (c) => {
       c.minimized = true;
     },
     () => {},
-    {description: 'minimize', group: 'client'}
+    { description: 'minimize', group: 'client' },
   ),
   awful.key(
     [modkey],
     'm',
-    c => {
+    (c) => {
       c.maximized = !c.maximized;
       c.raise();
     },
     () => {},
-    {description: '(un)maximize', group: 'client'}
+    { description: '(un)maximize', group: 'client' },
   ),
   awful.key(
     [modkey, 'Control'],
     'm',
-    c => {
+    (c) => {
       c.maximized_vertical = !c.maximized_vertical;
       c.raise();
     },
     () => {},
-    {description: '(un)maximize vertically', group: 'client'}
+    { description: '(un)maximize vertically', group: 'client' },
   ),
   awful.key(
     [modkey, 'Shift'],
     'm',
-    c => {
+    (c) => {
       c.maximized_horizontal = !c.maximized_horizontal;
       c.raise();
     },
     () => {},
-    {description: '(un)maximize horizontally', group: 'client'}
+    { description: '(un)maximize horizontally', group: 'client' },
   ),
   awful.key(
     [modkey],
     'p',
-    c => {
+    (c) => {
       if (c.floating) {
         c.ontop = false;
         c.sticky = false;
@@ -124,15 +125,15 @@ export default gears.table.join(
         c.sticky = true;
         c.floating = true;
 
-        const {height} = c.screen.geometry;
+        const { height } = c.screen.geometry;
         const newHeight = (1 / 3) * height;
         const newWidth = (16 / 9) * newHeight;
 
-        c.geometry({height: newHeight, width: newWidth});
-        awful.placement.bottom_right(c, {margins: {bottom: 60}});
+        c.geometry({ height: newHeight, width: newWidth });
+        awful.placement.bottom_right(c, { margins: { bottom: 60 } });
       }
     },
     () => {},
-    {description: 'pin window', group: 'client'}
-  )
+    { description: 'pin window', group: 'client' },
+  ),
 );

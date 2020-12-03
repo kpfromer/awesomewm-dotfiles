@@ -2,8 +2,8 @@
 /** @noResolution */
 
 declare module 'awful' {
-  import {BaseWiboxWidget} from 'wibox';
-  import {GearsShape, GearsShapeFunction, Surface, Table} from 'gears';
+  import { GearsShape, GearsShapeFunction, Surface, Table } from 'gears';
+  import { BaseWiboxWidget } from 'wibox';
 
   interface Util {
     shell: string;
@@ -196,11 +196,7 @@ declare module 'awful' {
      * @param name The name of the X11 property.
      * @param type One of “string”, “number” or “boolean”.
      */
-    register_xproperty: (
-      this: void,
-      name: string,
-      type: 'string' | 'number' | 'boolean'
-    ) => void;
+    register_xproperty: (this: void, name: string, type: 'string' | 'number' | 'boolean') => void;
     /**
      * Quit awesome.
      * @param code The exit code to use when exiting. (default 0)
@@ -472,11 +468,7 @@ declare module 'awful' {
      * @param height Desired height of client
      * @returns [Actual width of client, Actual height of client]
      */
-    apply_size_hints: (
-      this: any,
-      width: number,
-      height: number
-    ) => [width: number, height: number];
+    apply_size_hints: (this: any, width: number, height: number) => [width: number, height: number];
 
     /**
      * Get the client’s n-th icon.
@@ -497,13 +489,7 @@ declare module 'awful' {
      * @param w The relative width. (default c.width)
      * @param h The relative height. (default c.height)
      */
-    relative_move: (
-      this: any,
-      x: number,
-      y: number,
-      w: number,
-      h: number
-    ) => void;
+    relative_move: (this: any, x: number, y: number, w: number, h: number) => void;
 
     /**
      * Move a client to a tag.
@@ -541,7 +527,7 @@ declare module 'awful' {
         switch_to_tag?: boolean;
         action?: boolean;
         toggle_minimization?: boolean;
-      }
+      },
     ) => void;
     // TODO: grant;
     // TODO: deny;
@@ -559,7 +545,7 @@ declare module 'awful' {
     connect_signal: (
       this: any,
       name: string,
-      func: (client: ClientInstance, ...args: any[]) => void
+      func: (client: ClientInstance, ...args: any[]) => void,
     ) => void;
     /**
      * Connect to a signal weakly.
@@ -568,7 +554,7 @@ declare module 'awful' {
      * @param name The name of the signal.
      * @param func The callback to call when the signal is emitted.
      */
-    weak_connect_signal: (this: any, name: string, func: Function) => void;
+    weak_connect_signal: (this: any, name: string, func: (...args: unknown[]) => unknown) => void;
   }
 
   export type ClientStatic = {
@@ -581,15 +567,15 @@ declare module 'awful' {
      * @param screen A screen number to filter clients on.
      * @param stacked Return clients in stacking order? (ordered from top to bottom).
      */
-    get: (
-      this: void,
-      screen?: ScreenInstance,
-      stacked?: boolean
-    ) => ClientInstance[];
+    get: (this: void, screen?: ScreenInstance, stacked?: boolean) => ClientInstance[];
     /**
      * Disconnect from a signal.
      */
-    disconnect_signal: (this: void, name: string, callback: Function) => void;
+    disconnect_signal: (
+      this: void,
+      name: string,
+      callback: (...args: unknown[]) => unknown,
+    ) => void;
     /**
      * Emit a signal.
      */
@@ -600,7 +586,7 @@ declare module 'awful' {
     connect_signal: (
       this: void,
       name: string,
-      callback: (this: void, client: ClientInstance, ...args: any[]) => void
+      callback: (this: void, client: ClientInstance, ...args: any[]) => void,
     ) => void;
     /**
      * Get a client by its relative index to another client. If no client is passed, the focused client will be used.
@@ -613,7 +599,7 @@ declare module 'awful' {
       this: void,
       index: number,
       sel?: ClientInstance,
-      stacked?: boolean
+      stacked?: boolean,
     ) => ClientInstance | undefined;
 
     swap: {
@@ -623,23 +609,14 @@ declare module 'awful' {
        * @param client The client. (default focused)
        * @param stacked Use stacking order? (top to bottom) (default false)
        */
-      bydirection: (
-        this: void,
-        dir: Direction,
-        client?: ClientInstance,
-        stacked?: boolean
-      ) => void;
+      bydirection: (this: void, dir: Direction, client?: ClientInstance, stacked?: boolean) => void;
       /**
        * Swap a client with another client in the given direction.
        * Swaps across screens.
        * @param dir The direction, can be either "up", "down", "left" or "right".
        * @param sel The client. (optional)
        */
-      global_bydirection: (
-        this: void,
-        dir: Direction,
-        sel: ClientInstance
-      ) => void;
+      global_bydirection: (this: void, dir: Direction, sel: ClientInstance) => void;
       /**
        * Swap a client by its relative index.
        */
@@ -653,12 +630,7 @@ declare module 'awful' {
      * @param screen The screen.
      * @param stacked Use stacking order? (top to bottom) (default false)
      */
-    cycle: (
-      this: void,
-      clockwise: boolean,
-      screen?: ScreenInstance,
-      stacked?: boolean
-    ) => void;
+    cycle: (this: void, clockwise: boolean, screen?: ScreenInstance, stacked?: boolean) => void;
 
     /**
      * Restore (=unminimize) a random client.
@@ -702,21 +674,13 @@ declare module 'awful' {
      * @param wfact the window factor value
      * @param client The client.
      */
-    setwfact: (
-      this: void,
-      wfact: number,
-      client: ClientInstance
-    ) => ScreenInstance;
+    setwfact: (this: void, wfact: number, client: ClientInstance) => ScreenInstance;
     /**
      * Change window factor of a client.
      * @param add Amount to increase/decrease the client’s window factor. Should be between -current_window_factor and something close to infinite. The normalisation then ensures that the sum of all factors is 1.
      * @param client The client.
      */
-    incwfact: (
-      this: void,
-      add: number,
-      client: ClientInstance
-    ) => ScreenInstance;
+    incwfact: (this: void, add: number, client: ClientInstance) => ScreenInstance;
 
     // TODO:
     // iterate
@@ -731,10 +695,7 @@ declare module 'awful' {
        * @param client The client.
        * @returns The same client if it’s ok, nil otherwise.
        */
-      filter: (
-        this: void,
-        client: ClientInstance
-      ) => ClientInstance | undefined;
+      filter: (this: void, client: ClientInstance) => ClientInstance | undefined;
 
       /**
        * Focus a client by its relative index.
@@ -751,12 +712,7 @@ declare module 'awful' {
        * @param client The client.
        * @param stacked Use stacking order? (top to bottom) (default false)
        */
-      bydirection: (
-        this: void,
-        dir: Direction,
-        client?: ClientInstance,
-        stacked?: boolean
-      ) => void;
+      bydirection: (this: void, dir: Direction, client?: ClientInstance, stacked?: boolean) => void;
 
       /**
        * Focus a client by the given direction. Moves across screens.
@@ -768,7 +724,7 @@ declare module 'awful' {
         this: void,
         dir: Direction,
         client?: ClientInstance,
-        stacked?: boolean
+        stacked?: boolean,
       ) => void;
     };
   };
@@ -792,7 +748,11 @@ declare module 'awful' {
     /**
      * Disconnect from a signal.
      */
-    disconnect_signal: (this: void, name: string, callback: Function) => void;
+    disconnect_signal: (
+      this: void,
+      name: string,
+      callback: (...args: unknown[]) => unknown,
+    ) => void;
     /**
      * Emit a signal.
      */
@@ -803,7 +763,7 @@ declare module 'awful' {
     connect_signal: (
       this: void,
       name: string,
-      callback: (this: void, screen: ScreenInstance, ...args: any[]) => void
+      callback: (this: void, screen: ScreenInstance, ...args: any[]) => void,
     ) => void;
     /**
      * Return the screen index corresponding to the given (pixel) coordinates.
@@ -816,11 +776,7 @@ declare module 'awful' {
      * This moves the mouse pointer to the last known position on the new screen, or keeps its position relative to the current focused screen.
      * @param dir The direction.
      */
-    focus_bydirection: (
-      this: void,
-      dir: Direction,
-      screen: ScreenInstance
-    ) => void;
+    focus_bydirection: (this: void, dir: Direction, screen: ScreenInstance) => void;
     /**
      * Move the focus to a screen relative to the current one, This moves the mouse pointer to the last known position on the new screen, or keeps its position relative to the current focused screen.
      * @param offset Value to add to the current focused screen index. 1 to focus the next one, -1 to focus the previous one.
@@ -839,7 +795,7 @@ declare module 'awful' {
      */
     focused: (
       this: void,
-      args?: {client?: boolean; mouse?: boolean}
+      args?: { client?: boolean; mouse?: boolean },
     ) => ScreenInstance | undefined;
     // get_bounding_geometry
     /**
@@ -847,13 +803,13 @@ declare module 'awful' {
      */
     connect_for_each_screen: (
       this: void,
-      func: (this: void, screen: ScreenInstance) => void
+      func: (this: void, screen: ScreenInstance) => void,
     ) => void;
     /**
      * Undo the effect of connect_for_each_screen.
      * @param func The function that should no longer be called.
      */
-    disconnect_for_each_screen: (this: void, func: Function) => void;
+    disconnect_for_each_screen: (this: void, func: (...args: unknown[]) => unknown) => void;
     // set_auto_dpi_enabled
 
     // Static Fields
@@ -952,11 +908,7 @@ declare module 'awful' {
      * @param self Screen.
      * @param dir The direction, can be either “up”, “down”, “left” or “right”.
      */
-    get_next_in_direction: (
-      this: any,
-      self: ScreenInstance,
-      dir: Direction
-    ) => void;
+    get_next_in_direction: (this: any, self: ScreenInstance, dir: Direction) => void;
     /**
      * Get the list of visible clients for the screen.
      * This is used by screen.clients internally (with stacked=true).
@@ -984,11 +936,7 @@ declare module 'awful' {
      * @param ratios The different ratios to split into. If none is provided, it is split in half. (optional)
      * @param mode Either “vertical” or “horizontal”. If none is specified, it will split along the longest axis. (optional)
      */
-    split: (
-      this: any,
-      ratios?: number[],
-      mode?: 'vertical' | 'horizontal'
-    ) => void;
+    split: (this: any, ratios?: number[], mode?: 'vertical' | 'horizontal') => void;
 
     /**
      * Emit a signal.
@@ -1000,7 +948,7 @@ declare module 'awful' {
     connect_signal: (
       this: any,
       name: string,
-      callback: (this: void, screen: ScreenInstance, ...args: any[]) => void
+      callback: (this: void, screen: ScreenInstance, ...args: any[]) => void,
     ) => void;
     // weak_connect_signal
   };
@@ -1024,7 +972,11 @@ declare module 'awful' {
     /**
      * Disconnect from a signal.
      */
-    disconnect_signal: (this: void, name: string, callback: Function) => void;
+    disconnect_signal: (
+      this: void,
+      name: string,
+      callback: (...args: unknown[]) => unknown,
+    ) => void;
     /**
      * Emit a signal.
      */
@@ -1035,7 +987,7 @@ declare module 'awful' {
     connect_signal: (
       this: void,
       name: string,
-      callback: (this: void, tag: TagInstance, ...args: any[]) => void
+      callback: (this: void, tag: TagInstance, ...args: any[]) => void,
     ) => void;
 
     /**
@@ -1049,7 +1001,7 @@ declare module 'awful' {
       this: void,
       names: string[],
       screen: number | ScreenInstance,
-      layout: LayoutThingy[]
+      layout: LayoutThingy[],
     ) => TagInstance[];
 
     /**
@@ -1057,11 +1009,7 @@ declare module 'awful' {
      * @param screen The screen to look for a tag on. [awful.screen.focused()]
      * @param invalids A table of tags we consider unacceptable. [selectedlist(scr)]
      */
-    find_fallback: (
-      this: void,
-      screen: ScreenInstance,
-      invalids: TagInstance[]
-    ) => void;
+    find_fallback: (this: void, screen: ScreenInstance, invalids: TagInstance[]) => void;
 
     // history
 
@@ -1071,11 +1019,7 @@ declare module 'awful' {
      * @param tag The name of the tag.
      * @returns The tag found, or `nil`
      */
-    find_by_name: (
-      this: void,
-      screen: ScreenInstance,
-      name: string
-    ) => TagInstance | undefined;
+    find_by_name: (this: void, screen: ScreenInstance, name: string) => TagInstance | undefined;
 
     // incmwfact
     // incgap
@@ -1125,7 +1069,7 @@ declare module 'awful' {
       this: void,
       screen: ScreenInstance,
       signal?: string,
-      callback?: (tag: TagInstance) => void
+      callback?: (tag: TagInstance) => void,
     ) => void;
   };
 
@@ -1158,7 +1102,7 @@ declare module 'awful' {
      *
      * Both types of layouts have valid usage scenarios.
      */
-    layout: Function | LayoutThingy;
+    layout: (...args: unknown[]) => unknown | LayoutThingy;
     /**
      * The (proposed) list of available layouts for this tag.
      *
@@ -1222,7 +1166,7 @@ declare module 'awful' {
       args?: {
         fallback_tag: TagInstance;
         allow_untagged?: boolean;
-      }
+      },
     ) => void;
 
     /**
@@ -1234,7 +1178,7 @@ declare module 'awful' {
       args: {
         fallback_tag?: TagInstance;
         allow_untagged?: boolean;
-      }
+      },
     ) => boolean;
 
     /**
@@ -1252,7 +1196,7 @@ declare module 'awful' {
     connect_signal: (
       this: any,
       name: string,
-      callback: (this: void, tag: TagInstance, ...args: any[]) => void
+      callback: (this: void, tag: TagInstance, ...args: any[]) => void,
     ) => void;
     // weak_connect_signal
   };
@@ -1328,7 +1272,7 @@ declare module 'awful' {
     mod: Modifier[],
     button: number,
     press: (this: void, value: R) => void,
-    release?: (this: void, value: R) => void
+    release?: (this: void, value: R) => void,
   ): ButtonInstance<R>;
   /**
    * Create a new button to use as binding.
@@ -1400,7 +1344,7 @@ declare module 'awful' {
     press: (client: ClientInstance) => void,
     release?: (client: ClientInstance) => void,
     /** This is required! */
-    data?: Table
+    data?: Table,
   ): KeyInstance<R>[];
 
   /**
@@ -1415,16 +1359,12 @@ declare module 'awful' {
   }): KeyInstance<R>[];
 
   // TODO: below
+  // eslint-disable-next-line @typescript-eslint/ban-types
   type LayoutThingy = {};
   // TODO: NEXT MOUSE
 
   interface MouseClientFunctions {
-    resize: (
-      this: void,
-      client: ClientInstance,
-      corner?: string,
-      args?: Table
-    ) => void;
+    resize: (this: void, client: ClientInstance, corner?: string, args?: Table) => void;
     move: (this: void, client: ClientInstance, snap?: any) => void;
   }
 
@@ -1433,6 +1373,7 @@ declare module 'awful' {
   interface MouseProps {
     client: MouseClient;
   }
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface MouseFunctions {}
 
   type Mouse = MouseProps & MouseFunctions;
@@ -1442,6 +1383,7 @@ declare module 'awful' {
    */
   export const mouse: Mouse;
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface PlacementProps {}
 
   type Drawable = any;
@@ -1462,12 +1404,8 @@ declare module 'awful' {
    */
   interface PlacementFunctions {
     centered: (drawable: Drawable, args?: Table) => Table;
-    no_offscreen: (client: ClientInstance, args?: {screen: number}) => Table;
-    bottom_right: (
-      this: void,
-      client: ClientInstance,
-      args?: PlacementArgs
-    ) => Table;
+    no_offscreen: (client: ClientInstance, args?: { screen: number }) => Table;
+    bottom_right: (this: void, client: ClientInstance, args?: PlacementArgs) => Table;
   }
 
   export type Placement = PlacementProps & PlacementFunctions;
@@ -1505,12 +1443,7 @@ declare module 'awful' {
 
   interface LayoutFunctions {
     append_default_layouts: (this: void, layouts: string[]) => void;
-    inc: (
-      this: void,
-      relativeIndex: number,
-      screen?: ScreenInstance,
-      layouts?: unknown
-    ) => void;
+    inc: (this: void, relativeIndex: number, screen?: ScreenInstance, layouts?: unknown) => void;
   }
 
   type Layout = LayoutFunctions & {
@@ -1529,12 +1462,7 @@ declare module 'awful' {
     easy_async_with_shell: (
       this: void,
       command: string,
-      callback: (
-        stdout: string,
-        stderr: string,
-        exitReason: string,
-        exitCode: number
-      ) => void
+      callback: (stdout: string, stderr: string, exitReason: string, exitCode: number) => void,
     ) => void;
   }
 
@@ -1557,12 +1485,7 @@ declare module 'awful' {
     /**
      * @noSelf
      */
-    button: (
-      c: ClientInstance,
-      name: string,
-      selector: unknown,
-      action: unknown
-    ) => unknown;
+    button: (c: ClientInstance, name: string, selector: unknown, action: unknown) => unknown;
     /**
      * @noSelf
      */
@@ -1614,7 +1537,7 @@ declare module 'awful' {
         fg_focus: string;
         font: string;
         bg: string;
-      }>
+      }>,
     ): Titlebar;
     widget: Widget;
   };
@@ -1644,12 +1567,10 @@ declare module 'awful' {
       this: any,
       widget: Widget,
       buttons: Table,
-      label: (
-        object?: any
-      ) => {text: string; bg: string; bg_image: string; icon: string},
+      label: (object?: any) => { text: string; bg: string; bg_image: string; icon: string },
       data: Table,
       objects: Table,
-      args?: Table
+      args?: Table,
     ) => void;
   };
 
@@ -1683,41 +1604,16 @@ declare module 'awful' {
     (args: TaskListWidgetProps): unknown;
     // (args: Table, filter: (tag: Tag) => void, buttons: Table<Button>): unknown;
     filter: {
-      allscreen: (
-        this: void,
-        client: ClientInstance,
-        screen: ScreenInstance
-      ) => void;
-      alltags: (
-        this: void,
-        client: ClientInstance,
-        screen: ScreenInstance
-      ) => void;
-      currenttags: (
-        this: void,
-        client: ClientInstance,
-        screen: ScreenInstance
-      ) => void;
-      minimizedcurrenttags: (
-        this: void,
-        client: ClientInstance,
-        screen: ScreenInstance
-      ) => void;
-      focused: (
-        this: void,
-        client: ClientInstance,
-        screen: ScreenInstance
-      ) => void;
+      allscreen: (this: void, client: ClientInstance, screen: ScreenInstance) => void;
+      alltags: (this: void, client: ClientInstance, screen: ScreenInstance) => void;
+      currenttags: (this: void, client: ClientInstance, screen: ScreenInstance) => void;
+      minimizedcurrenttags: (this: void, client: ClientInstance, screen: ScreenInstance) => void;
+      focused: (this: void, client: ClientInstance, screen: ScreenInstance) => void;
     };
   }
 
   export interface CalendarPopupWidget {
-    call_calendar: (
-      this: any,
-      offset: number,
-      position: string,
-      screen: ScreenInstance
-    ) => unknown;
+    call_calendar: (this: any, offset: number, position: string, screen: ScreenInstance) => unknown;
 
     attach: (
       this: any,
@@ -1726,7 +1622,7 @@ declare module 'awful' {
       args: {
         on_hover: boolean;
         on_pressed: boolean;
-      }
+      },
     ) => unknown;
   }
 
@@ -1750,7 +1646,7 @@ declare module 'awful' {
         style_weeknumber?: Table;
         style_normal?: Table;
         style_focus?: Table;
-      }
+      },
     ) => unknown;
 
     year: (
@@ -1774,7 +1670,7 @@ declare module 'awful' {
         style_weeknumber: Table;
         style_normal: Table;
         style_focus: Table;
-      }
+      },
     ) => unknown;
   }
 
@@ -1796,9 +1692,9 @@ declare module 'awful' {
         stdout: string,
         stderr: string,
         exitreason: string,
-        exitcode: number
+        exitcode: number,
       ) => void,
-      baseWidget?: any
+      baseWidget?: any,
     ) => Widget;
 
     taglist: TagListWidget;
@@ -1841,13 +1737,9 @@ declare module 'awful' {
 
 /** @noResolution */
 declare module 'awful.hotkeys_popup' {
-  import {ClientInstance, ScreenInstance} from 'awful';
+  import { ClientInstance, ScreenInstance } from 'awful';
   interface Widget {
-    show_help: (
-      this: void,
-      client?: ClientInstance,
-      screen?: ScreenInstance
-    ) => void;
+    show_help: (this: void, client?: ClientInstance, screen?: ScreenInstance) => void;
   }
 
   export const widget: Widget;

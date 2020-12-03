@@ -1,4 +1,4 @@
-import {createElement} from './jsx-factory';
+import { createElement } from './jsx-factory';
 
 export default {
   createElement,

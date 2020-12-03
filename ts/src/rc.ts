@@ -7,6 +7,37 @@
 
 import * as awful from 'awful';
 import * as beautiful from 'beautiful';
+// ░█▀▀░█▀█░█▀█░█▀▀░▀█▀░█▀▀░█░█░█▀▄░█▀█░▀█▀░▀█▀░█▀█░█▀█
+// ░█░░░█░█░█░█░█▀▀░░█░░█░█░█░█░█▀▄░█▀█░░█░░░█░░█░█░█░█
+// ░▀▀▀░▀▀▀░▀░▀░▀░░░▀▀▀░▀▀▀░▀▀▀░▀░▀░▀░▀░░▀░░▀▀▀░▀▀▀░▀░▀
+import './configuration/client/index';
+import globalKeys from './configuration/keys/global';
+// import './configuration/root'
+import './configuration/tags/index';
+// ░█░░░█▀█░█░█░█▀█░█░█░▀█▀
+// ░█░░░█▀█░░█░░█░█░█░█░░█░
+// ░▀▀▀░▀░▀░░▀░░▀▀▀░▀▀▀░░▀░
+import './layout/my-panel';
+// import * as globalKeys from './configuration/keys/global';
+// root.keys(globalKeys);
+// require('configuration.client')
+// require('configuration.root')
+// require('configuration.tags')
+// _G.root.keys(require('configuration.keys.global'))
+// ░█▄█░█▀█░█▀▄░█░█░█░░░█▀▀░█▀▀
+// ░█░█░█░█░█░█░█░█░█░░░█▀▀░▀▀█
+// ░▀░▀░▀▀▀░▀▀░░▀▀▀░▀▀▀░▀▀▀░▀▀▀
+// // Configuration/layout for system notifications (using naughty)
+// require('module.notifications')
+// // Handles staring up programs like picom
+import './module/auto-start';
+import './module/notifications';
+// // Titlebars for clients (windows)
+import './module/titlebar';
+// ░▀█▀░█░█░█▀▀░█▄█░█▀▀
+// ░░█░░█▀█░█▀▀░█░█░█▀▀
+// ░░▀░░▀░▀░▀▀▀░▀░▀░▀▀▀/*  */
+import theme from './theme/index';
 // TODO: require('awful.autofocus')
 
 // ░█▀▀░█░█░█▀▀░█░░░█░░
@@ -16,49 +47,9 @@ import * as beautiful from 'beautiful';
 // https://awesomewm.org/apidoc/libraries/awful.util.html#shell
 awful.util.shell = 'sh';
 
-// ░▀█▀░█░█░█▀▀░█▄█░█▀▀
-// ░░█░░█▀█░█▀▀░█░█░█▀▀
-// ░░▀░░▀░▀░▀▀▀░▀░▀░▀▀▀
-
-import theme from './theme/index';
 beautiful.init(theme);
 
-// ░█░░░█▀█░█░█░█▀█░█░█░▀█▀
-// ░█░░░█▀█░░█░░█░█░█░█░░█░
-// ░▀▀▀░▀░▀░░▀░░▀▀▀░▀▀▀░░▀░
-
-import './layout/my-panel';
-
-// ░█▀▀░█▀█░█▀█░█▀▀░▀█▀░█▀▀░█░█░█▀▄░█▀█░▀█▀░▀█▀░█▀█░█▀█
-// ░█░░░█░█░█░█░█▀▀░░█░░█░█░█░█░█▀▄░█▀█░░█░░░█░░█░█░█░█
-// ░▀▀▀░▀▀▀░▀░▀░▀░░░▀▀▀░▀▀▀░▀▀▀░▀░▀░▀░▀░░▀░░▀▀▀░▀▀▀░▀░▀
-
-import './configuration/client/index';
-// import './configuration/root'
-import './configuration/tags/index';
-import globalKeys from './configuration/keys/global';
-// eslint-disable-next-line node/no-deprecated-api
 root.keys = globalKeys as any;
-
-// import * as globalKeys from './configuration/keys/global';
-// root.keys(globalKeys);
-
-// require('configuration.client')
-// require('configuration.root')
-// require('configuration.tags')
-// _G.root.keys(require('configuration.keys.global'))
-
-// ░█▄█░█▀█░█▀▄░█░█░█░░░█▀▀░█▀▀
-// ░█░█░█░█░█░█░█░█░█░░░█▀▀░▀▀█
-// ░▀░▀░▀▀▀░▀▀░░▀▀▀░▀▀▀░▀▀▀░▀▀▀
-
-// // Configuration/layout for system notifications (using naughty)
-// require('module.notifications')
-// // Handles staring up programs like picom
-import './module/auto-start';
-// // Titlebars for clients (windows)
-import './module/titlebar';
-import './module/notifications';
 
 // // TODO: Fix weird load up bug (lockscreen fixes this?)
 // require('module.dynamic-wallpaper')

@@ -1,6 +1,5 @@
-import {Theme} from 'beautiful';
 import * as filesystem from 'gears.filesystem';
-import {CustomTheme} from 'theme/index';
+import { CustomTheme } from 'theme/index';
 const theme_dir = `${filesystem.get_configuration_dir()}/theme`;
 
 // todo: typing
@@ -50,10 +49,8 @@ theme.transparent = '#00000000';
 // Awesome icon
 theme.awesome_icon = `${theme.icons}awesome.svg`;
 
-export const awesome_overrides = function (
-  this: void,
-  theme: Partial<CustomTheme>
-) {};
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+export const awesome_overrides = function (this: void, theme: Partial<CustomTheme>) {};
 
 export default {
   theme,

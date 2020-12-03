@@ -1,4 +1,4 @@
-import {Background, Margin} from 'awesome/components/base';
+import { Background, Margin } from 'awesome/components/base';
 import Awesome from 'awesome/jsx';
 import * as beautiful from 'beautiful';
 import * as gears from 'gears';
@@ -12,10 +12,7 @@ interface Props {
   outlineColor?: string;
 }
 
-export const PanelOutline: JSX.FunctionComponent<
-  Props,
-  wibox.BaseWiboxWidget
-> = ({
+export const PanelOutline: JSX.FunctionComponent<Props, wibox.BaseWiboxWidget> = ({
   children,
   backgroundColor = theme.transparent!,
   outlineColor = theme!.groups_title_bg,
@@ -32,6 +29,6 @@ export const PanelOutline: JSX.FunctionComponent<
       >
         {children}
       </Background>
-    </Margin>
+    </Margin>,
   );
 };

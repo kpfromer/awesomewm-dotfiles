@@ -2,8 +2,8 @@
 /** @noResolution */
 
 declare module 'ruled' {
-  import {Table} from 'gears';
-  import {Notification} from 'naughty';
+  import { Table } from 'gears';
+  import { Notification } from 'naughty';
 
   interface NotificationRuled {
     connect_signal: {

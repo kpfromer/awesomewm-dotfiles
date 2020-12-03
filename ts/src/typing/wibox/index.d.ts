@@ -2,14 +2,14 @@
 /** @noResolution */
 
 declare module 'wibox' {
-  import {ScreenInstance} from 'awful';
-  import {GearsShape, Table} from 'gears';
+  import { ScreenInstance } from 'awful';
+  import { GearsShape, Table } from 'gears';
 
   export interface WiboxWidget {
     connect_signal: (
       this: any,
       name: string,
-      callback: (this: void, ...args: any[]) => void
+      callback: (this: void, ...args: any[]) => void,
     ) => void;
 
     bg: string;
@@ -79,9 +79,7 @@ declare module 'wibox' {
     set_image: (this: any, src: string) => void;
   }
 
-  export type ImageWidget = ImageWidgetProps &
-    ImageWidgetFunctions &
-    WiboxWidget;
+  export type ImageWidget = ImageWidgetProps & ImageWidgetFunctions & WiboxWidget;
 
   interface SystrayWidgetProps {
     base_size?: number;
@@ -141,14 +139,14 @@ declare module 'wibox' {
       top?: number,
       bottom?: number,
       color?: string,
-      draw_empty?: boolean
+      draw_empty?: boolean,
     ) => unknown;
 
     background: (
       this: void,
       widget?: Widget,
       bg?: string,
-      shape?: GearsShape | (() => GearsShape)
+      shape?: GearsShape | (() => GearsShape),
     ) => unknown;
 
     constraint: (
@@ -156,7 +154,7 @@ declare module 'wibox' {
       widget: Widget,
       strategy: 'min' | 'max' | 'exact',
       width?: number,
-      height?: number
+      height?: number,
     ) => unknown;
 
     place: (this: void) => unknown;

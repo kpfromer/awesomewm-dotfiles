@@ -1,8 +1,9 @@
-import * as gears from 'gears';
+/* eslint-disable @typescript-eslint/no-empty-function */
 import * as awful from 'awful';
 import * as hotkeysPopup from 'awful.hotkeys_popup';
+import * as gears from 'gears';
 import config from '../config';
-const {modkey} = config;
+const { modkey } = config;
 
 function move_mouse_onto_focused_client(): void {
   if (client.focus) {
@@ -10,7 +11,7 @@ function move_mouse_onto_focused_client(): void {
     const geometry = client_to_focus.geometry();
     const x = geometry.x + geometry.width / 2;
     const y = geometry.y + geometry.height / 2;
-    mouse.coords({x, y}, true);
+    mouse.coords({ x, y }, true);
   }
 }
 
@@ -41,7 +42,7 @@ let globalkeys = gears.table.join(
       move_mouse_onto_focused_client();
     },
     () => {},
-    {description: 'swap focus to top window', group: 'client'}
+    { description: 'swap focus to top window', group: 'client' },
   ),
   awful.key(
     [modkey],
@@ -50,7 +51,7 @@ let globalkeys = gears.table.join(
       move_mouse_onto_focused_client();
     },
     () => {},
-    {description: 'swap focus to bottom window', group: 'client'}
+    { description: 'swap focus to bottom window', group: 'client' },
   ),
   awful.key(
     [modkey],
@@ -59,7 +60,7 @@ let globalkeys = gears.table.join(
       awful.tag.viewprev();
     },
     () => {},
-    {description: 'swap focus to left window', group: 'client'}
+    { description: 'swap focus to left window', group: 'client' },
   ),
   awful.key(
     [modkey],
@@ -68,7 +69,7 @@ let globalkeys = gears.table.join(
       awful.tag.viewnext();
     },
     () => {},
-    {description: 'swap focus to right window', group: 'client'}
+    { description: 'swap focus to right window', group: 'client' },
   ),
   // TODO:
   // awful.key([modkey], 'Escape', awful.tag.history.restore, () => {}, {
@@ -82,7 +83,7 @@ let globalkeys = gears.table.join(
       awful.client.focus.byidx(1);
     },
     () => {},
-    {description: 'focus next by index', group: 'client'}
+    { description: 'focus next by index', group: 'client' },
   ),
   awful.key(
     [modkey],
@@ -91,7 +92,7 @@ let globalkeys = gears.table.join(
       awful.client.focus.byidx(-1);
     },
     () => {},
-    {description: 'focus previous by index', group: 'client'}
+    { description: 'focus previous by index', group: 'client' },
   ),
   awful.key(
     [modkey, 'Shift'],
@@ -100,7 +101,7 @@ let globalkeys = gears.table.join(
       awful.client.swap.byidx(1);
     },
     () => {},
-    {description: 'swap with next client by index', group: 'client'}
+    { description: 'swap with next client by index', group: 'client' },
   ),
   awful.key(
     [modkey, 'Shift'],
@@ -109,7 +110,7 @@ let globalkeys = gears.table.join(
       awful.client.swap.byidx(-1);
     },
     () => {},
-    {description: 'swap with previous client by index', group: 'client'}
+    { description: 'swap with previous client by index', group: 'client' },
   ),
   awful.key(
     [modkey, 'Control'],
@@ -118,7 +119,7 @@ let globalkeys = gears.table.join(
       awful.screen.focus_relative(1);
     },
     () => {},
-    {description: 'focus the next screen', group: 'screen'}
+    { description: 'focus the next screen', group: 'screen' },
   ),
   awful.key(
     [modkey, 'Control'],
@@ -127,7 +128,7 @@ let globalkeys = gears.table.join(
       awful.screen.focus_relative(-1);
     },
     () => {},
-    {description: 'focus the previous screen', group: 'screen'}
+    { description: 'focus the previous screen', group: 'screen' },
   ),
   // TODO:
   // awful.key([modkey], 'u', awful.client .urgent.jumpto, () => {}, {
@@ -153,7 +154,7 @@ let globalkeys = gears.table.join(
       awful.spawn(config.apps.default.terminal);
     },
     () => {},
-    {description: 'open a terminal', group: 'launcher'}
+    { description: 'open a terminal', group: 'launcher' },
   ),
   awful.key(
     [modkey, 'Shift'],
@@ -162,7 +163,7 @@ let globalkeys = gears.table.join(
       awful.spawn(config.apps.default.screenshot);
     },
     () => {},
-    {description: 'capture a screenshot', group: 'launcher'}
+    { description: 'capture a screenshot', group: 'launcher' },
   ),
   awful.key([modkey, 'Control'], 'r', awesome.restart, () => {}, {
     description: 'reload awesome',
@@ -176,7 +177,7 @@ let globalkeys = gears.table.join(
     {
       description: 'quit awesome',
       group: 'awesome',
-    }
+    },
   ),
   awful.key(
     [modkey],
@@ -185,7 +186,7 @@ let globalkeys = gears.table.join(
       awful.spawn(config.apps.default.lock, false);
     },
     () => {},
-    {description: 'lock the screen', group: 'Utility'}
+    { description: 'lock the screen', group: 'Utility' },
   ),
   awful.key(
     [modkey],
@@ -194,7 +195,7 @@ let globalkeys = gears.table.join(
       awful.layout.inc(1);
     },
     () => {},
-    {description: 'select next', group: 'layout'}
+    { description: 'select next', group: 'layout' },
   ),
   awful.key(
     [modkey, 'Shift'],
@@ -203,7 +204,7 @@ let globalkeys = gears.table.join(
       awful.layout.inc(-1);
     },
     () => {},
-    {description: 'select previous', group: 'layout'}
+    { description: 'select previous', group: 'layout' },
   ),
   // awful.key(
   //   [modkey, 'Control'],
@@ -243,7 +244,7 @@ let globalkeys = gears.table.join(
     {
       description: 'lua execute prompt',
       group: 'awesome',
-    }
+    },
   ),
   awful.key(
     [modkey],
@@ -252,7 +253,7 @@ let globalkeys = gears.table.join(
       awful.spawn(config.apps.default.rofiAppmenu, false);
     },
     () => {},
-    {description: 'app launcher', group: 'launcher'}
+    { description: 'app launcher', group: 'launcher' },
   ),
   awful.key(
     [modkey],
@@ -261,7 +262,7 @@ let globalkeys = gears.table.join(
       awful.spawn(config.apps.default.browser);
     },
     () => {},
-    {description: 'launch browser', group: 'apps'}
+    { description: 'launch browser', group: 'apps' },
   ),
   awful.key(
     [modkey, 'Shift'],
@@ -270,7 +271,7 @@ let globalkeys = gears.table.join(
       awful.spawn('pulsemixer --change-volume -5');
     },
     () => {},
-    {description: 'decrease volume', group: 'audio'}
+    { description: 'decrease volume', group: 'audio' },
   ),
   awful.key(
     [modkey, 'Shift'],
@@ -279,7 +280,7 @@ let globalkeys = gears.table.join(
       awful.spawn('pulsemixer --change-volume +5');
     },
     () => {},
-    {description: 'increase volume', group: 'audio'}
+    { description: 'increase volume', group: 'audio' },
   ),
   awful.key(
     [modkey, 'Shift'],
@@ -288,7 +289,7 @@ let globalkeys = gears.table.join(
       awful.spawn('playerctl previous -p spotify');
     },
     () => {},
-    {description: 'previous song', group: 'audio'}
+    { description: 'previous song', group: 'audio' },
   ),
   awful.key(
     [modkey, 'Shift'],
@@ -297,7 +298,7 @@ let globalkeys = gears.table.join(
       awful.spawn('playerctl next -p spotify');
     },
     () => {},
-    {description: 'next song', group: 'audio'}
+    { description: 'next song', group: 'audio' },
   ),
   awful.key(
     [modkey, 'Shift'],
@@ -306,8 +307,8 @@ let globalkeys = gears.table.join(
       awful.spawn('playerctl play-pause -p spotify');
     },
     () => {},
-    {description: 'start/stop song', group: 'audio'}
-  )
+    { description: 'start/stop song', group: 'audio' },
+  ),
 );
 
 // Bind all key numbers to tags.
@@ -327,7 +328,7 @@ for (const i of forRange(0, 8)) {
         }
       },
       () => {},
-      {description: 'view tag #' + i, group: 'tag'}
+      { description: 'view tag #' + i, group: 'tag' },
     ),
     awful.key(
       [modkey, 'Control'],
@@ -340,7 +341,7 @@ for (const i of forRange(0, 8)) {
         }
       },
       () => {},
-      {description: 'toggle tag #' + i, group: 'tag'}
+      { description: 'toggle tag #' + i, group: 'tag' },
     ),
     awful.key(
       [modkey, 'Shift'],
@@ -354,7 +355,7 @@ for (const i of forRange(0, 8)) {
         }
       },
       () => {},
-      {description: 'move focused client to tag #' + i, group: 'tag'}
+      { description: 'move focused client to tag #' + i, group: 'tag' },
     ),
     awful.key(
       [modkey, 'Control', 'Shift'],
@@ -370,8 +371,8 @@ for (const i of forRange(0, 8)) {
         }
       },
       () => {},
-      {description: 'toggle focused client on tag #' + i, group: 'tag'}
-    )
+      { description: 'toggle focused client on tag #' + i, group: 'tag' },
+    ),
   );
 }
 export default globalkeys;

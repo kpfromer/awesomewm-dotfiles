@@ -1,8 +1,8 @@
+import { Background } from 'awesome/components/base';
 import Awesome from 'awesome/jsx';
-import * as wibox from 'wibox';
 import * as beautiful from 'beautiful';
-import {Background} from 'awesome/components/base';
-import {Table} from 'gears';
+import { Table } from 'gears';
+import * as wibox from 'wibox';
 
 export type ButtonPressHandler = (this: void, button: number) => void;
 
@@ -44,7 +44,7 @@ function createClickable(this: void, onButtonPress?: ButtonPressHandler) {
       'button::press',
       (self: unknown, lx: number, ly: number, button: number) => {
         onButtonPress(button);
-      }
+      },
     );
   }
 
@@ -58,26 +58,26 @@ export const Clickable: JSX.FunctionComponent<{
   create_callback?: (
     this: void,
     self: {
-      connect_signal: (this: any, name: string, callback: Function) => void;
+      connect_signal: (this: any, name: string, callback: (...args: any[]) => any) => void;
       get_children_by_id: <T = wibox.WiboxWidget>(this: any, id: string) => T[];
     },
     // TODO:
     item: any,
     index: number,
-    objects: any
+    objects: any,
   ) => void;
   update_callback?: (
     this: void,
     self: {
-      connect_signal: (this: any, name: string, callback: Function) => void;
+      connect_signal: (this: any, name: string, callback: (...args: any[]) => any) => void;
       get_children_by_id: <T = wibox.WiboxWidget>(this: any, id: string) => T[];
     },
     // TODO:
     item: any,
     index: number,
-    objects: any
+    objects: any,
   ) => void;
-}> = ({onButtonPress, children, ...rest}) => {
+}> = ({ onButtonPress, children, ...rest }) => {
   return (
     <base {...rest} widget={() => createClickable(onButtonPress)}>
       {children}

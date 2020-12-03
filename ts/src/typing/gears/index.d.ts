@@ -3,13 +3,13 @@
  * @noResolution
  */
 declare module 'gears' {
-  import {ScreenInstance} from 'awful';
+  import { ScreenInstance } from 'awful';
 
   export type GearsShapeFunction = (
     this: void,
     cairoContent: any,
     width: number,
-    height: number
+    height: number,
   ) => void;
 
   /**
@@ -29,13 +29,7 @@ declare module 'gears' {
      *
      * https://awesomewm.org/doc/api/libraries/gears.shape.html#module.rounded_rect
      */
-    rounded_rect: (
-      this: void,
-      cr: any,
-      width: number,
-      height: number,
-      radius?: number
-    ) => void;
+    rounded_rect: (this: void, cr: any, width: number, height: number, radius?: number) => void;
 
     /**
      * A rounded rect with only some of the corners rounded.
@@ -60,7 +54,7 @@ declare module 'gears' {
       tr?: boolean,
       br?: boolean,
       bl?: boolean,
-      rad?: number
+      rad?: number,
     ) => void;
   }
 
@@ -75,7 +69,7 @@ declare module 'gears' {
   //   get(key: K): V | undefined;
   // }
 
-  export type Table<V = any> = {[key: string]: V};
+  export type Table<V = any> = { [key: string]: V };
 
   /**
    * @noSelf
@@ -134,11 +128,7 @@ declare module 'gears' {
 
     start_new: (this: void, timeout: number, callback: () => void) => Timer;
 
-    weak_start_new: (
-      this: void,
-      timeout: number,
-      callback: () => void
-    ) => Timer;
+    weak_start_new: (this: void, timeout: number, callback: () => void) => Timer;
 
     // 'delayed_call': (this: void, callback: function,...: unknown) => unknown;
   };
@@ -157,7 +147,7 @@ declare module 'gears' {
       surf: string,
       s?: ScreenInstance,
       ignore_aspect?: boolean,
-      offset?: {x: number; y: number}
+      offset?: { x: number; y: number },
     ) => void;
   }
 
@@ -184,7 +174,7 @@ declare module 'gears.filesystem' {
  */
 /** @noResolution */
 declare module 'gears.table' {
-  import {Table} from 'gears';
+  import { Table } from 'gears';
 
   // interface GTable {
   // /**

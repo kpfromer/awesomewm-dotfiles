@@ -23,7 +23,7 @@ export const Text: JSX.FunctionComponent<
     markup?: boolean;
     id?: string;
   }
-> = ({markup = false, children = '', ...rest}) => {
+> = ({ markup = false, children = '', ...rest }) => {
   if (markup) {
     return (
       <base
@@ -43,9 +43,9 @@ export const Text: JSX.FunctionComponent<
 };
 
 export const Image: JSX.FunctionComponent<
-  wibox.ImageWidgetProps & {id?: string},
+  wibox.ImageWidgetProps & { id?: string },
   wibox.ImageWidget
-> = props => {
+> = (props) => {
   return <base {...props} widget={wibox.widget.imagebox} />;
 };
 
@@ -57,10 +57,7 @@ export interface MarginProps {
   bottom?: number;
 }
 
-export const Margin: JSX.FunctionComponent<MarginProps> = ({
-  children,
-  ...rest
-}) => {
+export const Margin: JSX.FunctionComponent<MarginProps> = ({ children, ...rest }) => {
   return (
     <base {...rest} widget={wibox.container.margin}>
       {children}
@@ -126,7 +123,7 @@ export const Layout: JSX.FunctionComponent<{
   );
 };
 
-export const Tooltip: JSX.FunctionComponent<awful.Tooltip> = props => {
+export const Tooltip: JSX.FunctionComponent<awful.Tooltip> = (props) => {
   return awful.tooltip({
     bg: theme.tooltip_bg!,
     fg: theme.tooltip_fg!,

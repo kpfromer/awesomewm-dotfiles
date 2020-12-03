@@ -18,9 +18,7 @@
     "noHeader": true,
     "luaBundle": "./main.lua",
     "luaBundleEntry": "./src/rc.ts",
-    "luaPlugins": [
-      {"name": "./src/jsx.ts"}
-    ]
+    "luaPlugins": [{ "name": "./src/jsx.ts" }]
   }
 }
 

@@ -1,10 +1,10 @@
 /**
  * @noSelfInFile
  */
-import * as filesystem from 'gears.filesystem';
 import * as beautiful from 'beautiful';
 import * as gears from 'gears';
-import {CustomTheme} from 'theme/index';
+import * as filesystem from 'gears.filesystem';
+import { CustomTheme } from 'theme/index';
 
 const dpi = beautiful.xresources.apply_dpi;
 const gtk_variable = beautiful.gtk.get_theme_variables;
@@ -23,7 +23,7 @@ theme.font_bold = 'Inter Bold 10';
 // Menu icon theme
 theme.icon_theme = 'Tela-blue-dark';
 
-const awesome_overrides = function (this: void, theme: Partial<CustomTheme>) {
+const awesome_overrides = function (this: void, theme: Partial<CustomTheme>): void {
   theme.dir = theme_dir;
   theme.icons = `${theme.dir}/icons/`;
   theme.wallpaper = `${theme.dir}/wallpapers/morning-wallpaper.jpg`;

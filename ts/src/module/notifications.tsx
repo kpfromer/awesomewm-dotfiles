@@ -16,7 +16,7 @@ import {
   NaughtyTitle,
   Text,
 } from 'awesome/components/base';
-import {Clickable} from '../widgets/clickable-container';
+import { Clickable } from '../widgets/clickable-container';
 
 const dpi = beautiful.xresources.apply_dpi;
 // const clickable_container = require('widget.clickable-container');
@@ -29,12 +29,7 @@ naughty.config.defaults.title = 'System Notification';
 naughty.config.defaults.margin = dpi(16);
 naughty.config.defaults.border_width = 0;
 naughty.config.defaults.position = 'top_left';
-naughty.config.defaults.shape = function (
-  this: void,
-  cr: any,
-  w: number,
-  h: number
-) {
+naughty.config.defaults.shape = function (this: void, cr: any, w: number, h: number) {
   gears.shape.rounded_rect(cr, w, h, dpi(6));
 };
 
@@ -56,7 +51,7 @@ naughty.config.icon_formats = ['svg', 'png', 'jpg', 'gif'];
 ruled.notification.connect_signal('request::rules', () => {
   // Critical notifs
   ruled.notification.append_rule({
-    rule: {urgency: 'critical'},
+    rule: { urgency: 'critical' },
     properties: {
       font: 'Inter Bold 10',
       bg: '#ff0000',
@@ -69,7 +64,7 @@ ruled.notification.connect_signal('request::rules', () => {
 
   // Normal notifs
   ruled.notification.append_rule({
-    rule: {urgency: 'normal'},
+    rule: { urgency: 'normal' },
     properties: {
       font: 'Inter Bold 10',
       bg: beautiful.transparent,
@@ -82,7 +77,7 @@ ruled.notification.connect_signal('request::rules', () => {
 
   // Low notifs
   ruled.notification.append_rule({
-    rule: {urgency: 'low'},
+    rule: { urgency: 'low' },
     properties: {
       font: 'Inter Bold 10',
       bg: beautiful.transparent,
@@ -107,7 +102,7 @@ naughty.connect_signal('request::display_error', (message, startup) => {
 
 // TODO: extract
 
-const Place: JSX.FunctionComponent = ({children}) => (
+const Place: JSX.FunctionComponent = ({ children }) => (
   <base widget={wibox.container.place}>{children}</base>
 );
 
@@ -126,7 +121,7 @@ naughty.connect_signal('request::icon', (n, context, hints) => {
 });
 
 // Connect to naughty on display signal
-naughty.connect_signal('request::display', n => {
+naughty.connect_signal('request::display', (n) => {
   const actions = wibox.widget({
     notification: n,
     style: {
@@ -168,12 +163,7 @@ naughty.connect_signal('request::display', n => {
                   <Layout fixed vertical fill_space>
                     <Background bg={beautiful.background}>
                       <Margin margins={beautiful.notification_margin}>
-                        <Text
-                          markup
-                          font="Inter Bold 10"
-                          align="center"
-                          valign="center"
-                        >
+                        <Text markup font="Inter Bold 10" align="center" valign="center">
                           {n.app_name ?? 'System Notification'}
                         </Text>
                       </Margin>

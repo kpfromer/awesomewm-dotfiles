@@ -1,8 +1,8 @@
 import Awesome from 'awesome/jsx';
 import * as awful from 'awful';
-import {TaskList as TaskListPlain} from 'awesome/components/panel';
-import {Background, Margin, Image} from 'awesome/components/base';
-import {Clickable} from '../../widgets/clickable-container';
+import { TaskList as TaskListPlain } from 'awesome/components/panel';
+import { Background, Margin, Image } from 'awesome/components/base';
+import { Clickable } from '../../widgets/clickable-container';
 import * as wibox from 'wibox';
 import * as beautiful from 'beautiful';
 import theme from '../../theme/index';
@@ -26,18 +26,11 @@ export const TaskList: JSX.FunctionComponent<Props> = ({
     <TaskListPlain
       currenttags
       screen={screen}
-      onLeftClick={client => (client.minimized = !client.minimized)}
+      onLeftClick={(client) => (client.minimized = !client.minimized)}
       task={
         <Clickable
-          create_callback={(
-            self,
-            client: awful.ClientInstance,
-            index,
-            objects
-          ) => {
-            const [background] = self.get_children_by_id<
-              wibox.BackgroundWidget
-            >('tag-background');
+          create_callback={(self, client: awful.ClientInstance, index, objects) => {
+            const [background] = self.get_children_by_id<wibox.BackgroundWidget>('tag-background');
 
             // Initialize
             if (client.focus) {

@@ -3,10 +3,10 @@ import * as awful from 'awful';
 import * as wibox from 'wibox';
 import * as gears from 'gears';
 import * as beautiful from 'beautiful';
-import {Margin, Tooltip} from 'awesome/components/base';
-import {ButtonPressHandler, Clickable} from '../../widgets/clickable-container';
-import {TextClock} from 'awesome/components/panel';
-import {PanelOutline} from '../panel-outline';
+import { Margin, Tooltip } from 'awesome/components/base';
+import { ButtonPressHandler, Clickable } from '../../widgets/clickable-container';
+import { TextClock } from 'awesome/components/panel';
+import { PanelOutline } from '../panel-outline';
 import theme from '../../theme/index';
 const dpi = beautiful.xresources.apply_dpi;
 
@@ -14,15 +14,11 @@ const PlainClock: JSX.FunctionComponent<{
   militaryTime?: boolean;
   font: string;
   onButtonPress?: ButtonPressHandler;
-}> = ({militaryTime = false, font, onButtonPress}) => {
+}> = ({ militaryTime = false, font, onButtonPress }) => {
   return (
     <Clickable onButtonPress={onButtonPress}>
       <Margin margins={dpi(7)}>
-        <TextClock
-          format={`<span font="${font}">${
-            militaryTime ? '%H:%M' : '%I:%M %p'
-          }</span>`}
-        />
+        <TextClock format={`<span font="${font}">${militaryTime ? '%H:%M' : '%I:%M %p'}</span>`} />
       </Margin>
     </Clickable>
   );
@@ -31,7 +27,7 @@ const PlainClock: JSX.FunctionComponent<{
 const Calendar: JSX.FunctionComponent<{
   font: string;
   screen: awful.ScreenInstance;
-}> = ({font, screen}) => {
+}> = ({ font, screen }) => {
   // TODO: Extract out to component
   return awful.widget.calendar_popup.month({
     screen,
@@ -53,7 +49,7 @@ const Calendar: JSX.FunctionComponent<{
           true,
           true,
           true,
-          theme.groups_radius!
+          theme.groups_radius!,
         );
       },
     },
@@ -74,16 +70,7 @@ const Calendar: JSX.FunctionComponent<{
       border_color: theme.fg_normal!,
       bg_color: theme.accent!,
       shape: function (this: void, cr: any, width: number, height: number) {
-        gears.shape.partially_rounded_rect(
-          cr,
-          width,
-          height,
-          true,
-          true,
-          true,
-          true,
-          dpi(4)
-        );
+        gears.shape.partially_rounded_rect(cr, width, height, true, true, true, true, dpi(4));
       },
     },
   }) as any;
@@ -110,8 +97,8 @@ export const Clock: JSX.FunctionComponent<{
   font: string;
   screen: awful.ScreenInstance;
   calendarPosition?: string;
-}> = ({militaryTime = false, font, screen, calendarPosition = 'tr'}) => {
-  const openClockToolTip: ButtonPressHandler = button => {
+}> = ({ militaryTime = false, font, screen, calendarPosition = 'tr' }) => {
+  const openClockToolTip: ButtonPressHandler = (button) => {
     if ((screen as any).clockTooltip) {
       const clockTooltip = (screen as any).clockTooltip as wibox.WiboxWidget;
       if (clockTooltip.visible && button === 1) {
@@ -123,11 +110,7 @@ export const Clock: JSX.FunctionComponent<{
   // TODO: create a declarative react approach for this linking
   const clock = (
     <PanelOutline>
-      <PlainClock
-        font={font}
-        militaryTime={militaryTime}
-        onButtonPress={openClockToolTip}
-      />
+      <PlainClock font={font} militaryTime={militaryTime} onButtonPress={openClockToolTip} />
     </PanelOutline>
   );
 
@@ -152,18 +135,14 @@ export const Clock: JSX.FunctionComponent<{
           day = lastDigit;
         }
 
-        return `Today is the <b>${day}${oridnal} of ${month}</b>\nAnd it's ${os.date(
-          '%A'
-        )}`;
+        return `Today is the <b>${day}${oridnal} of ${month}</b>\nAnd it's ${os.date('%A')}`;
       }}
     />
   );
 
   (screen as any).clockTooltip = clockTooltip;
 
-  const calendar = (
-    <Calendar font={font} screen={screen} />
-  ) as awful.CalendarPopupWidget;
+  const calendar = (<Calendar font={font} screen={screen} />) as awful.CalendarPopupWidget;
 
   calendar.attach(clock, calendarPosition, {
     on_hover: false,
