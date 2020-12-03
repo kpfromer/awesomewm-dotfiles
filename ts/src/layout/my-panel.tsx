@@ -2,6 +2,7 @@ import { Layout, Margin } from 'awesome/components/base';
 import Awesome from 'awesome/jsx';
 import * as awful from 'awful';
 import * as beautiful from 'beautiful';
+import { Wifi } from 'layout/components/wifi';
 import config from '../configuration/config';
 import theme from '../theme/index';
 import { Bluetooth } from './components/bluetooth';
@@ -52,6 +53,9 @@ screen.connect_signal('request::desktop_decoration', (screen: awful.ScreenInstan
 
         <Layout fixed horizontal spacing={dpi(5)}>
           <SystemTrayToggle />
+          <PanelOutline>
+            <Wifi />
+          </PanelOutline>
           <Bluetooth />
           <Clock font={font} militaryTime={militaryTime} screen={screen} />
           <LayoutStatus screen={screen} />

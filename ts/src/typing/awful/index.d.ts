@@ -1464,6 +1464,12 @@ declare module 'awful' {
       command: string,
       callback: (stdout: string, stderr: string, exitReason: string, exitCode: number) => void,
     ) => void;
+
+    easy_async: (
+      this: void,
+      cmd: string | Table,
+      callback: (stdout: string, stderr: string, exitreason: string, exitcode: number) => void,
+    ) => string | number;
   }
 
   type Spawn = SpawnFunctions;
