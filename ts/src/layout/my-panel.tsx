@@ -22,7 +22,7 @@ screen.connect_signal(
   'request::desktop_decoration',
   (screen: awful.ScreenInstance) => {
     const panel = awful.wibar({
-      position: 'top',
+      position: 'bottom',
       screen,
       ontop: true,
       type: 'dock',
@@ -31,7 +31,7 @@ screen.connect_signal(
       fg: beautiful.fg_normal,
     });
 
-    const font = theme.font!;
+    const font = theme.font_bold!;
 
     const focus = '#ffffffbb';
 

@@ -18,7 +18,7 @@ local bottom_panel = function(s)
     width = s.geometry.width,
     x = s.geometry.x,
     y = dpi(panel_y),
-    position = 'bottom',
+    position = 'top',
     bg = beautiful.background,
     fg = beautiful.fg_normal
   }
