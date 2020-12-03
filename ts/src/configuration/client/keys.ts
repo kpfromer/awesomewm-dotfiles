@@ -126,7 +126,7 @@ export default gears.table.join(
 
         const {height} = c.screen.geometry;
         const newHeight = (1 / 3) * height;
-        const newWidth = (16 / 9) * ((1 / 3) * height);
+        const newWidth = (16 / 9) * newHeight;
 
         c.geometry({height: newHeight, width: newWidth});
         awful.placement.bottom_right(c, {margins: {bottom: 60}});
