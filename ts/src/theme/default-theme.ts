@@ -49,6 +49,7 @@ const awesome_overrides = function (this: void, theme: Partial<CustomTheme>) {
   theme.menu_width = dpi(160);
 
   // Tooltips
+  theme.tooltip_fg = theme.fg_normal;
   theme.tooltip_bg = '#232323';
   theme.tooltip_border_color = '#232323';
   theme.tooltip_border_width = 0;
