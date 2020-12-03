@@ -27,8 +27,6 @@ beautiful.init(theme);
 // ░█░░░█▀█░░█░░█░█░█░█░░█░
 // ░▀▀▀░▀░▀░░▀░░▀▀▀░▀▀▀░░▀░
 
-// require('layout')
-
 import './layout/my-panel';
 
 // ░█▀▀░█▀█░█▀█░█▀▀░▀█▀░█▀▀░█░█░█▀▄░█▀█░▀█▀░▀█▀░█▀█░█▀█
@@ -40,7 +38,7 @@ import './configuration/client/index';
 import './configuration/tags/index';
 import globalKeys from './configuration/keys/global';
 // eslint-disable-next-line node/no-deprecated-api
-root.keys(globalKeys);
+root.keys = globalKeys as any;
 
 // import * as globalKeys from './configuration/keys/global';
 // root.keys(globalKeys);
