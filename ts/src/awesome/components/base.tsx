@@ -1,6 +1,6 @@
 import Awesome from 'awesome/jsx';
-import * as wibox from 'wibox';
 import * as awful from 'awful';
+import * as wibox from 'wibox';
 import theme from '../../theme/index';
 
 export type WiboxTextBox = {

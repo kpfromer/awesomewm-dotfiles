@@ -1,13 +1,13 @@
+import { Margin, Tooltip } from 'awesome/components/base';
+import { TextClock } from 'awesome/components/panel';
 import Awesome from 'awesome/jsx';
 import * as awful from 'awful';
-import * as wibox from 'wibox';
-import * as gears from 'gears';
 import * as beautiful from 'beautiful';
-import { Margin, Tooltip } from 'awesome/components/base';
-import { ButtonPressHandler, Clickable } from '../../widgets/clickable-container';
-import { TextClock } from 'awesome/components/panel';
-import { PanelOutline } from '../panel-outline';
+import * as gears from 'gears';
+import * as wibox from 'wibox';
 import theme from '../../theme/index';
+import { ButtonPressHandler, Clickable } from '../../widgets/clickable-container';
+import { PanelOutline } from '../panel-outline';
 const dpi = beautiful.xresources.apply_dpi;
 
 const PlainClock: JSX.FunctionComponent<{
