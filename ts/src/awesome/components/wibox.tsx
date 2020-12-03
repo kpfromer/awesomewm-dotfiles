@@ -5,18 +5,22 @@ import * as wibox from 'wibox';
 
 type BaseWibox = {id?: string};
 
-export const Background: JSX.FunctionComponent<
-  BaseWibox & {
-    shape?: (this: void, cr: any, width: number, height: number) => void;
-    bg?: string;
+export interface BackgroundProps {
+  shape?: (this: void, cr: any, width: number, height: number) => void;
+  fg?: string;
+  bg?: string;
 
-    forced_height?: number;
-    forced_width?: number;
+  forced_height?: number;
+  forced_width?: number;
 
-    border_width?: number;
-    border_color?: string;
-  }
-> = ({children, ...rest}) => {
+  border_width?: number;
+  border_color?: string;
+}
+
+export const Background: JSX.FunctionComponent<BaseWibox & BackgroundProps> = ({
+  children,
+  ...rest
+}) => {
   return (
     <base {...rest} widget={wibox.container.background}>
       {children}
