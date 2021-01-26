@@ -8,7 +8,7 @@
 local gears = require('gears')
 local awful = require('awful')
 local beautiful = require('beautiful')
-require('awful.autofocus')
+-- require('awful.autofocus')
 
 require('ts.main')
 
@@ -29,7 +29,7 @@ awful.util.shell = 'sh'
 -- ░█░░░█▀█░░█░░█░█░█░█░░█░
 -- ░▀▀▀░▀░▀░░▀░░▀▀▀░▀▀▀░░▀░
 
-require('layout')
+-- require('layout')
 
 -- ░█▀▀░█▀█░█▀█░█▀▀░▀█▀░█▀▀░█░█░█▀▄░█▀█░▀█▀░▀█▀░█▀█░█▀█
 -- ░█░░░█░█░█░█░█▀▀░░█░░█░█░█░█░█▀▄░█▀█░░█░░░█░░█░█░█░█
@@ -55,7 +55,7 @@ require('layout')
 -- require('module.titlebar')
 -- TODO: Fix weird load up bug (lockscreen fixes this?)
 -- require('module.dynamic-wallpaper')
-require('module.menu')
+-- require('module.menu')
 
 -- TODO: fix
-require('module.lockscreen')
+-- require('module.lockscreen')
