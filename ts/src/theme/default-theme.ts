@@ -26,7 +26,7 @@ theme.icon_theme = 'Tela-blue-dark';
 const awesome_overrides = function (this: void, theme: Partial<CustomTheme>): void {
   theme.dir = theme_dir;
   theme.icons = `${theme.dir}/icons/`;
-  theme.wallpaper = `${theme.dir}/wallpapers/morning-wallpaper.jpg`;
+  theme.wallpaper = `${theme.dir}/wallpapers/default.png`;
 
   // Default font
   theme.font = 'Inter Regular 10';
