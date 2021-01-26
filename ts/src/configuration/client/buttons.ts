@@ -1,9 +1,6 @@
 // ░█▀▄░█░█░▀█▀░▀█▀░█▀█░█▀█░█▀▀
 // ░█▀▄░█░█░░█░░░█░░█░█░█░█░▀▀█
 // ░▀▀░░▀▀▀░░▀░░░▀░░▀▀▀░▀░▀░▀▀▀
-// TODO: DESCRIPTION
-// Docs:
-// TODO
 
 import * as awful from 'awful';
 import * as gears from 'gears';

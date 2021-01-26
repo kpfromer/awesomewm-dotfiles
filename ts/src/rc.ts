@@ -22,6 +22,7 @@ awful.util.shell = 'sh';
 
 import './configuration/client/index';
 import globalKeys from './configuration/keys/global';
+root.keys = globalKeys as any;
 import './configuration/tags/index';
 
 // ░█░░░█▀█░█░█░█▀█░█░█░▀█▀
@@ -34,11 +35,11 @@ import './layout/my-panel';
 // ░█░█░█░█░█░█░█░█░█░░░█▀▀░▀▀█
 // ░▀░▀░▀▀▀░▀▀░░▀▀▀░▀▀▀░▀▀▀░▀▀▀
 
-// // Handles staring up programs like picom
+// Handles staring up programs like picom
 import './module/auto-start';
-// // Configuration/layout for system notifications (using naughty)
+// Configuration/layout for system notifications (using naughty)
 import './module/notifications';
-// // Titlebars for clients (windows)
+// Titlebars for clients (windows)
 import './module/titlebar';
 
 // ░▀█▀░█░█░█▀▀░█▄█░█▀▀
@@ -47,16 +48,7 @@ import './module/titlebar';
 
 import theme from './theme/index';
 
-// ░█▀▀░█░█░█▀▀░█░░░█░░
-// ░▀▀█░█▀█░█▀▀░█░░░█░░
-// ░▀▀▀░▀░▀░▀▀▀░▀▀▀░▀▀▀
-
-// https://awesomewm.org/apidoc/libraries/awful.util.html#shell
-awful.util.shell = 'sh';
-
 beautiful.init(theme);
-
-root.keys = globalKeys as any;
 
 // TODO: Fix weird load up bug (lockscreen fixes this?)
 // require('module.dynamic-wallpaper')

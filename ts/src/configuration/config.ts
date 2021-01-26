@@ -3,6 +3,7 @@ import * as awful from 'awful';
 
 export type CommandDefintion = {
   command: string;
+  // 1-9
   tag: number;
 };
 

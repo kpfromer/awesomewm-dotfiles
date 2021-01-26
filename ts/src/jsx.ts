@@ -17,6 +17,7 @@ import {
 } from 'typescript-to-lua/dist/transformation/utils/lualib';
 import { transformArguments } from 'typescript-to-lua/dist/transformation/visitors/call';
 import { literalVisitors } from 'typescript-to-lua/dist/transformation/visitors/literal';
+import * as tstl from 'typescript-to-lua';
 
 /*
 Tools:
@@ -150,7 +151,7 @@ function transformJsxElement(
   return transformJsxOpeningElement(expression.openingElement, context, expression.children);
 }
 
-export default {
+const plugin: tstl.Plugin = {
   visitors: {
     [ts.SyntaxKind.JsxSelfClosingElement]: (node, context) => transformJsxElement(node, context),
     [ts.SyntaxKind.JsxElement]: (node, context) => transformJsxElement(node, context),
@@ -162,3 +163,5 @@ export default {
     },
   },
 } as Plugin;
+
+export default plugin;
