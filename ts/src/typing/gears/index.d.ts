@@ -69,7 +69,7 @@ declare module 'gears' {
   //   get(key: K): V | undefined;
   // }
 
-  export type Table<V = any> = { [key: string]: V };
+  export type Table<V = any> = Record<string, V>;
 
   /**
    * @noSelf

@@ -11,7 +11,7 @@ declare module 'awful' {
 
   export let util: Util;
 
-  // TODO:
+  // TODO: better typing
   export type RuleBody = Table;
   // TODO:
   export interface Rule {
@@ -25,6 +25,8 @@ declare module 'awful' {
   interface Rules {
     // TODO:
     rules: Rule[];
+
+    match: (this: void, client: ClientInstance, rule: Table) => boolean;
   }
 
   export let rules: Rules;
@@ -399,6 +401,8 @@ declare module 'awful' {
     // /* Set the client shape.*/
     shape: GearsShapeFunction;
 
+    first_tag: TagInstance;
+
     focus: ClientInstance & {
       filter: (client: ClientInstance) => ClientInstance | undefined;
     };
@@ -601,6 +605,13 @@ declare module 'awful' {
       sel?: ClientInstance,
       stacked?: boolean,
     ) => ClientInstance | undefined;
+
+    iterate: (
+      this: void,
+      filter: (this: void, client: ClientInstance) => boolean,
+      start?: number,
+      screen?: ScreenInstance,
+    ) => LuaIterable<ClientInstance>;
 
     swap: {
       /**
