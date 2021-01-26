@@ -1,12 +1,12 @@
-import Awesome from 'awesome/jsx';
-import * as wibox from 'wibox';
-import * as gears from 'gears';
-import * as filesystem from 'gears.filesystem';
-import * as beautiful from 'beautiful';
 import { Image, Layout, Margin } from 'awesome/components/base';
 import { SystemTray } from 'awesome/components/panel';
-import { PanelOutline } from '../panel-outline';
+import Awesome from 'awesome/jsx';
+import * as beautiful from 'beautiful';
+import * as gears from 'gears';
+import * as filesystem from 'gears.filesystem';
+import * as wibox from 'wibox';
 import { Clickable } from '../../widgets/clickable-container';
+import { PanelOutline } from '../panel-outline';
 
 const dpi = beautiful.xresources.apply_dpi;
 const configDir = filesystem.get_configuration_dir();

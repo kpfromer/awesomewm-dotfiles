@@ -7,6 +7,7 @@ import config from '../configuration/config';
 import theme from '../theme/index';
 import { Bluetooth } from './components/bluetooth';
 import { Clock } from './components/clock';
+import { ControlCenterToggle } from './components/control-center-toggle';
 import { LayoutStatus } from './components/layout-status';
 import { SystemTrayToggle } from './components/systray-toggle';
 import { TagList } from './components/tag-list';
@@ -38,9 +39,13 @@ screen.connect_signal('request::desktop_decoration', (screen: awful.ScreenInstan
     <Margin left={dpi(5)} right={dpi(5)}>
       <Layout align horizontal expand="none">
         <Layout fixed horizontal>
-          <PanelOutline>
-            <TagList screen={screen} focus={focus} />
-          </PanelOutline>
+          <ControlCenterToggle />
+
+          <Margin left={dpi(5)}>
+            <PanelOutline>
+              <TagList screen={screen} focus={focus} />
+            </PanelOutline>
+          </Margin>
 
           <Margin left={dpi(5)}>
             <PanelOutline>

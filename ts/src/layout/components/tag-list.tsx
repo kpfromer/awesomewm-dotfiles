@@ -63,10 +63,10 @@ export const TagList: JSX.FunctionComponent<Props> = ({
 
             // Add background color if client added/removed from tag
             tag.connect_signal('tagged', () => {
-              if (tag.clients().length > 0) background.set_bg(hasChildrenColor);
+              if (!tag.selected && tag.clients().length > 0) background.set_bg(hasChildrenColor);
             });
             tag.connect_signal('ungtagged', () => {
-              if (tag.clients().length === 0) background.set_bg(backgroundColor);
+              if (!tag.selected && tag.clients().length === 0) background.set_bg(backgroundColor);
             });
 
             // https://www.reddit.com/r/awesomewm/comments/dq6cld/problem_with_urgent_signal_in_tag_list/
