@@ -70,15 +70,15 @@ local apps = {
   run_on_start_up = {
     -- Force Composition Pipeline for nvidia
     'force-composition-pipeline',
-    -- Picom (compositor)
-    'picom -b --experimental-backends --dbus --config ' .. config_dir .. '/configuration/picom.conf',
     -- Load xresources
     'xrdb merge .Xresources',
     -- Start audio
     'start-pulseaudio-x11',
     -- Start blue light filter
     'redshift -l 40.014984:-105.270546',
-    'blueberry-tray' -- Bluetooth tray icon
+    'blueberry-tray', -- Bluetooth tray icon
+    -- Picom (compositor)
+    -- 'picom -b --experimental-backends --dbus --config ' .. config_dir .. '/configuration/picom.conf'
     -- 'xfce4-power-manager', -- Power manager
     -- 'ibus-daemon --xim --daemonize', -- Ibus daemon for keyboard
     -- 'scream-start', -- scream audio sink

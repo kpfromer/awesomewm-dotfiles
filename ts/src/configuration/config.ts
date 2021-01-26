@@ -1,10 +1,65 @@
 import * as filesystem from 'gears.filesystem';
 import * as awful from 'awful';
 
+export type CommandDefintion = {
+  command: string;
+  tag: number;
+};
+
+export type StartupProgram = string | CommandDefintion;
+
+export interface Apps {
+  readonly default: Readonly<{
+    terminal: string;
+    textEditor: string;
+    terminalEditor: string;
+    browser: string;
+    fileManager: string;
+    networkManager: string;
+    bluetoothManager: string;
+    powerManager: string;
+    packageManager: string;
+    lock: string;
+    screenshot: string;
+    quake: string;
+    editor: string;
+    rofiAppmenu: string;
+  }>;
+  readonly startUp: ReadonlyArray<StartupProgram>;
+}
+
+export interface Config {
+  readonly debug: boolean;
+  readonly modkey: awful.Modifier;
+
+  // TODO: actually setup
+  // Shows laptop related stuff like battery level
+  readonly laptop: boolean;
+  // Changes clock format from "1:00 pm" to "13:00"
+  readonly militaryTime: boolean;
+
+  // Used for valid ways to layout awesomewm windows
+  readonly layouts: ReadonlyArray<string>;
+  readonly module: Readonly<{
+    auto_start: Readonly<{
+      debug_mode: boolean;
+    }>;
+
+    dynamic_wallpaper: Readonly<{
+      wall_dir: string;
+      valid_picture_formats: ReadonlyArray<string>;
+
+      stretch: false;
+    }>;
+  }>;
+
+  readonly apps: Apps;
+}
+
 const config_dir = filesystem.get_configuration_dir();
 const bin_dir = `${config_dir}utilities/`;
 
-const apps = {
+const apps: Apps = {
   default: {
     terminal: (os.getenv('TERMINAL') as string) ?? 'kitty',
 
@@ -18,7 +73,7 @@ const apps = {
     browser: os.getenv('BROWSER') ?? 'google-chrome-stable',
 
     // GUI File manager
-    fileManager: 'caja',
+    fileManager: 'nautilus',
 
     // Network manager
     networkManager: 'nm-connection-editor',
@@ -44,31 +99,6 @@ const apps = {
     editor: 'vim',
 
     rofiAppmenu: `rofi -dpi ${screen.primary.dpi} -show drun -theme ${config_dir}configuration/rofi/appmenu/rofi.rasi`,
-
-    // Rofi Web Search
-    // rofi_global:'rofi -dpi ' .. screen.primary.dpi ..
-    //     ' -show "Global Search" -modi "Global Search":' .. config_dir ..
-    //     '/configuration/rofi/global/rofi-spotlight.sh' .. ' -theme ' .. config_dir ..
-    //     '/configuration/rofi/global/rofi.rasi',
-
-    // // Application Menu
-    // rofi_appmenu:'rofi -dpi ' .. screen.primary.dpi .. ' -show drun -theme ' .. config_dir ..
-    //     '/configuration/rofi/appmenu/rofi.rasi'
-    // rofi:rofi_command,
-    // lock:'i3lock-fancy',
-    // quake:'termite',
-    // screenshot:'~/.config/awesome/configuration/utils/screenshot -m',
-    // region_screenshot:'~/.config/awesome/configuration/utils/screenshot -r',
-    // delayed_screenshot:'~/.config/awesome/configuration/utils/screenshot //delayed -r',
-
-    // Editing these also edits the default program
-    // associated with each tag/workspace
-    // browser:os.getenv("BROWSER") or "google-chrome-stable",
-    // editor:os.getenv("EDITOR") or "vim",
-    // social:'discord',
-    // // game:rofi_command,
-    // files:os.getenv('FILE_BROWSER') or 'caja'
-    // music:rofi_command
   },
 
   // List of apps to start once on start-up
@@ -76,45 +106,28 @@ const apps = {
     // Force Composition Pipeline for nvidia
     'force-composition-pipeline',
     // Picom (compositor)
-    `picom -b --experimental-backends --dbus --config ${config_dir}/configuration/picom.conf`,
+    `picom -b --experimental-backends --dbus --config ${config_dir}configuration/picom.conf`,
     // Load xresources
     'xrdb merge .Xresources',
     // Start audio
     'start-pulseaudio-x11',
     // Start blue light filter
     'redshift',
-    'blueberry-tray', // Bluetooth tray icon
+    // Bluetooth tray icon
+    'blueberry-tray',
+    // Reload feh background
+    // '/home/kpfromer/.fehbg',
 
-    // 'xfce4-power-manager', // Power manager
-    // 'ibus-daemon //xim //daemonize', // Ibus daemon for keyboard
-    // 'scream-start', // scream audio sink
-    // 'numlockx on', // enable numlock
-    // // '/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 & eval $(gnome-keyring-daemon -s //components=pkcs11,secrets,ssh,gpg)', // credential manager
-    // // '/usr/lib/x86_64-linux-gnu/libexec/polkit-kde-authentication-agent-1 & eval $(gnome-keyring-daemon -s //components=pkcs11,secrets,ssh,gpg)', // credential manager
-    // '/usr/lib/xfce-polkit/xfce-polkit & eval $(gnome-keyring-daemon -s //components=pkcs11,secrets,ssh,gpg)', // credential manager
-    // 'blueman-tray' // bluetooth tray
-    // 'lxsession'
+    // Graphical Programs
+    { command: 'mailspring', tag: 8 },
+    { command: 'discord', tag: 9 },
+    { command: 'slack', tag: 9 },
   ],
-
-  // List of apps to start once on start-up
-  // run_on_start_up:{
-
-  // utils:{
-
-  //   // Full Screenshot
-  //   full_screenshot:bin_dir .. 'snap full',
-
-  //   // Area Selected Screenshot
-  //   area_screenshot:bin_dir .. 'snap area',
-
-  //   // Update profile picture
-  //   update_profile:bin_dir .. 'profile-image'
-  // }
 };
 
-const config = {
-  debug: false as const,
-  modkey: 'Mod4' as const,
+const config: Config = {
+  debug: true,
+  modkey: 'Mod4',
 
   // TODO: actually setup
   // Shows laptop related stuff like battery level
@@ -128,16 +141,22 @@ const config = {
     awful.layout.suit.tile.left,
     awful.layout.suit.floating,
     awful.layout.suit.max as string,
-    // awful.layout.suit.floating, awful.layout.suit.tile,
-    // // awful.layout.suit.tile.left, awful.layout.suit.tile.bottom,
-    // // awful.layout.suit.tile.top, awful.layout.suit.fair,
-    // // awful.layout.suit.fair.horizontal, awful.layout.suit.spiral,
-    // // awful.layout.suit.spiral.dwindle, awful.layout.suit.max,
-    // awful.layout.suit.max.fullscreen, // awful.layout.suit.magnifier,
-    // awful.layout.suit.corner.nw
-    // // awful.layout.suit.corner.ne,
-    // // awful.layout.suit.corner.sw,
-    // // awful.layout.suit.corner.se,
+    // awful.layout.suit.floating,
+    // awful.layout.suit.tile,
+    // awful.layout.suit.tile.left,
+    // awful.layout.suit.tile.bottom,
+    // awful.layout.suit.tile.top,
+    // awful.layout.suit.fair,
+    // awful.layout.suit.fair.horizontal,
+    // awful.layout.suit.spiral,
+    // awful.layout.suit.spiral.dwindle,
+    // awful.layout.suit.max,
+    // awful.layout.suit.max.fullscreen,
+    // awful.layout.suit.magnifier,
+    // awful.layout.suit.corner.nw,
+    // awful.layout.suit.corner.ne,
+    // awful.layout.suit.corner.sw,
+    // awful.layout.suit.corner.se,
   ],
   module: {
     auto_start: {
@@ -147,7 +166,7 @@ const config = {
       wall_dir: 'theme/wallpapers/',
       valid_picture_formats: ['jpg', 'png', 'jpeg'],
       // Leave this table empty for full auto scheduling
-      // wallpaper_schedule:{
+      // wallpaper_schedule: {
       //   ['00:00:00']:'midnight-wallpaper.png',
       //   ['06:22:00']:'morning-wallpaper.jpg',
       //   ['12:00:00']:'noon-wallpaper.jpg',
