@@ -3,6 +3,7 @@ import * as awful from 'awful';
 import * as hotkeysPopup from 'awful.hotkeys_popup';
 import * as gears from 'gears';
 import config from '../config';
+import { KeyBindingGroup, toAwfulKeys } from './helper';
 const { modkey } = config;
 
 function move_mouse_onto_focused_client(): void {
@@ -30,11 +31,41 @@ function move_mouse_onto_focused_client(): void {
 //   }
 // }
 
+// const keyBindings: ReadonlyArray<KeyBindingGroup<awful.ClientInstance>> = [
+//   {
+//     name: 'awesome',
+//     bindings: [
+//       {
+//         modkey,
+//         key: 'q',
+//         onPress: () => awesome.quit(),
+//         description: 'quit awesome',
+//       },
+//       {
+//         modkey,
+//         key: 's',
+//         onPress: hotkeysPopup.widget.show_help,
+//         description: 'show help',
+//       },
+//     ],
+//   },
+// ];
+
 let globalkeys = gears.table.join(
+  // ...toAwfulKeys(keyBindings),
   awful.key([modkey], 's', hotkeysPopup.widget.show_help, () => {}, {
     description: 'show help',
     group: 'awesome',
   }),
+  awful.key(
+    [modkey, 'Control'],
+    'q',
+    () => {
+      awesome.quit();
+    },
+    () => {},
+    { description: 'Quit Awesome', group: 'awesome' },
+  ),
   awful.key(
     [modkey],
     'Up',
@@ -164,6 +195,24 @@ let globalkeys = gears.table.join(
     },
     () => {},
     { description: 'capture a screenshot', group: 'launcher' },
+  ),
+  awful.key(
+    [modkey, 'Shift'],
+    'f',
+    () => {
+      awful.spawn('nautilus');
+    },
+    () => {},
+    { description: 'open graphical file explorer', group: 'launcher' },
+  ),
+  awful.key(
+    [modkey],
+    'v',
+    () => {
+      awful.spawn(`${config.apps.default.terminal} -e vifmrun`);
+    },
+    () => {},
+    { description: 'open terminal file explorer', group: 'launcher' },
   ),
   awful.key([modkey, 'Control'], 'r', awesome.restart, () => {}, {
     description: 'reload awesome',
@@ -309,6 +358,7 @@ let globalkeys = gears.table.join(
     () => {},
     { description: 'start/stop song', group: 'audio' },
   ),
+  // ...keyBindings,
 );
 
 // Bind all key numbers to tags.
