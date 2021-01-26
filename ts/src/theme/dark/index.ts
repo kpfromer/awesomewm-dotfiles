@@ -49,6 +49,8 @@ theme.transparent = '#00000000';
 // Awesome icon
 theme.awesome_icon = `${theme.icons}awesome.svg`;
 
+theme.wallpaper = '/home/kpfromer/Pictures/maCo_IQpxZHQiKhC3btIbR1uw6Y06aGOpibwtQYkA1E.png';
+
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export const awesome_overrides = function (this: void, theme: Partial<CustomTheme>) {};
 

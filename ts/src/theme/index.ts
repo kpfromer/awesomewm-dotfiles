@@ -1,7 +1,7 @@
 import { Theme } from 'beautiful';
 import * as gtable from 'gears.table';
 import defaultTheme from './default-theme';
-import theme from './werewolf/index';
+import darkTheme from './dark/index';
 
 export type CustomTheme = Theme<{
   background: string;
@@ -44,11 +44,11 @@ export type CustomTheme = Theme<{
   titlebar_size: number;
 }>;
 
-const finalTheme: Partial<CustomTheme> = {};
+const theme: Partial<CustomTheme> = {};
 
-gtable.crush(finalTheme, defaultTheme.theme);
-gtable.crush(finalTheme, theme.theme);
-defaultTheme.awesome_overrides(finalTheme);
-theme.awesome_overrides(finalTheme);
+gtable.crush(theme, defaultTheme.theme);
+gtable.crush(theme, darkTheme.theme);
+defaultTheme.awesome_overrides(theme);
+darkTheme.awesome_overrides(theme);
 
-export default finalTheme;
+export default theme;
