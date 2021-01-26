@@ -1341,8 +1341,8 @@ declare module 'awful' {
   export function key<R = ClientInstance>(
     mod: Modifier[],
     key: string,
-    press: (client: ClientInstance) => void,
-    release?: (client: ClientInstance) => void,
+    press: (client: R) => void,
+    release?: (client: R) => void,
     /** This is required! */
     data?: Table,
   ): KeyInstance<R>[];
@@ -1442,7 +1442,7 @@ declare module 'awful' {
   }
 
   interface LayoutFunctions {
-    append_default_layouts: (this: void, layouts: string[]) => void;
+    append_default_layouts: (this: void, layouts: ReadonlyArray<string>) => void;
     inc: (this: void, relativeIndex: number, screen?: ScreenInstance, layouts?: unknown) => void;
   }
 
@@ -1453,7 +1453,7 @@ declare module 'awful' {
   export const layout: Layout;
 
   interface SpawnFunctions {
-    (this: void, command: string, rules?: boolean, callback?: () => void): void;
+    (this: void, command: string, rules?: Table | boolean, callback?: () => void): string | number;
     /**
      * Call spawn.easy_async with a shell. This calls cmd with $SHELL -c (via awful.util.shell).
      *
@@ -1470,6 +1470,8 @@ declare module 'awful' {
       cmd: string | Table,
       callback: (stdout: string, stderr: string, exitreason: string, exitcode: number) => void,
     ) => string | number;
+
+    with_shell: (this: void, command: string) => void;
   }
 
   type Spawn = SpawnFunctions;
@@ -1739,6 +1741,13 @@ declare module 'awful' {
 
   // TODO: return type
   export const tooltip: (this: void, args: Tooltip) => any;
+
+  // TODO: better from https://awesomewm.org/doc/api/classes/awful.popup.html
+
+  type Popup = Record<string, any>;
+
+  // TODO: return type
+  export const popup: (this: void, args?: Popup) => any;
 }
 
 /** @noResolution */

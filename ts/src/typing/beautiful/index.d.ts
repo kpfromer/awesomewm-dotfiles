@@ -3,6 +3,8 @@
  * @noResolution
  */
 declare module 'beautiful' {
+  import { ScreenInstance } from 'awful';
+
   export interface ThemeBase {
     /**
      * Hotkeys widget background color
@@ -1785,4 +1787,8 @@ declare module 'beautiful' {
 
   export const groups_radius: number;
   export const accent: string;
+
+  export const font: string;
+  export const border_color: string;
+  export const wallpaper: string | ((this: void, screen: ScreenInstance) => void);
 }

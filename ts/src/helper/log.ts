@@ -1,8 +1,19 @@
-import * as awful from 'awful';
 import * as beautiful from 'beautiful';
 import { notification, NotificationProps } from 'naughty';
+import * as debug from 'gears.debug';
 
-export const log = function (this: void, message: string, opts?: Partial<NotificationProps>): void {
+// debug.dump({ a: '1', b: '2' }, 'test table');
+// debug.print_error('KPFROMER - ERROR');
+
+export function log(this: void, value: any, tableName = 'NO-NAME'): void {
+  debug.dump(value, tableName);
+}
+
+export function logNotification(
+  this: void,
+  message: string,
+  opts?: Partial<NotificationProps>,
+): void {
   const {
     app_name = 'AwesomeWM Log',
     title = '<b>Log from AwesomeWM</b>',
@@ -17,7 +28,7 @@ export const log = function (this: void, message: string, opts?: Partial<Notific
     icon,
     message,
   });
-};
+}
 
 function dump(this: void, table: Record<string, unknown>, indent = 0): string {
   const spacing = string.rep('  ', indent);
@@ -36,11 +47,45 @@ function dump(this: void, table: Record<string, unknown>, indent = 0): string {
   return result;
 }
 
-export const dumpData = dump;
+// export const log = function (this: void, message: string, opts?: Partial<NotificationProps>): void {
+//   const {
+//     app_name = 'AwesomeWM Log',
+//     title = '<b>Log from AwesomeWM</b>',
+//     timeout = 50,
+//     icon = beautiful.awesome_icon,
+//   } = opts ?? {};
 
-export function logToFile(this: void, value: any, location = '/tmp/awesome.txt'): void {
-  const text = type(value) === 'table' ? dump(value) : value;
+//   notification({
+//     app_name,
+//     title,
+//     timeout,
+//     icon,
+//     message,
+//   });
+// };
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  awful.spawn.easy_async_with_shell(`echo "${text.replace('"', '\\"')}" > ${location}`, () => {});
-}
+// function dump(this: void, table: Record<string, unknown>, indent = 0): string {
+//   const spacing = string.rep('  ', indent);
+//   let result = '';
+//   for (const [key, value] of Object.entries(table)) {
+//     result += spacing;
+
+//     if (type(value) === 'table') {
+//       result += `${key}:\n`;
+//       result += dump(value as Record<string, unknown>, indent + 1);
+//     } else {
+//       result += `${key}: ${value}\n`;
+//     }
+//   }
+
+//   return result;
+// }
+
+// export const dumpData = dump;
+
+// export function logToFile(this: void, value: any, location = '/tmp/awesome.txt'): void {
+//   const text = type(value) === 'table' ? dump(value) : value;
+
+//   // eslint-disable-next-line @typescript-eslint/no-empty-function
+//   awful.spawn.easy_async_with_shell(`echo "${text.replace('"', '\\"')}" > ${location}`, () => {});
+// }

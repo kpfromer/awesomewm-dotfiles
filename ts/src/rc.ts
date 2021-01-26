@@ -7,6 +7,8 @@
 
 import * as awful from 'awful';
 import * as beautiful from 'beautiful';
+import * as gears from 'gears';
+import { isString } from 'helper/type-check';
 // ░█▀▀░█▀█░█▀█░█▀▀░▀█▀░█▀▀░█░█░█▀▄░█▀█░▀█▀░▀█▀░█▀█░█▀█
 // ░█░░░█░█░█░█░█▀▀░░█░░█░█░█░█░█▀▄░█▀█░░█░░░█░░█░█░█░█
 // ░▀▀▀░▀▀▀░▀░▀░▀░░░▀▀▀░▀▀▀░▀▀▀░▀░▀░▀░▀░░▀░░▀▀▀░▀▀▀░▀░▀
@@ -63,24 +65,23 @@ root.keys = globalKeys as any;
 // ░█▄█░█▀█░█░░░█░░░█▀▀░█▀█░█▀▀░█▀▀░█▀▄
 // ░▀░▀░▀░▀░▀▀▀░▀▀▀░▀░░░▀░▀░▀░░░▀▀▀░▀░▀
 
-// screen.connect_signal(
-//     'request::wallpaper', function(s)
-//       // If wallpaper is a function, call it with the screen
-//       if beautiful.wallpaper then
-//         if type(beautiful.wallpaper) == 'string' then
+screen.connect_signal('request::wallpaper', (screen) => {
+  if (beautiful.wallpaper) {
+    // If wallpaper is a function, call it with the screen
+    if (isString(beautiful.wallpaper)) {
+      const { wallpaper } = beautiful;
+      // Check if beautiful.wallpaper is color/image
+      switch (wallpaper.charAt(0)) {
+        case '#':
+          // If beautiful.wallpaper is color
+          return gears.wallpaper.set(wallpaper);
+        default:
+          // If beautiful.wallpaper is path/image
 
-//           // Check if beautiful.wallpaper is color/image
-//           if beautiful.wallpaper:sub(1, #'#') == '#' then
-//             // If beautiful.wallpaper is color
-//             gears.wallpaper.set(beautiful.wallpaper)
-
-//           elseif beautiful.wallpaper:sub(1, #'/') == '/' then
-//             // If beautiful.wallpaper is path/image
-//             gears.wallpaper.maximized(beautiful.wallpaper, s)
-//           end
-//         else
-//           beautiful.wallpaper(s)
-//         end
-//       end
-//     end
-// )
+          return gears.wallpaper.maximized(wallpaper, screen);
+      }
+    } else {
+      beautiful.wallpaper(screen);
+    }
+  }
+});

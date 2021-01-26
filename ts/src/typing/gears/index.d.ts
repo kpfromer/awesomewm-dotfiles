@@ -144,11 +144,17 @@ declare module 'gears' {
      * https://awesomewm.org/apidoc/utility_libraries/gears.wallpaper.html#maximized
      */
     maximized: (
+      this: void,
       surf: string,
       s?: ScreenInstance,
       ignore_aspect?: boolean,
       offset?: { x: number; y: number },
     ) => void;
+
+    /**
+     * @param pattern The wallpaper that should be set. This can be a cairo surface, a description for gears.color or a cairo pattern.
+     */
+    set: (this: void, pattern: string) => void;
   }
 
   export const wallpaper: Wallpaper;
@@ -160,7 +166,7 @@ declare module 'gears' {
 /** @noResolution */
 declare module 'gears.filesystem' {
   /**
-   * Get the path to the user’s config dir. This is the directory containing the configuration file (“rc.lua”).
+   * Get the path to the user's config dir. This is the directory containing the configuration file ("rc.lua").
    *
    * @returns A string with the requested path with a slash at the end.
    *
@@ -237,4 +243,10 @@ declare module 'gears.table' {
   //  * @noSelf
   //  */
   // map: (f: function, tbl: Table) => unknown;
+}
+
+declare module 'gears.debug' {
+  export const dump: (this: void, data: any, tag: string, depth?: number) => void;
+
+  export const print_error: (this: void, message: string) => void;
 }
