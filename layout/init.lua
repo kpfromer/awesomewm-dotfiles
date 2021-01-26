@@ -10,7 +10,7 @@ local info_center = require('layout.info-center')
 screen.connect_signal(
     'request::desktop_decoration', function(s)
       -- s.top_panel = top_panel(s)
-      s.bottom_panel = bottom_panel(s)
+      -- s.bottom_panel = bottom_panel(s)
       s.control_center = control_center(s)
       s.info_center = info_center(s)
       s.control_center_show_again = false
@@ -26,7 +26,7 @@ function update_bars_visibility()
       local fullscreen = s.selected_tag.fullscreen_mode
       -- Order matter here for shadow
       -- s.top_panel.visible = not fullscreen
-      s.bottom_panel.visible = not fullscreen
+      -- s.bottom_panel.visible = not fullscreen
       if s.control_center then
         if fullscreen and focused.control_center.visible then
           focused.control_center:toggle()
